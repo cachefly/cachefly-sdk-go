@@ -2,11 +2,9 @@
   <img src="https://www.cachefly.com/wp-content/uploads/2023/10/Thumbnail-About-Us-Video.png" alt="CacheFly Logo" width="200"/>
 </p>
 
-<p align="center">
-<h4>Go implementation of CacheFly API (2.5.0) </h4>
-</p>
+<h4 align="center">Go implementation of CacheFly API (2.5.0)</h4>
 
-<hr>
+<hr style="width: 50%; border: 1px solid #000; margin: 20px auto;">
 
 ## CacheFly SDK for Go
 
