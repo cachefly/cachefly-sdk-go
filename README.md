@@ -77,6 +77,37 @@ go get github.com/avvvet/cachefly-sdk-go
 
 ```
 
+## Example Usage
+
+Below is an example of how to use the CacheFly SDK in your Go project:
+
+```go
+package main
+
+import (
+    "fmt"
+    "log"
+    "github.com/avvvet/cachefly-sdk-go"
+)
+
+func main() {
+    // Create a new CacheFly client with your API key
+    client := cachefly.NewClient("your-api-key")
+
+    // Example: Get details of a specific service by its ID
+    serviceID := "your-service-id"
+    service, err := client.GetService(serviceID)
+    if err != nil {
+        log.Fatalf("Failed to fetch service: %v", err)
+    }
+
+    // Print service details
+    fmt.Printf("Service Name: %s\n", service.Name)
+    fmt.Printf("Service Status: %s\n", service.Status)
+    fmt.Printf("Service Domains: %v\n", service.Domains)
+}
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
