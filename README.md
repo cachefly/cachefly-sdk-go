@@ -81,31 +81,49 @@ go get github.com/avvvet/cachefly-sdk-go
 
 Below is an example of how to use the CacheFly SDK in your Go project:
 
+example how to list all services from cachefly.
+
 ```go
 package main
 
 import (
-    "fmt"
-    "log"
-    "github.com/avvvet/cachefly-sdk-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly"
+	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly/api"
 )
 
 func main() {
-    // Create a new CacheFly client with your API key
-    client := cachefly.NewClient("your-api-key")
+	client := cachefly.NewClient(
+		cachefly.WithToken("YOUR-API-TOKEN"),
+	)
 
-    // Example: Get details of a specific service by its ID
-    serviceID := "your-service-id"
-    service, err := client.GetService(serviceID)
-    if err != nil {
-        log.Fatalf("Failed to fetch service: %v", err)
-    }
+	ctx := context.Background()
 
-    // Print service details
-    fmt.Printf("Service Name: %s\n", service.Name)
-    fmt.Printf("Service Status: %s\n", service.Status)
-    fmt.Printf("Service Domains: %v\n", service.Domains)
+	resp, err := client.Services.List(ctx, api.ListOptions{
+		ResponseType:    "shallow",
+		IncludeFeatures: false,
+		Status:          "ACTIVE",
+		Offset:          0,
+		Limit:           1,
+	})
+	if err != nil {
+		log.Fatalf("Error fetching services: %v", err)
+	}
+
+	data, err := json.MarshalIndent(resp.Services, "", "  ")
+	if err != nil {
+		fmt.Printf("Error formatting JSON: %v\n", err)
+		return
+	}
+
+	fmt.Println("Services:")
+	fmt.Println(string(data))
 }
+
 ```
 
 ## License
