@@ -13,6 +13,8 @@ A Golang SDK for interacting with the [CacheFly CDN API v2.5](https://portal.cac
 This SDK is designed to abstract the HTTP API layer and simplify working with CacheFly resources 
 and can be used independently as golang package in your project or as the backend foundation for managing CacheFly resources. 
 
+> ⚠️ This SDK is in active development.
+
 ## CacheFly
 
 CacheFly CDN is the only CDN built for throughput, delivering rich-media content up to 158% more than other major CDNs.
