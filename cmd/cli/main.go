@@ -41,6 +41,18 @@ func main() {
 	fmt.Println("Created Service:")
 	fmt.Println(string(createdJSON))
 
+	// --- Get service by Id ---
+	serviceID := created.ID
+
+	service, err := client.Services.Get(ctx, serviceID, "shallow", false)
+	if err != nil {
+		log.Fatalf("Error getting service: %v", err)
+	}
+
+	data, _ := json.MarshalIndent(service, "", "  ")
+	fmt.Println("Fetched Service:")
+	fmt.Println(string(data))
+
 	// --- List active services ---
 	resp, err := client.Services.List(ctx, api.ListOptions{
 		ResponseType:    "shallow",

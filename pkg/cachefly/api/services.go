@@ -63,6 +63,27 @@ func (s *ServicesService) Create(ctx context.Context, req CreateServiceRequest) 
 	return &created, nil
 }
 
+// Get service by ID
+func (s *ServicesService) Get(ctx context.Context, id string, responseType string, includeFeatures bool) (*Service, error) {
+	endpoint := fmt.Sprintf("/services/%s", id)
+
+	params := url.Values{}
+	if responseType != "" {
+		params.Set("responseType", responseType)
+	}
+	params.Set("includeFeatures", strconv.FormatBool(includeFeatures))
+
+	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
+
+	var result Service
+	err := s.Client.Get(ctx, fullURL, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
 // List services
 func (s *ServicesService) List(ctx context.Context, opts ListOptions) (*ListServicesResponse, error) {
 	endpoint := "/services"
