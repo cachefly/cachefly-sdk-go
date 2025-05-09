@@ -20,6 +20,12 @@ type Service struct {
 	Status            string `json:"status"`
 }
 
+type CreateServiceRequest struct {
+	Name        string `json:"name"`
+	UniqueName  string `json:"uniqueName"`
+	Description string `json:"description"`
+}
+
 type ListServicesResponse struct {
 	Meta     MetaInfo  `json:"meta"`
 	Services []Service `json:"data"`
@@ -42,6 +48,19 @@ type ListOptions struct {
 // communication with the services endpoint.
 type ServicesService struct {
 	Client *httpclient.Client
+}
+
+// Create a new service
+func (s *ServicesService) Create(ctx context.Context, req CreateServiceRequest) (*Service, error) {
+	endpoint := "/services"
+
+	var created Service
+	err := s.Client.Post(ctx, endpoint, req, &created)
+	if err != nil {
+		return nil, err
+	}
+
+	return &created, nil
 }
 
 // List services
