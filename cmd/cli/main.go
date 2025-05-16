@@ -4,19 +4,43 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
+	"os"
 
 	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly"
 	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly/api"
 	"github.com/google/uuid"
+	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 )
 
+func LoadEnv() {
+	err := godotenv.Load("./.env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	log.Info(".env file loaded.")
+}
+
 func main() {
+
+	LoadEnv()
 	client := cachefly.NewClient(
-		cachefly.WithToken("YOUR-API-KEY"),
+		cachefly.WithToken(os.Getenv("API_TOKEN")),
 	)
 
 	ctx := context.Background()
+
+	account, err := client.Accounts.Get(ctx, "")
+	if err != nil {
+		log.Fatalf("Error fetching account: %v", err)
+	}
+
+	j, err := json.MarshalIndent(account, "", " ")
+	if err != nil {
+		log.Fatalf("Error formating account %v", err)
+	}
+	fmt.Print("\n Accounts")
+	fmt.Println(string(j))
 
 	// --- Create a new service  ---
 	id := uuid.New().String()[:8]

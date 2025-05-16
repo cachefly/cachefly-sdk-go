@@ -12,6 +12,7 @@ type Client struct {
 
 	// API groups
 	Services *api.ServicesService
+	Accounts *api.AccountsService
 }
 
 // for configuring the Client.
@@ -54,5 +55,6 @@ func NewClient(opts ...Option) *Client {
 	return &Client{
 		httpClient: hc,
 		Services:   &api.ServicesService{Client: hc},
+		Accounts:   &api.AccountsService{Client: hc},
 	}
 }
