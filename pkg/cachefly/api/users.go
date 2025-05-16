@@ -206,3 +206,28 @@ func (u *UsersService) DeactivateByID(ctx context.Context, id string) (*User, er
 	}
 	return &updated, nil
 }
+
+// EnableTwoFactorAuth enables 2FA for the current user.
+// PUT /users/me/enable2FA
+func (u *UsersService) EnableTwoFactorAuth(ctx context.Context) (*User, error) {
+	const endpoint = "/users/me/enable2FA"
+
+	var updated User
+	// Send an empty JSON body so Content-Type: application/json is set
+	if err := u.Client.Put(ctx, endpoint, struct{}{}, &updated); err != nil {
+		return nil, err
+	}
+	return &updated, nil
+}
+
+// DisableTwoFactorAuth disables 2FA for the current user.
+// PUT /users/me/disable2FA
+func (u *UsersService) DisableTwoFactorAuth(ctx context.Context) (*User, error) {
+	const endpoint = "/users/me/disable2FA"
+
+	var updated User
+	if err := u.Client.Put(ctx, endpoint, struct{}{}, &updated); err != nil {
+		return nil, err
+	}
+	return &updated, nil
+}
