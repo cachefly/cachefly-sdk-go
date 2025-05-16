@@ -11,8 +11,9 @@ type Client struct {
 	httpClient *httpclient.Client
 
 	// API groups
-	Services *api.ServicesService
-	Accounts *api.AccountsService
+	Services       *api.ServicesService
+	Accounts       *api.AccountsService
+	ServiceDomains *api.ServiceDomainsService
 }
 
 // for configuring the Client.
@@ -53,8 +54,9 @@ func NewClient(opts ...Option) *Client {
 	})
 
 	return &Client{
-		httpClient: hc,
-		Services:   &api.ServicesService{Client: hc},
-		Accounts:   &api.AccountsService{Client: hc},
+		httpClient:     hc,
+		Services:       &api.ServicesService{Client: hc},
+		Accounts:       &api.AccountsService{Client: hc},
+		ServiceDomains: &api.ServiceDomainsService{Client: hc},
 	}
 }
