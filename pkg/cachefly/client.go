@@ -19,6 +19,7 @@ type Client struct {
 	ServiceImageOptimization   *api.ServiceImageOptimizationService
 	Certificates               *api.CertificatesService
 	Origins                    *api.OriginsService
+	Users                      *api.UsersService
 }
 
 // for configuring the Client.
@@ -67,5 +68,6 @@ func NewClient(opts ...Option) *Client {
 		ServiceOptionsRefererRules: &api.ServiceOptionsRefererRulesService{Client: hc},
 		ServiceImageOptimization:   &api.ServiceImageOptimizationService{Client: hc},
 		Origins:                    &api.OriginsService{Client: hc},
+		Users:                      &api.UsersService{Client: hc},
 	}
 }
