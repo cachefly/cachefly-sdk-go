@@ -20,6 +20,7 @@ type Client struct {
 	Certificates               *api.CertificatesService
 	Origins                    *api.OriginsService
 	Users                      *api.UsersService
+	ScriptConfigs              *api.ScriptConfigsService
 }
 
 // for configuring the Client.
@@ -69,5 +70,6 @@ func NewClient(opts ...Option) *Client {
 		ServiceImageOptimization:   &api.ServiceImageOptimizationService{Client: hc},
 		Origins:                    &api.OriginsService{Client: hc},
 		Users:                      &api.UsersService{Client: hc},
+		ScriptConfigs:              &api.ScriptConfigsService{Client: hc},
 	}
 }
