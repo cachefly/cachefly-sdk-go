@@ -86,6 +86,48 @@ func (c *Client) Get(ctx context.Context, endpoint string, out interface{}) erro
 	return json.NewDecoder(resp.Body).Decode(out)
 }
 
+func (c *Client) Put(ctx context.Context, endpoint string, body interface{}, out interface{}) error {
+	// 1. Marshal the request body
+	var reader io.Reader
+	if body != nil {
+		payload, err := json.Marshal(body)
+		if err != nil {
+			return fmt.Errorf("failed to marshal request body: %w", err)
+		}
+		reader = bytes.NewReader(payload)
+	}
+
+	// 2. Create the request
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, c.fullURL(endpoint), reader)
+	if err != nil {
+		return err
+	}
+
+	// 3. Set headers
+	req.Header.Set("Authorization", "Bearer "+c.token)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	// 4. Do the call
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// 5. Check for error status
+	if resp.StatusCode >= 400 {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("API error %d: %s", resp.StatusCode, string(body))
+	}
+
+	// 6. Decode if out is provided
+	if out != nil {
+		return json.NewDecoder(resp.Body).Decode(out)
+	}
+	return nil
+}
+
 func (c *Client) fullURL(endpoint string) string {
 	return c.baseURL + path.Clean("/"+endpoint)
 }
