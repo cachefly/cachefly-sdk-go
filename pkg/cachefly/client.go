@@ -17,6 +17,7 @@ type Client struct {
 	ServiceRules               *api.ServiceRulesService
 	ServiceOptionsRefererRules *api.ServiceOptionsRefererRulesService
 	ServiceImageOptimization   *api.ServiceImageOptimizationService
+	Certificates               *api.CertificatesService
 }
 
 // for configuring the Client.
