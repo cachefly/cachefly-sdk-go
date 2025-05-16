@@ -45,6 +45,14 @@ type ListOptions struct {
 	Limit           int
 }
 
+// UpdateServiceRequest is the payload for updating a service by ID.
+type UpdateServiceRequest struct {
+	Description    string `json:"description"`
+	TLSProfile     string `json:"tlsProfile"`
+	AutoSSL        bool   `json:"autoSsl"`
+	DeliveryRegion string `json:"deliveryRegion"`
+}
+
 // communication with the services endpoint.
 type ServicesService struct {
 	Client *httpclient.Client
@@ -112,4 +120,19 @@ func (s *ServicesService) List(ctx context.Context, opts ListOptions) (*ListServ
 	}
 
 	return &result, nil
+}
+
+// UpdateServiceByID updates an existing service.
+// id is required.
+func (s *ServicesService) UpdateServiceByID(ctx context.Context, id string, req UpdateServiceRequest) (*Service, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+	endpoint := fmt.Sprintf("/services/%s", id)
+
+	var updated Service
+	if err := s.Client.Put(ctx, endpoint, req, &updated); err != nil {
+		return nil, err
+	}
+	return &updated, nil
 }
