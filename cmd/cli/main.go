@@ -25,7 +25,7 @@ func main() {
 
 	LoadEnv()
 	client := cachefly.NewClient(
-		cachefly.WithToken(os.Getenv("API_TOKEN")),
+		cachefly.WithToken(os.Getenv("CACHEFLY_API_TOKEN")),
 	)
 
 	ctx := context.Background()
