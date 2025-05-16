@@ -58,6 +58,11 @@ type ServicesService struct {
 	Client *httpclient.Client
 }
 
+// payload for enabling access logging on a service.
+type EnableAccessLogsRequest struct {
+	LogTarget string `json:"logTarget"`
+}
+
 // Create a new service
 func (s *ServicesService) Create(ctx context.Context, req CreateServiceRequest) (*Service, error) {
 	endpoint := "/services"
@@ -161,6 +166,20 @@ func (s *ServicesService) DeactivateServiceByID(ctx context.Context, id string) 
 
 	var updated Service
 	if err := s.Client.Put(ctx, endpoint, struct{}{}, &updated); err != nil {
+		return nil, err
+	}
+	return &updated, nil
+}
+
+// id is required. Returns the updated Service.
+func (s *ServicesService) EnableAccessLogging(ctx context.Context, id string, req EnableAccessLogsRequest) (*Service, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+	endpoint := fmt.Sprintf("/services/%s/accessLogs", id)
+
+	var updated Service
+	if err := s.Client.Put(ctx, endpoint, req, &updated); err != nil {
 		return nil, err
 	}
 	return &updated, nil
