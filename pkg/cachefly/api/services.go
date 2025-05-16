@@ -136,3 +136,32 @@ func (s *ServicesService) UpdateServiceByID(ctx context.Context, id string, req 
 	}
 	return &updated, nil
 }
+
+// ActivateServiceByID
+// id is required. Returns the updated Service.
+func (s *ServicesService) ActivateServiceByID(ctx context.Context, id string) (*Service, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+	endpoint := fmt.Sprintf("/services/%s/activate", id)
+
+	var updated Service
+	if err := s.Client.Put(ctx, endpoint, struct{}{}, &updated); err != nil {
+		return nil, err
+	}
+	return &updated, nil
+}
+
+// id is required. Returns the updated Service.
+func (s *ServicesService) DeactivateServiceByID(ctx context.Context, id string) (*Service, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+	endpoint := fmt.Sprintf("/services/%s/deactivate", id)
+
+	var updated Service
+	if err := s.Client.Put(ctx, endpoint, struct{}{}, &updated); err != nil {
+		return nil, err
+	}
+	return &updated, nil
+}
