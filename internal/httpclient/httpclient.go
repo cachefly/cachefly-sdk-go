@@ -128,6 +128,31 @@ func (c *Client) Put(ctx context.Context, endpoint string, body interface{}, out
 	return nil
 }
 
+// Delete performs a DELETE request with no body and decodes the JSON response into out.
+func (c *Client) Delete(ctx context.Context, endpoint string, out interface{}) error {
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, c.fullURL(endpoint), nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+c.token)
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("API error %d: %s", resp.StatusCode, string(body))
+	}
+	if out != nil {
+		return json.NewDecoder(resp.Body).Decode(out)
+	}
+	return nil
+}
+
 func (c *Client) fullURL(endpoint string) string {
 	return c.baseURL + path.Clean("/"+endpoint)
 }
