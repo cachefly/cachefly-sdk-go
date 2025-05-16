@@ -14,6 +14,7 @@ type Client struct {
 	Services       *api.ServicesService
 	Accounts       *api.AccountsService
 	ServiceDomains *api.ServiceDomainsService
+	ServiceRules   *api.ServiceRulesService
 }
 
 // for configuring the Client.
@@ -58,5 +59,6 @@ func NewClient(opts ...Option) *Client {
 		Services:       &api.ServicesService{Client: hc},
 		Accounts:       &api.AccountsService{Client: hc},
 		ServiceDomains: &api.ServiceDomainsService{Client: hc},
+		ServiceRules:   &api.ServiceRulesService{Client: hc},
 	}
 }
