@@ -11,10 +11,12 @@ type Client struct {
 	httpClient *httpclient.Client
 
 	// API groups
-	Services       *api.ServicesService
-	Accounts       *api.AccountsService
-	ServiceDomains *api.ServiceDomainsService
-	ServiceRules   *api.ServiceRulesService
+	Services                   *api.ServicesService
+	Accounts                   *api.AccountsService
+	ServiceDomains             *api.ServiceDomainsService
+	ServiceRules               *api.ServiceRulesService
+	ServiceOptionsRefererRules *api.ServiceOptionsRefererRulesService
+	ServiceImageOptimization   *api.ServiceImageOptimizationService
 }
 
 // for configuring the Client.
@@ -55,10 +57,12 @@ func NewClient(opts ...Option) *Client {
 	})
 
 	return &Client{
-		httpClient:     hc,
-		Services:       &api.ServicesService{Client: hc},
-		Accounts:       &api.AccountsService{Client: hc},
-		ServiceDomains: &api.ServiceDomainsService{Client: hc},
-		ServiceRules:   &api.ServiceRulesService{Client: hc},
+		httpClient:                 hc,
+		Services:                   &api.ServicesService{Client: hc},
+		Accounts:                   &api.AccountsService{Client: hc},
+		ServiceDomains:             &api.ServiceDomainsService{Client: hc},
+		ServiceRules:               &api.ServiceRulesService{Client: hc},
+		ServiceOptionsRefererRules: &api.ServiceOptionsRefererRulesService{Client: hc},
+		ServiceImageOptimization:   &api.ServiceImageOptimizationService{Client: hc},
 	}
 }
