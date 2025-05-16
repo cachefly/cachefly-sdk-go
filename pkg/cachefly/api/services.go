@@ -184,3 +184,17 @@ func (s *ServicesService) EnableAccessLogging(ctx context.Context, id string, re
 	}
 	return &updated, nil
 }
+
+// id is required.
+func (s *ServicesService) DeleteAccessLoggingByID(ctx context.Context, id string) (*Service, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+	endpoint := fmt.Sprintf("/services/%s/accessLogs", id)
+
+	var updated Service
+	if err := s.Client.Delete(ctx, endpoint, &updated); err != nil {
+		return nil, err
+	}
+	return &updated, nil
+}
