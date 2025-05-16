@@ -21,6 +21,7 @@ type Client struct {
 	Origins                    *api.OriginsService
 	Users                      *api.UsersService
 	ScriptConfigs              *api.ScriptConfigsService
+	TLSProfiles                *api.TLSProfilesService
 }
 
 // for configuring the Client.
@@ -71,5 +72,6 @@ func NewClient(opts ...Option) *Client {
 		Origins:                    &api.OriginsService{Client: hc},
 		Users:                      &api.UsersService{Client: hc},
 		ScriptConfigs:              &api.ScriptConfigsService{Client: hc},
+		TLSProfiles:                &api.TLSProfilesService{Client: hc},
 	}
 }
