@@ -6,7 +6,6 @@
 
 # Ignore go binaries
 /bin/
-/pkg/
 /vendor/
 
 # Ignore workspace-specific files
@@ -22,7 +21,6 @@ Thumbs.db
 # Ignore go build output
 /build/
 /bin/
-/pkg/
 
 # Ignore environment files
 .env
