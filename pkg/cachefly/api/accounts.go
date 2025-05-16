@@ -30,6 +30,23 @@ type Account struct {
 	Certificates             []string `json:"certificates"`
 }
 
+// CreateChildAccountRequest is the payload for creating a new child account.
+type CreateChildAccountRequest struct {
+	CompanyName string `json:"companyName"` // required
+	Username    string `json:"username"`    // required, 8–32 chars, lowercase letters/numbers, dashes
+	Password    string `json:"password"`    // required, ≥8 chars
+	FullName    string `json:"fullName"`    // required, ≥2 chars
+	Email       string `json:"email"`       // required, must be a valid email
+	Website     string `json:"website,omitempty"`
+	Address1    string `json:"address1,omitempty"`
+	Address2    string `json:"address2,omitempty"`
+	City        string `json:"city,omitempty"`
+	Country     string `json:"country,omitempty"`
+	State       string `json:"state,omitempty"`
+	Phone       string `json:"phone,omitempty"`
+	Zip         string `json:"zip,omitempty"`
+}
+
 // communication with the accounts endpoint
 type AccountsService struct {
 	Client *httpclient.Client
@@ -200,4 +217,19 @@ func (a *AccountsService) UpdateCurrentAccount(ctx context.Context, req UpdateAc
 		return nil, err
 	}
 	return &updated, nil
+}
+
+// CreateChildAccount creates a new child account (POST /accounts)
+func (a *AccountsService) CreateChildAccount(ctx context.Context, req CreateChildAccountRequest) (*Account, error) {
+	// Validate required fields
+	if req.CompanyName == "" || req.Username == "" || req.Password == "" ||
+		req.FullName == "" || req.Email == "" {
+		return nil, fmt.Errorf("companyName, username, password, fullName and email are required")
+	}
+
+	var created Account
+	if err := a.Client.Post(ctx, "/accounts", req, &created); err != nil {
+		return nil, err
+	}
+	return &created, nil
 }
