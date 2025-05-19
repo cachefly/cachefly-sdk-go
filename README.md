@@ -79,54 +79,54 @@ go get github.com/avvvet/cachefly-sdk-go
 
 ```
 
+## Quick Start
+
+Copy the snippet below into your project to get started:
+
+```go
+client := cachefly.NewClient(cachefly.WithToken("YOUR_API_TOKEN"))
+resp, _ := client.Accounts.List(ctx, api.ListAccountsOptions{Offset: 0, Limit: 5})
+for _, a := range resp.Accounts {
+    fmt.Println(a.ID, a.CompanyName)
+}
+```
+
 ## Example Usage
 
 Below is an example of how to use the CacheFly SDK in your Go project:
 
-example how to list all services from cachefly.
+1. Create a `.env` file in your project root containing:
 
-```go
-package main
+   ```dotenv
+   CACHEFLY_API_TOKEN=your_real_api_token_here
+   ```
+2. Run with:
 
-import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"log"
+   ```bash
+   go run examples/<resource>/<example>.go
+   ```
 
-	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly"
-	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly/api"
-)
+### Accounts
 
-func main() {
-	client := cachefly.NewClient(
-		cachefly.WithToken("YOUR-API-TOKEN"),
-	)
+* [List Accounts](examples/accounts/list.go)
+* [Get Current Account](examples/accounts/get.go)
+* [Get Account By ID](examples/accounts/getbyid/main.go)
+* [Update Current Account](examples/accounts/update/main.go)
+* [Update Account By ID](examples/accounts/updatebyid/main.go)
+* [Create Child Account](examples/accounts/create/main.go)
+* [Enable Two-Factor Auth](examples/accounts/enable2fa/main.go)
 
-	ctx := context.Background()
+### Services
 
-	resp, err := client.Services.List(ctx, api.ListOptions{
-		ResponseType:    "shallow",
-		IncludeFeatures: false,
-		Status:          "ACTIVE",
-		Offset:          0,
-		Limit:           1,
-	})
-	if err != nil {
-		log.Fatalf("Error fetching services: %v", err)
-	}
+* [List Services](examples/services/list.go)
+* [Get Service By ID](examples/services/getbyid/main.go)
+* [Create Service](examples/services/create/main.go)
+* [Update Service](examples/services/update/main.go)
+* [Delete Service](examples/services/delete/main.go)
 
-	data, err := json.MarshalIndent(resp.Services, "", "  ")
-	if err != nil {
-		fmt.Printf("Error formatting JSON: %v\n", err)
-		return
-	}
+---
 
-	fmt.Println("Services:")
-	fmt.Println(string(data))
-}
 
-```
 
 ## License
 
