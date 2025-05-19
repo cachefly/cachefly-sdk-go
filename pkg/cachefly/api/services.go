@@ -9,6 +9,10 @@ import (
 	"github.com/avvvet/cachefly-sdk-go/internal/httpclient"
 )
 
+type ServicesService struct {
+	Client *httpclient.Client
+}
+
 type Service struct {
 	ID                string `json:"_id"`
 	UpdatedAt         string `json:"updateAt"`
@@ -24,6 +28,13 @@ type CreateServiceRequest struct {
 	Name        string `json:"name"`
 	UniqueName  string `json:"uniqueName"`
 	Description string `json:"description"`
+}
+
+type UpdateServiceOptions struct {
+	Description    string `json:"description,omitempty"`
+	TlsProfile     string `json:"tlsProfile,omitempty"`
+	AutoSsl        bool   `json:"autoSsl"`
+	DeliveryRegion string `json:"deliveryRegion,omitempty"`
 }
 
 type ListServicesResponse struct {
@@ -45,7 +56,6 @@ type ListOptions struct {
 	Limit           int
 }
 
-// UpdateServiceRequest is the payload for updating a service by ID.
 type UpdateServiceRequest struct {
 	Description    string `json:"description"`
 	TLSProfile     string `json:"tlsProfile"`
@@ -53,12 +63,6 @@ type UpdateServiceRequest struct {
 	DeliveryRegion string `json:"deliveryRegion"`
 }
 
-// communication with the services endpoint.
-type ServicesService struct {
-	Client *httpclient.Client
-}
-
-// payload for enabling access logging on a service.
 type EnableAccessLogsRequest struct {
 	LogTarget string `json:"logTarget"`
 }
@@ -67,7 +71,6 @@ type EnableOriginLogsRequest struct {
 	LogTarget string `json:"logTarget"`
 }
 
-// Create a new service
 func (s *ServicesService) Create(ctx context.Context, req CreateServiceRequest) (*Service, error) {
 	endpoint := "/services"
 
@@ -80,7 +83,6 @@ func (s *ServicesService) Create(ctx context.Context, req CreateServiceRequest) 
 	return &created, nil
 }
 
-// Get service by ID
 func (s *ServicesService) Get(ctx context.Context, id string, responseType string, includeFeatures bool) (*Service, error) {
 	endpoint := fmt.Sprintf("/services/%s", id)
 
@@ -101,7 +103,21 @@ func (s *ServicesService) Get(ctx context.Context, id string, responseType strin
 	return &result, nil
 }
 
-// List services
+func (s *ServicesService) GetByID(ctx context.Context, id string) (*Service, error) {
+	if id == "" {
+		return nil, fmt.Errorf("service ID is required")
+	}
+
+	endpoint := fmt.Sprintf("/services/%s", url.PathEscape(id))
+
+	// Call the API and unmarshal into Service
+	var svc Service
+	if err := s.Client.Get(ctx, endpoint, &svc); err != nil {
+		return nil, err
+	}
+	return &svc, nil
+}
+
 func (s *ServicesService) List(ctx context.Context, opts ListOptions) (*ListServicesResponse, error) {
 	endpoint := "/services"
 	params := url.Values{}
@@ -131,8 +147,6 @@ func (s *ServicesService) List(ctx context.Context, opts ListOptions) (*ListServ
 	return &result, nil
 }
 
-// UpdateServiceByID updates an existing service.
-// id is required.
 func (s *ServicesService) UpdateServiceByID(ctx context.Context, id string, req UpdateServiceRequest) (*Service, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
@@ -146,8 +160,6 @@ func (s *ServicesService) UpdateServiceByID(ctx context.Context, id string, req 
 	return &updated, nil
 }
 
-// ActivateServiceByID
-// id is required. Returns the updated Service.
 func (s *ServicesService) ActivateServiceByID(ctx context.Context, id string) (*Service, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
@@ -161,7 +173,6 @@ func (s *ServicesService) ActivateServiceByID(ctx context.Context, id string) (*
 	return &updated, nil
 }
 
-// id is required. Returns the updated Service.
 func (s *ServicesService) DeactivateServiceByID(ctx context.Context, id string) (*Service, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
@@ -175,7 +186,6 @@ func (s *ServicesService) DeactivateServiceByID(ctx context.Context, id string) 
 	return &updated, nil
 }
 
-// id is required. Returns the updated Service.
 func (s *ServicesService) EnableAccessLogging(ctx context.Context, id string, req EnableAccessLogsRequest) (*Service, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
@@ -189,7 +199,6 @@ func (s *ServicesService) EnableAccessLogging(ctx context.Context, id string, re
 	return &updated, nil
 }
 
-// id is required.
 func (s *ServicesService) DeleteAccessLoggingByID(ctx context.Context, id string) (*Service, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
@@ -203,7 +212,6 @@ func (s *ServicesService) DeleteAccessLoggingByID(ctx context.Context, id string
 	return &updated, nil
 }
 
-// id is required.
 func (s *ServicesService) EnableOriginLogging(ctx context.Context, id string, req EnableOriginLogsRequest) (*Service, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
@@ -217,7 +225,6 @@ func (s *ServicesService) EnableOriginLogging(ctx context.Context, id string, re
 	return &updated, nil
 }
 
-// id is required.
 func (s *ServicesService) DeleteOriginLoggingByID(ctx context.Context, id string) (*Service, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")

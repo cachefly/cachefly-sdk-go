@@ -117,11 +117,12 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 
 ### Services
 
-* [List Services](examples/services/list.go)
+* [List Services](examples/services/list/list.go)
 * [Get Service By ID](examples/services/getbyid/main.go)
 * [Create Service](examples/services/create/main.go)
-* [Update Service](examples/services/update/main.go)
-* [Delete Service](examples/services/delete/main.go)
+* [Update Service By ID](examples/services/updatebyid/main.go)
+* [Activate Service](examples/services/activate/main.go)
+* [Deactivate Service](examples/services/deactivate/main.go)
 
 ---
 

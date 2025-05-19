@@ -22,20 +22,26 @@ func main() {
 		log.Fatal("❌ CACHEFLY_API_TOKEN environment variable is required")
 	}
 
+	if len(os.Args) < 2 {
+		log.Println("⚠️ Usage: go run main.go <service_id>")
+		return
+	}
+	serviceID := os.Args[1]
+
 	client := cachefly.NewClient(
 		cachefly.WithToken(token),
 	)
 
-	resp, err := client.Accounts.Get(context.Background(), "")
+	resp, err := client.Services.ActivateServiceByID(context.Background(), serviceID)
 	if err != nil {
-		log.Fatalf("❌ Failed to get account: %v", err)
+		log.Fatalf("❌ Failed to activate service: %v", err)
 	}
 
-	listJSON, err := json.MarshalIndent(resp, "", "  ")
+	dataJSON, err := json.MarshalIndent(resp, "", "  ")
 	if err != nil {
 		log.Fatalf("Error formatting MarshalIndent [account]: %v", err)
 	}
 
-	fmt.Println("\n ✅ Current Account:")
-	fmt.Println(string(listJSON))
+	fmt.Println("\n ✅ Service activated successfully.")
+	fmt.Println(string(dataJSON))
 }

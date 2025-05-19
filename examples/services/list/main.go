@@ -8,11 +8,11 @@ import (
 	"os"
 
 	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly"
+	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly/api"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-
 	if err := godotenv.Load(); err != nil {
 		log.Printf("⚠️ Warning: unable to load .env file: %v", err)
 	}
@@ -26,16 +26,25 @@ func main() {
 		cachefly.WithToken(token),
 	)
 
-	resp, err := client.Accounts.Get(context.Background(), "")
+	opts := api.ListOptions{
+		Offset:          0,
+		Limit:           10,
+		Status:          "ACTIVE",
+		IncludeFeatures: false,
+		ResponseType:    "",
+	}
+
+	resp, err := client.Services.List(context.Background(), opts)
 	if err != nil {
-		log.Fatalf("❌ Failed to get account: %v", err)
+		log.Fatalf("❌ Failed to list services: %v", err)
 	}
 
 	listJSON, err := json.MarshalIndent(resp, "", "  ")
 	if err != nil {
-		log.Fatalf("Error formatting MarshalIndent [account]: %v", err)
+		log.Fatalf("Error formatting service list: %v", err)
 	}
 
 	fmt.Println("\n ✅ Current Account:")
 	fmt.Println(string(listJSON))
+
 }

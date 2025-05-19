@@ -22,20 +22,25 @@ func main() {
 		log.Fatal("❌ CACHEFLY_API_TOKEN environment variable is required")
 	}
 
+	if len(os.Args) < 2 {
+		log.Println("⚠️ Usage: go run main.go <service_id>")
+		return
+	}
+	serviceID := os.Args[1]
+
 	client := cachefly.NewClient(
 		cachefly.WithToken(token),
 	)
 
-	resp, err := client.Accounts.Get(context.Background(), "")
+	resp, err := client.Services.DeleteOriginLoggingByID(context.Background(), serviceID)
 	if err != nil {
-		log.Fatalf("❌ Failed to get account: %v", err)
+		log.Fatalf("❌ Failed to disable origin logging: %v", err)
 	}
 
-	listJSON, err := json.MarshalIndent(resp, "", "  ")
+	dataJSON, err := json.MarshalIndent(resp, "", "  ")
 	if err != nil {
-		log.Fatalf("Error formatting MarshalIndent [account]: %v", err)
+		log.Fatalf("Error formatting MarshalIndent [DeleteOriginLoggingByID]: %v", err)
 	}
-
-	fmt.Println("\n ✅ Current Account:")
-	fmt.Println(string(listJSON))
+	fmt.Println("\n ✅ Origin logging disabled successfully.")
+	fmt.Println(string(dataJSON))
 }
