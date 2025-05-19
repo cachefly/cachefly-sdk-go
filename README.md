@@ -124,10 +124,27 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 * [Activate Service](examples/services/activate/main.go)
 * [Deactivate Service](examples/services/deactivate/main.go)
 
----
+## Running the Examples with Make
 
+simplify running example scripts.
 
+1. **Ensure** you have a `.env` in your project root with your API token:
+   ```dotenv
+   CACHEFLY_API_TOKEN=your_real_api_token_here
+   ```
 
+  Run example, to list services:
+
+  ```
+    make service-list
+  ```
+
+  Run example, to list service by ID, You’ll be asked to enter the service ID interactively.
+
+  ```
+    make service-getbyid
+  ```
+ 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
