@@ -10,8 +10,7 @@
 
 A Golang SDK for interacting with the [CacheFly CDN API v2.5](https://portal.cachefly.com/api/2.5/docs/).
 
-This SDK is designed to abstract the HTTP API layer and simplify working with CacheFly resources 
-and can be used independently as golang package in your project or as the backend foundation for managing CacheFly resources. 
+This SDK abstracts the HTTP API layer and simplifies working with CacheFly resources. Use it independently as a Go package in your project or as the foundation for managing CacheFly resources.
 
 > ⚠️ This SDK is in active development.
 
@@ -21,67 +20,88 @@ CacheFly CDN is the only CDN built for throughput, delivering rich-media content
 
 ## ✨ Features
 
-The SDK provides support for the following CacheFly API functionalities:
+<table>
+  <tr>
+    <td valign="top">
 
-✅ Accounts
-  - Retrieve and update account information
-  - Manage child accounts
-  - Enable/disable two-factor authentication (2FA)
+* **Accounts**
 
-✅ Services
-  - List, create, update, activate/deactivate services
-  - Enable/disable access and origin logging
+  * Retrieve and update account information
+  * Manage child accounts
+  * Enable/disable two-factor authentication (2FA)
 
-✅ Service Domains
-  - Manage service domains
-  - Signal domain readiness for validation
+* **Services**
 
-✅ Service Rules
-  - List and update service rules
-  - Fetch service rules JSON schema
+  * List, create, update, activate/deactivate services
+  * Enable/disable access and origin logging
 
-✅ Service Options
-  - Retrieve and update basic service options
-  - Manage legacy API keys and ProtectServe keys
-  - Handle FTP settings and child accounts
+* **Service Domains**
 
-✅ Service Options - Referer Rules
-  - List, create, update, and delete referer rules
+  * Manage service domains
+  * Signal domain readiness for validation
 
-✅ Service Image Optimization
-  - Fetch, create, update, and activate/deactivate image optimization configurations
-  - Fetch default configurations and validation schemas
+* **Service Rules**
 
-✅ Certificates
-  - List, create, retrieve, and delete certificates
+  * List and update service rules
+  * Fetch service rules JSON schema
 
-✅ Origins
-  - List, create, update, and delete origins
+* **Service Options**
 
-✅ Users
-  - Retrieve and update user information
-  - Manage users and their permissions
-  - Activate/deactivate users
+  * Retrieve and update basic service options
+  * Manage legacy API keys and ProtectServe keys
+  * Handle FTP settings and child accounts
 
-✅ User Security
-  - Enable/disable two-factor authentication (2FA)
+    </td>
+    <td valign="top">
 
-✅ Script Configs
-  - List, create, retrieve, update, and delete script configurations
+* **Referer Rules**
 
-✅ LS Profiles
-  - Manage TLS profiles
+  * List, create, update, and delete referer rules
+
+* **Image Optimization**
+
+  * Fetch, create, update, and activate/deactivate image optimization configurations
+  * Fetch default configurations and validation schemas
+
+* **Certificates**
+
+  * List, create, retrieve, and delete certificates
+
+* **Origins**
+
+  * List, create, update, and delete origins
+
+* **Users**
+
+  * Retrieve and update user information
+  * Manage users and their permissions
+  * Activate/deactivate users
+
+* **User Security**
+
+  * Enable/disable two-factor authentication (2FA)
+
+* **Script Configs**
+
+  * List, create, retrieve, update, and delete script configurations
+
+* **TLS Profiles**
+
+  * Manage TLS profiles
+
+    </td>
+
+  </tr>
+
+</table>
 
 ## Installation
 
 ```bash
 go get github.com/avvvet/cachefly-sdk-go
-
 ```
 
 ## Quick Start
-
-Copy the snippet below into your project to get started:
 
 ```go
 client := cachefly.NewClient(cachefly.WithToken("YOUR_API_TOKEN"))
@@ -93,40 +113,44 @@ for _, a := range resp.Accounts {
 
 ## Example Usage
 
-Below is an example of how to use the CacheFly SDK in your Go project:
-
-1. Create a `.env` file in your project root containing:
+1. Create a `.env` file in your project root:
 
    ```dotenv
    CACHEFLY_API_TOKEN=your_real_api_token_here
    ```
-2. Run with:
+2. Run any example:
 
    ```bash
-   go run examples/<resource>/<example>.go
    ```
+
+go run examples/accounts/list.go
+
+```
+
+## Examples
 
 ### Accounts
 
-* [List Accounts](examples/accounts/main.go)
-* [Get Current Account](examples/accounts/main.go)
-* [Get Account By ID](examples/accounts/getbyid/main.go)
-* [Update Current Account](examples/accounts/update/main.go)
-* [Update Account By ID](examples/accounts/updatebyid/main.go)
-* [Create Child Account](examples/accounts/create/main.go)
+- [List Accounts](examples/accounts/list.go)
+- [Get Current Account](examples/accounts/get/main.go)
+- [Get Account By ID](examples/accounts/getbyid/main.go)
+- [Update Current Account](examples/accounts/update/main.go)
+- [Update Account By ID](examples/accounts/updatebyid/main.go)
+- [Create Child Account](examples/accounts/create/main.go)
+- [Enable Two-Factor Auth](examples/accounts/enable2fa/main.go)
 
 ### Services
 
-* [List Services](examples/services/list.go)
-* [Get Service By ID](examples/services/getbyid/main.go)
-* [Create Service](examples/services/create/main.go)
-* [Update Service](examples/services/update/main.go)
-* [Delete Service](examples/services/delete/main.go)
+- [List Services](examples/services/list.go)
+- [Get Service By ID](examples/services/getbyid/main.go)
+- [Create Service](examples/services/create/main.go)
+- [Update Service](examples/services/update/main.go)
+- [Delete Service](examples/services/delete/main.go)
 
 ---
-
-
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+```
