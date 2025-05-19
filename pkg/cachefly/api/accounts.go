@@ -9,28 +9,80 @@ import (
 	"github.com/avvvet/cachefly-sdk-go/internal/httpclient"
 )
 
-type Account struct {
-	ID                       string   `json:"_id"`
-	UpdatedAt                string   `json:"updateAt"`
-	CreatedAt                string   `json:"createdAt"`
-	CompanyName              string   `json:"companyName"`
-	Website                  string   `json:"website"`
-	Address1                 string   `json:"address1"`
-	Address2                 string   `json:"address2"`
-	City                     string   `json:"city"`
-	Country                  string   `json:"country"`
-	State                    string   `json:"state"`
-	Phone                    string   `json:"phone"`
-	Zip                      string   `json:"zip"`
-	TwoFactorAuthEnabled     bool     `json:"twoFactorAuthEnabled"`
-	TwoFactorAuthGracePeriod int      `json:"twoFactorAuthGracePeriod"`
-	Users                    []string `json:"users"`
-	Services                 []string `json:"services"`
-	Origins                  []string `json:"origins"`
-	Certificates             []string `json:"certificates"`
+type AccountsService struct {
+	Client *httpclient.Client
 }
 
-// CreateChildAccountRequest is the payload for creating a new child account.
+type Account struct {
+	ID          string `json:"_id"`
+	Uid         int    `json:"uid"`
+	CompanyName string `json:"companyName"`
+	Status      string `json:"status"`
+
+	// Parent relationship
+	Parent   *string `json:"parent"`
+	IsParent bool    `json:"isParent"`
+	IsChild  bool    `json:"isChild"`
+
+	// Signup and user info
+	SignupCountry string `json:"signupCountry"`
+	SignupIp      string `json:"signupIp"`
+	SignupDate    string `json:"signupDate"`
+	Email         string `json:"email"`
+
+	// Timestamps
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
+
+	// Two-factor authentication
+	TwoFactorAuthEnabled     bool `json:"twoFactorAuthEnabled"`
+	TwoFactorAuthGracePeriod int  `json:"twoFactorAuthGracePeriod"`
+
+	// TLS and SSL settings
+	DefaultTlsProfile           string `json:"defaultTlsProfile"`
+	AutoSslEnabled              bool   `json:"autoSslEnabled"`
+	DefaultAutoSsl              bool   `json:"defaultAutoSsl"`
+	DefaultDomainValidationMode string `json:"defaultDomainValidationMode"`
+	CertificatesEnabled         bool   `json:"certificatesEnabled"`
+
+	// SAML settings
+	SamlEnabled  bool `json:"samlEnabled"`
+	SamlRequired bool `json:"samlRequired"`
+	SamlActive   bool `json:"samlActive"`
+
+	// Caching and delivery
+	DefaultDeliveryRegion string `json:"defaultDeliveryRegion"`
+	CacheWarmingEnabled   bool   `json:"cacheWarmingEnabled"`
+
+	// Storage limits
+	MaxNumOfActiveStorageAccounts int `json:"maxNumOfActiveStorageAccounts"`
+
+	// Address info
+	Website  string `json:"website"`
+	Address1 string `json:"address1"`
+	Address2 string `json:"address2"`
+	City     string `json:"city"`
+	State    string `json:"state"`
+	Country  string `json:"country"`
+	Zip      string `json:"zip"`
+	Phone    string `json:"phone"`
+
+	// Relations and collections
+	Origins                 []string `json:"origins"`
+	Certificates            []string `json:"certificates"`
+	ScriptConfigDefinitions []string `json:"scriptConfigDefinitions"`
+	LogTargets              []string `json:"logTargets"`
+	Users                   []string `json:"users"`
+	Services                []string `json:"services"`
+	V1Account               bool     `json:"v1Account"`
+}
+
+/*
+It is expected that most companies will need only one account.
+The concept of sub accounts found in the older version 1 API has been directly replaced by the concept of services.
+Opening multiple accounts is only required to separate invoicing concerns.
+[as per the API doc]
+*/
 type CreateChildAccountRequest struct {
 	CompanyName string `json:"companyName"` // required
 	Username    string `json:"username"`    // required, 8–32 chars, lowercase letters/numbers, dashes
@@ -47,11 +99,6 @@ type CreateChildAccountRequest struct {
 	Zip         string `json:"zip,omitempty"`
 }
 
-// communication with the accounts endpoint
-type AccountsService struct {
-	Client *httpclient.Client
-}
-
 type ListAccountsResponse struct {
 	Meta     MetaInfo  `json:"meta"`
 	Accounts []Account `json:"data"`
@@ -66,7 +113,6 @@ type ListAccountsOptions struct {
 	ResponseType string
 }
 
-// UpdateAccountRequest is the payload for updating an account.
 type UpdateAccountRequest struct {
 	CompanyName              string `json:"companyName"`
 	Website                  string `json:"website"`
@@ -134,30 +180,44 @@ func (a *AccountsService) List(ctx context.Context, opts ListAccountsOptions) (*
 	return &result, nil
 }
 
-// Get account by ID
+// GetByID retrieves an account by its ID, optionally specifying a responseType.
 func (a *AccountsService) GetByID(ctx context.Context, id string, responseType string) (*Account, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
 
-	endpoint := "/accounts"
+	// 1) Base path with path‐param
+	endpoint := fmt.Sprintf("/accounts/%s", url.PathEscape(id))
 
+	// 2) Build up any query params
 	params := url.Values{}
-	params.Set("id", id)
-
 	if responseType != "" {
 		params.Set("responseType", responseType)
 	}
 
-	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
-
-	var result Account
-	err := a.Client.Get(ctx, fullURL, &result)
-	if err != nil {
-		return nil, err
+	// 3) Append the ?query=string only if we have params
+	fullURL := endpoint
+	if len(params) > 0 {
+		fullURL = fmt.Sprintf("%s?%s", endpoint, params.Encode())
 	}
 
+	// 4) Call into the HTTP client and unmarshal directly into Account
+	var result Account
+	if err := a.Client.Get(ctx, fullURL, &result); err != nil {
+		return nil, err
+	}
 	return &result, nil
+}
+
+// UpdateCurrentAccount updates the authenticated account (me) via PUT /accounts/me.
+func (a *AccountsService) UpdateCurrentAccount(ctx context.Context, req UpdateAccountRequest) (*Account, error) {
+	endpoint := "/accounts/me"
+
+	var updated Account
+	if err := a.Client.Put(ctx, endpoint, req, &updated); err != nil {
+		return nil, err
+	}
+	return &updated, nil
 }
 
 // UpdateAccountByID updates the fields of an existing account.
@@ -203,17 +263,6 @@ func (a *AccountsService) DeactivateAccountByID(ctx context.Context, id string) 
 
 	var updated Account
 	if err := a.Client.Put(ctx, endpoint, struct{}{}, &updated); err != nil {
-		return nil, err
-	}
-	return &updated, nil
-}
-
-// UpdateCurrentAccount updates the authenticated account (me) via PUT /accounts/me.
-func (a *AccountsService) UpdateCurrentAccount(ctx context.Context, req UpdateAccountRequest) (*Account, error) {
-	endpoint := "/accounts/me"
-
-	var updated Account
-	if err := a.Client.Put(ctx, endpoint, req, &updated); err != nil {
 		return nil, err
 	}
 	return &updated, nil
