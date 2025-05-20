@@ -124,6 +124,14 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 * [Activate Service](examples/services/activate/main.go)
 * [Deactivate Service](examples/services/deactivate/main.go)
 
+
+### Service Rules
+
+* [List Service Rules](examples/service_rules/list/main.go)  
+* [Update Service Rules](examples/service_rules/update/main.go)  
+* [Fetch Service Rules JSON Schema](examples/service_rules/schema/main.go)  
+
+
 ### Service Options
 
 * [Get Basic Service Options](examples/service_options/get_basic/main.go)  
