@@ -259,3 +259,75 @@ regenerate-ftp-password:
 	  echo "Running example: service-options-regenerate-ftp-password with ID $$SERVICE_ID"; \
 	  go run $(EXAMPLES_DIR_SERVICE_OPTIONS)/regenerate_ftp_password/main.go $$SERVICE_ID; \
 	'
+
+
+# SERVICE_OPTIONS_REFERER_RULES
+
+EXAMPLES_DIR_REFERER_RULES := examples/referer_rules
+
+# List referer rules
+referer-rules-list:
+	@bash -c '\
+	  SERVICE_ID="${SERVICE_ID:-}"; \
+	  if [ -z "$$SERVICE_ID" ]; then \
+	    read -p "Enter service ID: " SERVICE_ID; \
+	  fi; \
+	  echo "Running example: referer-rules-list with service ID $$SERVICE_ID"; \
+	  go run $(EXAMPLES_DIR_REFERER_RULES)/list/main.go $$SERVICE_ID; \
+	'
+
+# Get referer rule by ID
+referer-rule-get:
+	@bash -c '\
+	  SERVICE_ID="${SERVICE_ID:-}"; \
+	  if [ -z "$$SERVICE_ID" ]; then \
+	    read -p "Enter service ID: " SERVICE_ID; \
+	  fi; \
+	  RULE_ID="${RULE_ID:-}"; \
+	  if [ -z "$$RULE_ID" ]; then \
+	    read -p "Enter rule ID: " RULE_ID; \
+	  fi; \
+	  echo "Running example: referer-rule-get with service ID $$SERVICE_ID and rule ID $$RULE_ID"; \
+	  go run $(EXAMPLES_DIR_REFERER_RULES)/getbyid/main.go $$SERVICE_ID $$RULE_ID; \
+	'
+
+# Create a referer rule
+referer-rule-create:
+	@bash -c '\
+	  SERVICE_ID="${SERVICE_ID:-}"; \
+	  if [ -z "$$SERVICE_ID" ]; then \
+	    read -p "Enter service ID: " SERVICE_ID; \
+	  fi; \
+	  echo "Running example: referer-rule-create with service ID $$SERVICE_ID"; \
+	  go run $(EXAMPLES_DIR_REFERER_RULES)/create/main.go $$SERVICE_ID; \
+	'
+
+# Update a referer rule by ID
+referer-rule-update:
+	@bash -c '\
+	  SERVICE_ID="${SERVICE_ID:-}"; \
+	  if [ -z "$$SERVICE_ID" ]; then \
+	    read -p "Enter service ID: " SERVICE_ID; \
+	  fi; \
+	  RULE_ID="${RULE_ID:-}"; \
+	  if [ -z "$$RULE_ID" ]; then \
+	    read -p "Enter rule ID: " RULE_ID; \
+	  fi; \
+	  echo "Running example: referer-rule-update with service ID $$SERVICE_ID and rule ID $$RULE_ID"; \
+	  go run $(EXAMPLES_DIR_REFERER_RULES)/update/main.go $$SERVICE_ID $$RULE_ID; \
+	'
+
+# Delete a referer rule by ID
+referer-rule-delete:
+	@bash -c '\
+	  SERVICE_ID="${SERVICE_ID:-}"; \
+	  if [ -z "$$SERVICE_ID" ]; then \
+	    read -p "Enter service ID: " SERVICE_ID; \
+	  fi; \
+	  RULE_ID="${RULE_ID:-}"; \
+	  if [ -z "$$RULE_ID" ]; then \
+	    read -p "Enter rule ID: " RULE_ID; \
+	  fi; \
+	  echo "Running example: referer-rule-delete with service ID $$SERVICE_ID and rule ID $$RULE_ID"; \
+	  go run $(EXAMPLES_DIR_REFERER_RULES)/delete/main.go $$SERVICE_ID $$RULE_ID; \
+	'
