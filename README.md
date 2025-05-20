@@ -146,6 +146,24 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 * [Update Service Referer Rule](examples/referer_rules/update/main.go)  
 * [Delete Service Referer Rule](examples/referer_rules/delete/main.go)  
 
+### Image Optimization
+
+* [Fetch Configuration](examples/image_optimization/fetch_configuration/main.go)  
+* [Create Configuration](examples/image_optimization/create/main.go)  
+* [Activate Configuration](examples/image_optimization/activate/main.go)  
+* [Deactivate Configuration](examples/image_optimization/deactivate/main.go)  
+* [Fetch Default Configuration](examples/image_optimization/fetch_default/main.go)  
+* [Fetch Validation Schema](examples/image_optimization/fetch_schema/main.go)  
+
+
+### Certificates
+
+* [List Certificates](examples/certificates/list/main.go)  
+* [Create Certificate](examples/certificates/create/main.go)  
+* [Get Certificate By ID](examples/certificates/getbyid/main.go)  
+* [Delete Certificate By ID](examples/certificates/delete/main.go)  
+
+
 ## Running the Examples with Make
 
 simplify running example scripts.
