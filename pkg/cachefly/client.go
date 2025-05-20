@@ -71,6 +71,7 @@ func NewClient(opts ...Option) *Client {
 		ServiceOptions:             &api.ServiceOptionsService{Client: hc},
 		ServiceOptionsRefererRules: &api.ServiceOptionsRefererRulesService{Client: hc},
 		ServiceImageOptimization:   &api.ServiceImageOptimizationService{Client: hc},
+		Certificates:               &api.CertificatesService{Client: hc},
 		Origins:                    &api.OriginsService{Client: hc},
 		Users:                      &api.UsersService{Client: hc},
 		ScriptConfigs:              &api.ScriptConfigsService{Client: hc},

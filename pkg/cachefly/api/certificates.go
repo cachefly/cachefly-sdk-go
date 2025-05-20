@@ -9,6 +9,10 @@ import (
 	"github.com/avvvet/cachefly-sdk-go/internal/httpclient"
 )
 
+type CertificatesService struct {
+	Client *httpclient.Client
+}
+
 // TLS/SSL certificate in CacheFly.
 type Certificate struct {
 	ID                string   `json:"_id"`
@@ -41,10 +45,6 @@ type CreateCertificateRequest struct {
 	Certificate    string `json:"certificate"`        // required, PEM-encoded certificate
 	CertificateKey string `json:"certificateKey"`     // required, PEM-encoded private key
 	Password       string `json:"password,omitempty"` // optional password for key
-}
-
-type CertificatesService struct {
-	Client *httpclient.Client
 }
 
 // List fetches all certificates with optional filters.
