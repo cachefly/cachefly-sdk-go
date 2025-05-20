@@ -138,6 +138,13 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 * [Get FTP Settings](examples/service_options/get_ftp_settings/main.go)  
 * [Regenerate FTP Password](examples/service_options/regenerate_ftp_password/main.go)  
 
+### Service Options – Referer Rules
+
+* [List Service Referer Rules](examples/referer_rules/list/main.go)  
+* [Get Service Referer Rule By ID](examples/referer_rules/getbyid/main.go)  
+* [Create Service Referer Rule](examples/referer_rules/create/main.go)  
+* [Update Service Referer Rule](examples/referer_rules/update/main.go)  
+* [Delete Service Referer Rule](examples/referer_rules/delete/main.go)  
 
 ## Running the Examples with Make
 
