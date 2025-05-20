@@ -21,56 +21,39 @@ CacheFly CDN is the only CDN built for throughput, delivering rich-media content
 
 ## ✨ Features
 
-The SDK provides support for the following CacheFly API functionalities:
+- **Accounts**  
+  Manage your CacheFly account and child accounts, including 2FA settings.
 
-✅ Accounts
-  - Retrieve and update account information
-  - Manage child accounts
-  - Enable/disable two-factor authentication (2FA)
+- **Services**  
+  Create, list, update, activate/deactivate services and control access/origin logging.
 
-✅ Services
-  - List, create, update, activate/deactivate services
-  - Enable/disable access and origin logging
+- **Service Domains**  
+  Add, list, update, delete domains and signal readiness for validation.
 
-✅ Service Domains
-  - Manage service domains
-  - Signal domain readiness for validation
+- **Service Rules**  
+  List and update routing/cache rules and fetch the JSON schema for custom rules.
 
-✅ Service Rules
-  - List and update service rules
-  - Fetch service rules JSON schema
+- **Service Options**  
+  View and save basic settings, manage legacy and ProtectServe API keys, and configure FTP.
 
-✅ Service Options
-  - Retrieve and update basic service options
-  - Manage legacy API keys and ProtectServe keys
-  - Handle FTP settings and child accounts
+- **Image Optimization**  
+  Fetch, create, update and toggle image‐optimization configurations.
 
-✅ Service Options - Referer Rules
-  - List, create, update, and delete referer rules
+- **Certificates**  
+  List, create, retrieve, and delete TLS certificates.
 
-✅ Service Image Optimization
-  - Fetch, create, update, and activate/deactivate image optimization configurations
-  - Fetch default configurations and validation schemas
+- **Origins**  
+  Add, list, update, and remove origin servers.
 
-✅ Certificates
-  - List, create, retrieve, and delete certificates
+- **Users**  
+  Create, list, update, deactivate users and manage permissions + 2FA.
 
-✅ Origins
-  - List, create, update, and delete origins
+- **Script Configs**  
+  Manage custom scripts: list, create, update, delete.
 
-✅ Users
-  - Retrieve and update user information
-  - Manage users and their permissions
-  - Activate/deactivate users
+- **TLS Profiles**  
+  Create and manage TLS profiles for your services.
 
-✅ User Security
-  - Enable/disable two-factor authentication (2FA)
-
-✅ Script Configs
-  - List, create, retrieve, update, and delete script configurations
-
-✅ TLS Profiles
-  - Manage TLS profiles
 
 ## Installation
 
