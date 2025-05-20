@@ -1,0 +1,59 @@
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly"
+	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly/api"
+	"github.com/joho/godotenv"
+)
+
+func main() {
+	// Load environment variables
+	if err := godotenv.Load(); err != nil {
+		log.Printf("⚠️ Warning: unable to load .env file: %v", err)
+	}
+
+	// Read API token
+	token := os.Getenv("CACHEFLY_API_TOKEN")
+	if token == "" {
+		log.Fatal("❌ CACHEFLY_API_TOKEN environment variable is required")
+	}
+
+	// Read Service ID argument
+	if len(os.Args) < 2 {
+		log.Println("⚠️ Usage: go run main.go <service_id>")
+		return
+	}
+	serviceID := os.Args[1]
+
+	// Initialize CacheFly client
+	client := cachefly.NewClient(
+		cachefly.WithToken(token),
+	)
+
+	// Prepare create payload for new domain
+	payload := api.CreateServiceDomainRequest{
+		Name:        "www.example.com",
+		Description: "example description from SDK domain create",
+	}
+
+	// Call Create service domain
+	domain, err := client.ServiceDomains.Create(context.Background(), serviceID, payload)
+	if err != nil {
+		log.Fatalf("❌ Failed to create domain for service %s: %v", serviceID, err)
+	}
+
+	// Pretty-print the created domain
+	out, err := json.MarshalIndent(domain, "", "  ")
+	if err != nil {
+		log.Fatalf("❌ Error formatting domain JSON: %v", err)
+	}
+
+	fmt.Println("\n✅ Service domain created successfully:")
+	fmt.Println(string(out))
+}
