@@ -3,12 +3,23 @@ package api
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	"github.com/avvvet/cachefly-sdk-go/internal/httpclient"
 )
 
 type ServiceImageOptimizationService struct {
 	Client *httpclient.Client
+}
+
+/*
+CreateImageOptimizationOptions specifies the payload for creating an image optimization configuration.
+refere for correct paylaod from updated documentation.
+*/
+type CreateImageOptimizationOptions struct {
+	Enabled        bool     `json:"enabled"`                  // enable/disable optimization
+	Formats        []string `json:"formats,omitempty"`        // e.g. ["webp","avif"]
+	DefaultQuality int      `json:"defaultQuality,omitempty"` // quality level (0–100)
 }
 
 // GetConfiguration fetches the current image optimization configuration (YAML or JSON string).
@@ -28,7 +39,7 @@ func (s *ServiceImageOptimizationService) GetConfiguration(ctx context.Context, 
 
 // CreateConfiguration creates a new configuration; body is YAML or JSON string.
 // POST /services/{id}/imageopt4
-func (s *ServiceImageOptimizationService) CreateConfiguration(ctx context.Context, serviceID string, configStr string) (string, error) {
+func (s *ServiceImageOptimizationService) CreateConfiguration(ctx context.Context, serviceID string, configStr CreateImageOptimizationOptions) (string, error) {
 	if serviceID == "" {
 		return "", fmt.Errorf("serviceID is required")
 	}
@@ -87,7 +98,7 @@ func (s *ServiceImageOptimizationService) GetDefaults(ctx context.Context, servi
 	if serviceID == "" {
 		return "", fmt.Errorf("serviceID is required")
 	}
-	endpoint := fmt.Sprintf("/services/%s/imageopt4/defaults", serviceID)
+	endpoint := fmt.Sprintf("/services/%s/imageopt4/default", serviceID)
 
 	var defStr string
 	if err := s.Client.Get(ctx, endpoint, &defStr); err != nil {
@@ -96,13 +107,11 @@ func (s *ServiceImageOptimizationService) GetDefaults(ctx context.Context, servi
 	return defStr, nil
 }
 
-// GetExample fetches an example configuration.
-// GET /services/{id}/imageopt4/example
-func (s *ServiceImageOptimizationService) GetExample(ctx context.Context, serviceID string) (string, error) {
+func (s *ServiceImageOptimizationService) GetDetail(ctx context.Context, serviceID string) (string, error) {
 	if serviceID == "" {
 		return "", fmt.Errorf("serviceID is required")
 	}
-	endpoint := fmt.Sprintf("/services/%s/imageopt4/example", serviceID)
+	endpoint := fmt.Sprintf("/services/%s/imageopt4/details", serviceID)
 
 	var exStr string
 	if err := s.Client.Get(ctx, endpoint, &exStr); err != nil {
@@ -124,4 +133,33 @@ func (s *ServiceImageOptimizationService) ValidateConfiguration(ctx context.Cont
 		return nil, err
 	}
 	return result, nil
+}
+
+// ActivateConfiguration enables the image optimization configuration for a service.
+func (s *ServiceImageOptimizationService) ActivateConfiguration(ctx context.Context, serviceID string) error {
+	if serviceID == "" {
+		return fmt.Errorf("service ID is required")
+	}
+	endpoint := fmt.Sprintf("/services/%s/imageopt4/activate", url.PathEscape(serviceID))
+
+	emptyBody := struct{}{}
+
+	// Perform POST with no request body
+	if err := s.Client.Put(ctx, endpoint, emptyBody, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+// DeactivateConfiguration disables the image optimization configuration for a service.
+func (s *ServiceImageOptimizationService) DeactivateConfiguration(ctx context.Context, serviceID string) error {
+	if serviceID == "" {
+		return fmt.Errorf("service ID is required")
+	}
+	endpoint := fmt.Sprintf("/services/%s/imageopt4/deactivate", url.PathEscape(serviceID))
+	// Perform PUT with no request body
+	if err := s.Client.Put(ctx, endpoint, nil, nil); err != nil {
+		return err
+	}
+	return nil
 }
