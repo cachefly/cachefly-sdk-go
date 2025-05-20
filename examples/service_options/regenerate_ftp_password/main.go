@@ -1,0 +1,48 @@
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly"
+	"github.com/joho/godotenv"
+)
+
+func main() {
+	// Load environment variables from .env file
+	if err := godotenv.Load(); err != nil {
+		log.Printf("⚠️ Warning: unable to load .env file: %v", err)
+	}
+
+	// Read API token
+	token := os.Getenv("CACHEFLY_API_TOKEN")
+	if token == "" {
+		log.Fatal("❌ CACHEFLY_API_TOKEN environment variable is required")
+	}
+
+	// Read Service ID argument
+	if len(os.Args) < 2 {
+		log.Fatal("⚠️ Usage: go run main.go <service_id>")
+	}
+	serviceID := os.Args[1]
+
+	// Initialize CacheFly client
+	client := cachefly.NewClient(cachefly.WithToken(token))
+
+	// Regenerate FTP password (POST /services/{id}/options/ftp/password)
+	newPwd, err := client.ServiceOptions.RegenerateFTPPassword(context.Background(), serviceID, false)
+	if err != nil {
+		log.Fatalf("❌ Failed to regenerate FTP password for service %s: %v", serviceID, err)
+	}
+
+	// Print the new password
+	fmt.Println("✅ FTP password regenerated successfully:")
+	jsonData, err := json.MarshalIndent(newPwd, "", " ")
+	if err != nil {
+		log.Fatalf("Error formatting MarshalIndent [RegenerateFTPPassword]: %v", err)
+	}
+	fmt.Println(string(jsonData))
+}

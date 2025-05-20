@@ -15,6 +15,7 @@ type Client struct {
 	Accounts                   *api.AccountsService
 	ServiceDomains             *api.ServiceDomainsService
 	ServiceRules               *api.ServiceRulesService
+	ServiceOptions             *api.ServiceOptionsService
 	ServiceOptionsRefererRules *api.ServiceOptionsRefererRulesService
 	ServiceImageOptimization   *api.ServiceImageOptimizationService
 	Certificates               *api.CertificatesService
@@ -67,6 +68,7 @@ func NewClient(opts ...Option) *Client {
 		Accounts:                   &api.AccountsService{Client: hc},
 		ServiceDomains:             &api.ServiceDomainsService{Client: hc},
 		ServiceRules:               &api.ServiceRulesService{Client: hc},
+		ServiceOptions:             &api.ServiceOptionsService{Client: hc},
 		ServiceOptionsRefererRules: &api.ServiceOptionsRefererRulesService{Client: hc},
 		ServiceImageOptimization:   &api.ServiceImageOptimizationService{Client: hc},
 		Origins:                    &api.OriginsService{Client: hc},

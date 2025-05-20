@@ -121,8 +121,11 @@ func (s *ServiceOptionsService) RegenerateLegacyAPIKey(ctx context.Context, id s
 	}
 	endpoint := fmt.Sprintf("/services/%s/options/apikey", id)
 
+	//it needs empty body
+	emptyBody := struct{}{}
+
 	var res LegacyAPIKeyResponse
-	if err := s.Client.Post(ctx, endpoint, nil, &res); err != nil {
+	if err := s.Client.Post(ctx, endpoint, emptyBody, &res); err != nil {
 		return nil, err
 	}
 	return &res, nil
@@ -143,8 +146,14 @@ func (s *ServiceOptionsService) GetProtectServeKey(ctx context.Context, id strin
 		return nil, fmt.Errorf("id is required")
 	}
 	endpoint := fmt.Sprintf("/services/%s/options/protectserve", id)
+
 	params := url.Values{}
-	params.Set("hideSecrets", strconv.FormatBool(hideSecrets))
+	params.Set("hideSecrets", "false")
+
+	if strconv.FormatBool(hideSecrets) != "" {
+		params.Set("hideSecrets", strconv.FormatBool(hideSecrets))
+	}
+
 	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
 
 	var res ProtectServeKeyResponse
@@ -166,8 +175,11 @@ func (s *ServiceOptionsService) RecreateProtectServeKey(ctx context.Context, id,
 	}
 	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
 
+	//it needs empty body
+	emptyBody := struct{}{}
+
 	var res ProtectServeKeyResponse
-	if err := s.Client.Post(ctx, fullURL, nil, &res); err != nil {
+	if err := s.Client.Post(ctx, fullURL, emptyBody, &res); err != nil {
 		return nil, err
 	}
 	return &res, nil
@@ -187,6 +199,22 @@ func (s *ServiceOptionsService) UpdateProtectServeOptions(ctx context.Context, i
 	return &res, nil
 }
 
+// DeleteProtectServeKey deletes the ProtectServe key for the specified service.
+func (s *ServiceOptionsService) DeleteProtectServeKey(ctx context.Context, serviceID string) error {
+	if serviceID == "" {
+		return fmt.Errorf("service ID is required")
+	}
+
+	// Build endpoint path: DELETE /services/{id}/options/protectserve
+	endpoint := fmt.Sprintf("/services/%s/options/protectserve", url.PathEscape(serviceID))
+
+	// Perform DELETE request. No request body expected.
+	if err := s.Client.Delete(ctx, endpoint, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 // GetFTPSettings retrieves FTP settings for a service (optional hideSecrets).
 func (s *ServiceOptionsService) GetFTPSettings(ctx context.Context, id string, hideSecrets bool) (*FTPSettingsResponse, error) {
 	if id == "" {
@@ -194,7 +222,12 @@ func (s *ServiceOptionsService) GetFTPSettings(ctx context.Context, id string, h
 	}
 	endpoint := fmt.Sprintf("/services/%s/options/ftp", id)
 	params := url.Values{}
-	params.Set("hideSecrets", strconv.FormatBool(hideSecrets))
+
+	params.Set("hideSecrets", "false")
+	if strconv.FormatBool(hideSecrets) != "" {
+		params.Set("hideSecrets", strconv.FormatBool(hideSecrets))
+	}
+
 	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
 
 	var res FTPSettingsResponse
@@ -211,11 +244,18 @@ func (s *ServiceOptionsService) RegenerateFTPPassword(ctx context.Context, id st
 	}
 	endpoint := fmt.Sprintf("/services/%s/options/ftp", id)
 	params := url.Values{}
-	params.Set("hideSecrets", strconv.FormatBool(hideSecrets))
+
+	params.Set("hideSecrets", "false")
+	if strconv.FormatBool(hideSecrets) != "" {
+		params.Set("hideSecrets", strconv.FormatBool(hideSecrets))
+	}
+
 	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
 
+	emptyBody := struct{}{}
+
 	var res FTPSettingsResponse
-	if err := s.Client.Post(ctx, fullURL, nil, &res); err != nil {
+	if err := s.Client.Post(ctx, fullURL, emptyBody, &res); err != nil {
 		return nil, err
 	}
 	return &res, nil
