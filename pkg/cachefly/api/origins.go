@@ -67,13 +67,13 @@ type UpdateOriginRequest struct {
 	Type                   string `json:"type,omitempty"`
 	Name                   string `json:"name,omitempty"`
 	Hostname               string `json:"hostname,omitempty"`
-	Gzip                   *bool  `json:"gzip,omitempty"`
-	CacheByQueryParam      *bool  `json:"cacheByQueryParam,omitempty"`
+	Gzip                   bool   `json:"gzip,omitempty"`
+	CacheByQueryParam      bool   `json:"cacheByQueryParam,omitempty"`
 	Scheme                 string `json:"scheme,omitempty"`
-	TTL                    *int   `json:"ttl,omitempty"`
-	MissedTTL              *int   `json:"missedTtl,omitempty"`
-	ConnectionTimeout      *int   `json:"connectionTimeout,omitempty"`
-	TimeToFirstByteTimeout *int   `json:"timeToFirstByteTimeout,omitempty"`
+	TTL                    int    `json:"ttl,omitempty"`
+	MissedTTL              int    `json:"missedTtl,omitempty"`
+	ConnectionTimeout      int    `json:"connectionTimeout,omitempty"`
+	TimeToFirstByteTimeout int    `json:"timeToFirstByteTimeout,omitempty"`
 	AccessKey              string `json:"accessKey,omitempty"`
 	SecretKey              string `json:"secretKey,omitempty"`
 	Region                 string `json:"region,omitempty"`
