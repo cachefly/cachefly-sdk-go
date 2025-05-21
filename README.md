@@ -163,6 +163,14 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 * [Get Certificate By ID](examples/certificates/getbyid/main.go)  
 * [Delete Certificate By ID](examples/certificates/delete/main.go)  
 
+### Origins
+
+* [List All Origins](examples/origins/list/main.go)  
+* [Get Origin By ID](examples/origins/getbyid/main.go)  
+* [Create Origin](examples/origins/create/main.go)  
+* [Update Origin By ID](examples/origins/update/main.go)  
+* [Delete Origin By ID](examples/origins/delete/main.go)  
+
 
 ## Running the Examples with Make
 
