@@ -184,6 +184,11 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 * [Deactivate User](examples/users/deactivate/main.go)  
 * [List Allowed Permissions](examples/users/allowed_permissions/main.go)  
 
+### User Security
+
+* [Enable Two-Factor Authentication](examples/users/enable2fa/main.go)  
+* [Disable Two-Factor Authentication](examples/users/disable2fa/main.go)  
+
 
 ## Running the Examples with Make
 
