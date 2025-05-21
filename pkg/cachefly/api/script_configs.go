@@ -54,10 +54,11 @@ type CreateScriptConfigRequest struct {
 
 // UpdateScriptConfigRequest is the payload for updating a config.
 type UpdateScriptConfigRequest struct {
-	Name     string      `json:"name,omitempty"`
-	MimeType string      `json:"mimeType,omitempty"`
-	Services []string    `json:"services,omitempty"`
-	Value    interface{} `json:"value,omitempty"`
+	Name                   string      `json:"name,omitempty"`
+	MimeType               string      `json:"mimeType,omitempty"`
+	Services               []string    `json:"services,omitempty"`
+	ScriptConfigDefinition string      `json:"scriptConfigDefinition"`
+	Value                  interface{} `json:"value,omitempty"`
 }
 
 // ScriptConfigsService handles /scriptConfigs endpoints.
@@ -180,4 +181,91 @@ func (s *ScriptConfigsService) DeactivateByID(ctx context.Context, id string) (*
 		return nil, err
 	}
 	return &cfg, nil
+}
+
+// GetValueAsFile retrieves the raw script configuration file content for the given config ID.
+// It calls GET /scriptConfigs/{id}/file and returns the file bytes.
+func (s *ScriptConfigsService) GetValueAsFile(ctx context.Context, configID string) ([]byte, error) {
+	if configID == "" {
+		return nil, fmt.Errorf("config ID is required")
+	}
+	endpoint := fmt.Sprintf("/scriptConfigs/%s/file", url.PathEscape(configID))
+
+	// The client should return raw bytes for non-JSON endpoints.
+	var content []byte
+	if err := s.Client.Get(ctx, endpoint, &content); err != nil {
+		return nil, err
+	}
+	return content, nil
+}
+
+// UpdateScriptConfigValue updates the script configuration content using raw file data.
+func (s *ScriptConfigsService) UpdateValueAsFile(ctx context.Context, configID string, content []byte) (*ScriptConfig, error) {
+	if configID == "" {
+		return nil, fmt.Errorf("config ID is required")
+	}
+	endpoint := fmt.Sprintf("/scriptConfigs/%s/value", url.PathEscape(configID))
+
+	var updated ScriptConfig
+	// Pass raw bytes as body; Client.Put must handle []byte by sending as-is
+	if err := s.Client.Put(ctx, endpoint, content, &updated); err != nil {
+		return nil, err
+	}
+	return &updated, nil
+}
+
+// ListPromo retrieves promo script config definitions.
+// GET /scriptConfigDefinitions/promo
+func (s *ScriptConfigsService) ListPromo(ctx context.Context, includeFeatures bool) ([]ScriptConfig, error) {
+	endpoint := "/scriptConfigDefinitions/promo"
+	params := url.Values{}
+	// only send includeFeatures when true
+	if includeFeatures {
+		params.Set("includeFeatures", strconv.FormatBool(true))
+	}
+	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
+
+	var defs []ScriptConfig
+	if err := s.Client.Get(ctx, fullURL, &defs); err != nil {
+		return nil, err
+	}
+	return defs, nil
+}
+
+func (s *ScriptConfigsService) GetDefinitionByID(ctx context.Context, id string) (*ScriptConfig, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+	endpoint := fmt.Sprintf("/scriptConfigDefinitions/%s", url.PathEscape(id))
+
+	var def ScriptConfig
+	if err := s.Client.Get(ctx, endpoint, &def); err != nil {
+		return nil, err
+	}
+	return &def, nil
+}
+
+// List returns account-level script config definitions with optional filters.
+// GET /scriptConfigDefinitions
+func (s *ScriptConfigsService) ListAccountScriptConfigDefinitions(ctx context.Context, opts ListScriptConfigsOptions) (*ListScriptConfigsResponse, error) {
+	endpoint := "/scriptConfigDefinitions"
+	params := url.Values{}
+	params.Set("includeFeatures", strconv.FormatBool(opts.IncludeFeatures))
+	params.Set("includeHidden", strconv.FormatBool(opts.IncludeHidden))
+	if opts.Offset >= 0 {
+		params.Set("offset", strconv.Itoa(opts.Offset))
+	}
+	if opts.Limit > 0 {
+		params.Set("limit", strconv.Itoa(opts.Limit))
+	}
+	if opts.ResponseType != "" {
+		params.Set("responseType", opts.ResponseType)
+	}
+	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
+
+	var resp ListScriptConfigsResponse
+	if err := s.Client.Get(ctx, fullURL, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
 }
