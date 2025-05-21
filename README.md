@@ -171,6 +171,19 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 * [Update Origin By ID](examples/origins/update/main.go)  
 * [Delete Origin By ID](examples/origins/delete/main.go)  
 
+### Users
+
+* [List Users](examples/users/list/main.go)  
+* [Get User By ID](examples/users/getbyid/main.go)  
+* [Create User](examples/users/create/main.go)  
+* [Update User By ID](examples/users/update/main.go)  
+* [Delete User By ID](examples/users/delete/main.go)  
+* [Get Current User](examples/users/me/main.go)  
+* [Update Current User](examples/users/update_me/main.go)  
+* [Activate User](examples/users/activate/main.go)  
+* [Deactivate User](examples/users/deactivate/main.go)  
+* [List Allowed Permissions](examples/users/allowed_permissions/main.go)  
+
 
 ## Running the Examples with Make
 
