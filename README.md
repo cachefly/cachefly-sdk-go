@@ -205,6 +205,10 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 * [Get Script Config Definition By ID](examples/script_configs/definitions_getbyid/main.go)  
 * [List Promo Script Config Definitions](examples/script_configs/list_promo/main.go)  
 
+### TLS Profiles
+
+* [List TLS Profiles](examples/tls_profiles/list/main.go)  
+* [Get TLS Profile By ID](examples/tls_profiles/getbyid/main.go)  
 
 
 ## Running the Examples with Make
