@@ -187,7 +187,24 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 ### User Security
 
 * [Enable Two-Factor Authentication](examples/users/enable2fa/main.go)  
-* [Disable Two-Factor Authentication](examples/users/disable2fa/main.go)  
+* [Disable Two-Factor Authentication](examples/users/disable2fa/main.go) 
+
+### Script Configs
+* [List Script Configs](examples/script_configs/list/main.go)  
+* [Get Script Config By ID](examples/script_configs/getbyid/main.go)  
+* [Create Script Config](examples/script_configs/create/main.go)  
+* [Update Script Config By ID](examples/script_configs/update/main.go)  
+* [Update Script Config Value As File](examples/script_configs/update_file/main.go)  
+* [Get Script Config Value As File](examples/script_configs/get_file/main.go)  
+* [Fetch Script Config JSON Schema](examples/script_configs/schema/main.go)  
+* [Activate Script Config](examples/script_configs/activate/main.go)
+* [Deactivate Script Config](examples/script_configs/deactivate/main.go)
+
+### Script Config Definitions
+* [List Account Script Config Definitions](examples/script_configs/list_account_definitions/main.go)  
+* [Get Script Config Definition By ID](examples/script_configs/definitions_getbyid/main.go)  
+* [List Promo Script Config Definitions](examples/script_configs/list_promo/main.go)  
+
 
 
 ## Running the Examples with Make
