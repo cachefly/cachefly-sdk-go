@@ -331,3 +331,21 @@ referer-rule-delete:
 	  echo "Running example: referer-rule-delete with service ID $$SERVICE_ID and rule ID $$RULE_ID"; \
 	  go run $(EXAMPLES_DIR_REFERER_RULES)/delete/main.go $$SERVICE_ID $$RULE_ID; \
 	'
+EXAMPLES_DIR_TLS_PROFILES := examples/tls_profiles
+
+# List all TLS profiles
+tls-profiles-list:
+	@echo "Running example: tls-profiles-list"
+	@go run $(EXAMPLES_DIR_TLS_PROFILES)/list/main.go
+
+# Get a TLS profile by ID
+tls-profile-get:
+	@bash -c '\
+	  PROFILE_ID="$${PROFILE_ID:-}"; \
+	  if [ -z "$$PROFILE_ID" ]; then \
+	    read -p "Enter TLS Profile ID: " PROFILE_ID; \
+	  fi; \
+	  echo "Running example: tls-profile-get with ID $$PROFILE_ID"; \
+	  go run $(EXAMPLES_DIR_TLS_PROFILES)/getbyid/main.go $$PROFILE_ID; \
+	'
+
