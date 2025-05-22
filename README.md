@@ -231,7 +231,27 @@ simplify running example scripts.
   ```
     make service-getbyid
   ```
- 
+
+## Acceptance Tests
+
+The SDK includes one or two end-to-end (acceptance) tests per resources that hit real CacheFly API endpoints. 
+
+- Require a live API token in a `.env` file at the project root  
+- Automatically skip if `.env` or `CACHEFLY_API_TOKEN` is not found  
+- Discover valid resource IDs at runtime (no other setup needed)  
+- Run against your account/staging environment to verify full CRUD behavior  
+
+Create a `.env` in your repo root with:
+
+```dotenv
+CACHEFLY_API_TOKEN=your_real_api_token_here
+```
+
+
+```run acceptance tests 
+  go test ./pkg/cachefly/api -timeout 30s
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
