@@ -25,7 +25,7 @@ type Client struct {
 func New(cfg Config) *Client {
 	return &Client{
 		http: &http.Client{
-			Timeout: 35 * time.Second, // Set a reasonable timeout
+			Timeout: 35 * time.Second,
 		},
 		baseURL: cfg.BaseURL,
 		token:   cfg.AuthToken,
