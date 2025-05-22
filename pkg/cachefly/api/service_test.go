@@ -7,14 +7,7 @@ import (
 
 	"github.com/avvvet/cachefly-sdk-go/internal/httpclient"
 	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly/api"
-	"github.com/joho/godotenv"
 )
-
-func loadEnv(t *testing.T) {
-	if err := godotenv.Load("../../../.env"); err != nil {
-		t.Log(".env not found, relying on existing environment variables")
-	}
-}
 
 func TestServicesService_List(t *testing.T) {
 	loadEnv(t)

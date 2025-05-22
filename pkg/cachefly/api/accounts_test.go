@@ -1,4 +1,4 @@
-package api
+package api_test
 
 import (
 	"context"
@@ -6,11 +6,12 @@ import (
 	"testing"
 
 	"github.com/avvvet/cachefly-sdk-go/internal/httpclient"
+	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly/api"
 	"github.com/joho/godotenv"
 )
 
 func loadEnv(t *testing.T) {
-	if err := godotenv.Load(".env"); err != nil {
+	if err := godotenv.Load("../../../.env"); err != nil {
 		t.Log(".env not found, relying on existing environment variables")
 	}
 }
@@ -28,7 +29,7 @@ func TestAccountsService_Get(t *testing.T) {
 		AuthToken: token,
 	}
 	client := httpclient.New(config)
-	service := &AccountsService{Client: client}
+	service := &api.AccountsService{Client: client}
 
 	account, err := service.Get(context.Background(), "shallow")
 	if err != nil {
@@ -53,9 +54,9 @@ func TestAccountsService_List(t *testing.T) {
 		AuthToken: token,
 	}
 	client := httpclient.New(config)
-	service := &AccountsService{Client: client}
+	service := &api.AccountsService{Client: client}
 
-	opts := ListAccountsOptions{
+	opts := api.ListAccountsOptions{
 		IsChild:      false,
 		IsParent:     false,
 		Status:       "ACTIVE",
