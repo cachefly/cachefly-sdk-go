@@ -38,7 +38,6 @@ type TLSProfilesService struct {
 }
 
 // List retrieves all TLS profiles, with optional sort, group, paging.
-// :contentReference[oaicite:0]{index=0}
 func (s *TLSProfilesService) List(ctx context.Context, opts ListTLSProfilesOptions) (*ListTLSProfilesResponse, error) {
 	endpoint := "/tlsprofiles"
 	params := url.Values{}
@@ -67,7 +66,6 @@ func (s *TLSProfilesService) List(ctx context.Context, opts ListTLSProfilesOptio
 }
 
 // GetByID fetches a single TLS profile by its ID.
-// :contentReference[oaicite:1]{index=1}
 func (s *TLSProfilesService) GetByID(ctx context.Context, id string) (*TLSProfile, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
