@@ -6,7 +6,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/examples/users/enable2fa/main.go",
+            "program": "${workspaceFolder}/examples/accounts/list/main.go",
             "env": {},
             "args": [],
             "showLog": true,

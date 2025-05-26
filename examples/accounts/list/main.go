@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -30,11 +31,11 @@ func main() {
 
 	// Prepare list options
 	opts := api.ListAccountsOptions{
-		Offset:       0,
-		Limit:        10,
-		Status:       "ACTIVE",
-		IsChild:      false,
-		IsParent:     false,
+		Offset: 0,
+		Limit:  10,
+		Status: "ACTIVE",
+		//IsChild:      false,
+		IsParent:     true,
 		ResponseType: "shallow",
 	}
 
@@ -44,13 +45,11 @@ func main() {
 		log.Fatalf("❌ Failed to list accounts: %v", err)
 	}
 
-	// Print out the retrieved accounts
-	if len(resp.Accounts) == 0 {
-		fmt.Println("✗ No accounts found.")
-	} else {
-		fmt.Println("✅ Accounts retrieved successfully:")
-		for _, acct := range resp.Accounts {
-			fmt.Printf("- ID: %s, Name: %s\n", acct.ID, acct.CompanyName)
-		}
+	listJSON, err := json.MarshalIndent(resp, "", "  ")
+	if err != nil {
+		log.Fatalf("Error formatting MarshalIndent [account]: %v", err)
 	}
+
+	fmt.Println("\n ✅ Accounts retrieved successfully:")
+	fmt.Println(string(listJSON))
 }
