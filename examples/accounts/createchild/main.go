@@ -30,10 +30,10 @@ func main() {
 	)
 
 	payload := api.CreateChildAccountRequest{
-		CompanyName: "string",
-		Username:    "stringstring",
+		CompanyName: "JWR-FROM-SDK",
+		Username:    "sdkuser001",
 		Password:    "stringstring",
-		FullName:    "string",
+		FullName:    "SDK GO",
 		Email:       "user@example.com",
 		Website:     "http://example.com",
 		Address1:    "string",
