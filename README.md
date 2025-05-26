@@ -96,7 +96,13 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 * [Get Account By ID](examples/accounts/getbyid/main.go)
 * [Update Current Account](examples/accounts/update/main.go)
 * [Update Account By ID](examples/accounts/updatebyid/main.go)
-* [Create Child Account](examples/accounts/create/main.go)
+* [Create Child Account](examples/accounts/createchild/main.go)
+* [Activate Child Account](examples/accounts/activate/main.go)
+* [Deactivate Child Account](examples/accounts/deactivate/main.go)
+* [Get Child Account Auth Token](examples/accounts/getchildauthtoken/main.go)
+* [Enable Two-Factor Authentication](examples/accounts/enable2fa/main.go)  
+* [Disable Two-Factor Authentication](examples/accounts/disable2fa/main.go) 
+
 
 ### Services
 
