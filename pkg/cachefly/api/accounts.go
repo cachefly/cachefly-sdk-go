@@ -308,3 +308,25 @@ func (a *AccountsService) GetChildAccountAuthToken(ctx context.Context, id strin
 	// 3) Return token + expiry
 	return &resp, nil
 }
+
+// Enable2FAForCurrentAccount enables two-factor authentication for the currently authenticated account.
+// PUT /accounts/me/enable2FA
+func (a *AccountsService) Enable2FAForCurrentAccount(ctx context.Context) (*Account, error) {
+	endpoint := "/accounts/me/enable2FA"
+
+	var updated Account
+	if err := a.Client.Put(ctx, endpoint, struct{}{}, &updated); err != nil {
+		return nil, err
+	}
+	return &updated, nil
+}
+
+func (a *AccountsService) Disable2FAForCurrentAccount(ctx context.Context) (*Account, error) {
+	endpoint := "/accounts/me/disable2FA"
+
+	var updated Account
+	if err := a.Client.Put(ctx, endpoint, struct{}{}, &updated); err != nil {
+		return nil, err
+	}
+	return &updated, nil
+}
