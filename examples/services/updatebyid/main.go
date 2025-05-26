@@ -34,10 +34,11 @@ func main() {
 	)
 
 	payload := api.UpdateServiceRequest{
-		Description:    "updated service from SDK",
-		TLSProfile:     "66320d4208158b00411703e4",
-		AutoSSL:        false,
-		DeliveryRegion: "673f01735a5ddf015fc46997",
+		Description:       "updated service from SDK",
+		TLSProfile:        "66320d4208158b00411703e4",
+		AutoSSL:           false,
+		DeliveryRegion:    "673f01735a5ddf015fc46997",
+		ConfigurationMode: "API_RULES",
 	}
 
 	service, err := client.Services.UpdateServiceByID(context.Background(), serviceID, payload)

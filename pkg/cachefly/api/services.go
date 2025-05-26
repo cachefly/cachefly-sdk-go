@@ -57,10 +57,11 @@ type ListOptions struct {
 }
 
 type UpdateServiceRequest struct {
-	Description    string `json:"description"`
-	TLSProfile     string `json:"tlsProfile"`
-	AutoSSL        bool   `json:"autoSsl"`
-	DeliveryRegion string `json:"deliveryRegion"`
+	Description       string `json:"description"`
+	TLSProfile        string `json:"tlsProfile"`
+	AutoSSL           bool   `json:"autoSsl"`
+	DeliveryRegion    string `json:"deliveryRegion"`
+	ConfigurationMode string `json:"configurationMode"`
 }
 
 type EnableAccessLogsRequest struct {
