@@ -31,7 +31,7 @@ func main() {
 
 	// Prepare update payload object
 	updatePayload := api.UpdateAccountRequest{
-		CompanyName:              "string",
+		CompanyName:              "parent-company-updated-sdk",
 		Website:                  "http://exammple.com",
 		Address1:                 "string",
 		Address2:                 "string",

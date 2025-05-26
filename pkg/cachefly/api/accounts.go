@@ -282,3 +282,29 @@ func (a *AccountsService) CreateChildAccount(ctx context.Context, req CreateChil
 	}
 	return &created, nil
 }
+
+// ChildAccountAuthResponse is the JSON returned by POST /accounts/{id}/auth
+type ChildAccountAuthResponse struct {
+	Token     string `json:"token"`
+	ExpiresAt string `json:"expiresAt"`
+}
+
+// parent account can request GetChildAccountAuthToken requests of a child-account.
+// then using this token, all other service mangement can be requested for the child account
+// POST /accounts/{id}/auth
+func (a *AccountsService) GetChildAccountAuthToken(ctx context.Context, id string) (*ChildAccountAuthResponse, error) {
+	if id == "" {
+		return nil, fmt.Errorf("id is required")
+	}
+	// 1) Build the path
+	endpoint := fmt.Sprintf("/accounts/%s/auth", url.PathEscape(id))
+
+	// 2) Call POST with an empty JSON body
+	var resp ChildAccountAuthResponse
+	if err := a.Client.Post(ctx, endpoint, struct{}{}, &resp); err != nil {
+		return nil, err
+	}
+
+	// 3) Return token + expiry
+	return &resp, nil
+}
