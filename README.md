@@ -9,6 +9,7 @@
 ## CacheFly SDK for Go
 
 A Golang SDK for interacting with the [CacheFly CDN API v2.5](https://portal.cachefly.com/api/2.5/docs/).
+v2.6 support coming soon.
 
 This SDK is designed to abstract the HTTP API layer and simplify working with CacheFly resources 
 and can be used independently as golang package in your project or as the backend foundation for managing CacheFly resources. 
