@@ -32,14 +32,19 @@ func main() {
 	opts := api.ServiceOptions{
 		ReverseProxy: api.ReverseProxyConfig{
 			Mode:              "WEB",
-			Enabled:           false,
+			Enabled:           true,
 			CacheByQueryParam: true,
 			Hostname:          "www.example.com",
 			OriginScheme:      "FOLLOW",
 			TTL:               2678400,
 			UseRobotsTXT:      true,
 		},
-		// Explicitly send an empty array (not null) for this field:
+		ErrorTTL: api.Option{
+			Enabled: true,
+			Value:   120,
+		},
+		NoCache: true,
+
 		MimeTypesOverrides: []api.MimeTypeOverride{},
 		ExpiryHeaders:      []api.ExpiryHeader{},
 	}
