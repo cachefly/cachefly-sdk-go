@@ -9,15 +9,58 @@ import (
 	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
 )
 
-// ServiceOptions represents basic service options.
+// ServiceOptions represents the full set of options you can GET/PUT on a service.
 type ServiceOptions struct {
+	FTP                    bool               `json:"ftp"`
 	CORS                   bool               `json:"cors"`
 	AutoRedirect           bool               `json:"autoRedirect"`
 	ReverseProxy           ReverseProxyConfig `json:"reverseProxy"`
 	MimeTypesOverrides     []MimeTypeOverride `json:"mimeTypesOverrides"`
 	ExpiryHeaders          []ExpiryHeader     `json:"expiryHeaders"`
-	APIKeyEnabled          bool               `json:"apiKeyEnabled"`
+	RawLogs                Option             `json:"rawLogs"`
+	BrotliCompression      bool               `json:"brotli_compression"`
+	BrotliSupport          bool               `json:"brotli_support"`
+	Livestreaming          bool               `json:"livestreaming"`
+	NoCache                bool               `json:"nocache"`
+	ErrorTTL               Option             `json:"error_ttl"`
+	CacheByGeoCountry      bool               `json:"cachebygeocountry"`
+	CacheByRegion          bool               `json:"cachebyregion"`
+	CacheByReferer         bool               `json:"cachebyreferer"`
+	NormalizeQueryString   bool               `json:"normalizequerystring"`
+	TTFBTimeout            Option             `json:"ttfb_timeout"`
+	ConTimeout             Option             `json:"contimeout"`
+	AllowRetry             bool               `json:"allowretry"`
+	SharedShield           Option             `json:"sharedshield"`
+	LinkPreheat            bool               `json:"linkpreheat"`
+	EdgeToOrigin           bool               `json:"edgetoorigin"`
+	BWThrottle             Option             `json:"bwthrottle"`
+	FollowRedirect         bool               `json:"followredirect"`
+	PurgeMode              Option             `json:"purgemode"`
+	PurgeNoQuery           bool               `json:"purgenoquery"`
+	DirPurgeSkip           Option             `json:"dirpurgeskip"`
+	ForceOrigQString       bool               `json:"forceorigqstring"`
+	SkipPserveExt          Option             `json:"skip_pserve_ext"`
+	HTTPMethods            Option             `json:"httpmethods"`
+	BWThrottleQuery        Option             `json:"bwthrottlequery"`
+	ServeStale             bool               `json:"servestale"`
+	CachePostRequests      bool               `json:"cachepostrequests"`
+	OriginHostHeader       Option             `json:"originhostheader"`
+	SendXFF                bool               `json:"send-xff"`
+	UseCFDooTEncoding      bool               `json:"usecfdootencoding"`
+	SkipURLEncoding        bool               `json:"skip_urlencoding"`
+	MaxCons                Option             `json:"maxcons"`
+	Trace                  bool               `json:"trace"`
+	Slice                  Option             `json:"slice"`
+	UseSlicer              bool               `json:"use_slicer"`
+	Redirect               Option             `json:"redirect"`
+	SkipEncodingExt        Option             `json:"skip_encoding_ext"`
 	ProtectServeKeyEnabled bool               `json:"protectServeKeyEnabled"`
+	APIKeyEnabled          bool               `json:"apiKeyEnabled"`
+}
+
+type Option struct {
+	Enabled bool        `json:"enabled"`
+	Value   interface{} `json:"value"`
 }
 
 // ReverseProxyConfig configures reverse proxy behavior.
