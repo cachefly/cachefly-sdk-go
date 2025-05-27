@@ -185,18 +185,18 @@ func (s *ScriptConfigsService) DeactivateByID(ctx context.Context, id string) (*
 
 // GetValueAsFile retrieves the raw script configuration file content for the given config ID.
 // It calls GET /scriptConfigs/{id}/file and returns the file bytes.
-func (s *ScriptConfigsService) GetValueAsFile(ctx context.Context, configID string) ([]byte, error) {
+func (s *ScriptConfigsService) GetValueAsFile(ctx context.Context, configID string) (*interface{}, error) {
 	if configID == "" {
 		return nil, fmt.Errorf("config ID is required")
 	}
 	endpoint := fmt.Sprintf("/scriptConfigs/%s/file", url.PathEscape(configID))
 
 	// The client should return raw bytes for non-JSON endpoints.
-	var content []byte
+	var content interface{}
 	if err := s.Client.Get(ctx, endpoint, &content); err != nil {
 		return nil, err
 	}
-	return content, nil
+	return &content, nil
 }
 
 // UpdateScriptConfigValue updates the script configuration content using raw file data.

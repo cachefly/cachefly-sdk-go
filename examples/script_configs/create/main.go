@@ -31,10 +31,10 @@ func main() {
 
 	// Prepare payload for creating a new script configuration
 	opts := api.CreateScriptConfigRequest{
-		Name:                   "example-script",
-		Services:               []string{"681b3dc52715310035cb75d4"},
-		ScriptConfigDefinition: "771b3dc52715310035cb75d4",
-		MimeType:               "json",
+		Name:                   "advanced-cache-config-from-sdk",
+		Services:               []string{"681e55412d0cc10041680dc7"},
+		ScriptConfigDefinition: "64de825631861c0035b75708",
+		MimeType:               "text/yaml",
 	}
 
 	// Call Create (POST /services/{id}/scriptConfigs)

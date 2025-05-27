@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -38,11 +38,12 @@ func main() {
 		log.Fatalf("❌ Failed to fetch script config file for %s: %v", configID, err)
 	}
 
-	// Write the content to a local file
-	fileName := fmt.Sprintf("%s.js", configID)
-	if err := ioutil.WriteFile(fileName, data, 0644); err != nil {
-		log.Fatalf("❌ Failed to write script to %s: %v", fileName, err)
+	// Pretty-print the script configuration
+	out, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		log.Fatalf("❌ Error formatting script config JSON: %v", err)
 	}
 
-	fmt.Printf("✅ Script configuration file saved to %s\n", fileName)
+	fmt.Println("\n✅ Script configuration fetched successfully:")
+	fmt.Println(string(out))
 }

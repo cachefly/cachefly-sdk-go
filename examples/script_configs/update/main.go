@@ -37,10 +37,16 @@ func main() {
 
 	// Prepare payload for updating the script configuration
 	opts := api.UpdateScriptConfigRequest{
-		Name:                   "updated-example-script",
+		Name:                   "url-redirects-updated-sdk",
 		Services:               []string{"681b3dc52715310035cb75d4"},
-		ScriptConfigDefinition: "771b3dc52715310035cb75d4",
-		MimeType:               "updatedjson",
+		ScriptConfigDefinition: "63fcfcc58a797a005f2ad04e",
+		MimeType:               "text/json",
+		Value: map[string]map[string]string{
+			"301": {
+				"/old/path/to/file.jpg":  "https://www.sdk.com/path/to/new/file.jpg",
+				"/old/path/to/file2.jpg": "https://www.sdk.com/path/to/some/other/file.jpg",
+			},
+		},
 	}
 
 	// Call Update (PUT /scriptConfigs/{id})

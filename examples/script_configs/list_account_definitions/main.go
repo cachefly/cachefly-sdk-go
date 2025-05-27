@@ -34,7 +34,7 @@ func main() {
 		IncludeFeatures: true,
 		IncludeHidden:   false,
 		Offset:          0,
-		Limit:           10,
+		Limit:           20,
 		ResponseType:    "", // e.g., "shallow" or "deep"
 	}
 
