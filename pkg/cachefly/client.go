@@ -2,8 +2,8 @@
 package cachefly
 
 import (
-	"github.com/avvvet/cachefly-sdk-go/internal/httpclient"
-	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly/api"
+	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	api "github.com/cachefly/cachefly-go-sdk/pkg/cachefly/api/v2_5"
 )
 
 // main struct to interact with CacheFly APIs.

@@ -58,7 +58,7 @@ CacheFly CDN is the only CDN built for throughput, delivering rich-media content
 ## Installation
 
 ```bash
-go get github.com/avvvet/cachefly-sdk-go
+go get github.com/cachefly/cachefly-go-sdk
 
 ```
 

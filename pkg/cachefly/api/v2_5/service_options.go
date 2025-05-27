@@ -1,4 +1,4 @@
-package api
+package v2_5
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/avvvet/cachefly-sdk-go/internal/httpclient"
+	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
 )
 
 // ServiceOptions represents basic service options.

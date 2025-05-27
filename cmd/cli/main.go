@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly"
-	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly/api"
+	"github.com/cachefly/cachefly-go-sdk/pkg/cachefly"
+	api "github.com/cachefly/cachefly-go-sdk/pkg/cachefly/api/v2_5"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"

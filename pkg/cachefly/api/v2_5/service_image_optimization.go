@@ -1,11 +1,11 @@
-package api
+package v2_5
 
 import (
 	"context"
 	"fmt"
 	"net/url"
 
-	"github.com/avvvet/cachefly-sdk-go/internal/httpclient"
+	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
 )
 
 type ServiceImageOptimizationService struct {

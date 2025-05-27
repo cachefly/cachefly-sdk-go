@@ -1,12 +1,12 @@
-package api_test
+package v2_5_test
 
 import (
 	"context"
 	"os"
 	"testing"
 
-	"github.com/avvvet/cachefly-sdk-go/internal/httpclient"
-	"github.com/avvvet/cachefly-sdk-go/pkg/cachefly/api"
+	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	api "github.com/cachefly/cachefly-go-sdk/pkg/cachefly/api/v2_5"
 )
 
 func TestServiceOptionsService_GetBasicOptions(t *testing.T) {
