@@ -1,69 +1,185 @@
-package v2_5_test
+package v2_5
 
 import (
 	"context"
-	"os"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
-	api "github.com/cachefly/cachefly-go-sdk/pkg/cachefly/api/v2_5"
 )
 
-func TestServicesService_List(t *testing.T) {
-	loadEnv(t)
+// CREATE - Test Create method
+func TestServicesService_Create(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/2.5/services" {
+			t.Errorf("Expected path /api/2.5/services, got %s", r.URL.Path)
+		}
+		if r.Method != "POST" {
+			t.Errorf("Expected POST method, got %s", r.Method)
+		}
 
-	token := os.Getenv("CACHEFLY_API_TOKEN")
-	if token == "" {
-		t.Skip("CACHEFLY_API_TOKEN not set")
-	}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		w.Write([]byte(`{"_id":"new-123","name":"New Service"}`))
+	}))
+	defer server.Close()
 
-	cfg := httpclient.Config{
-		BaseURL:   "https://api.cachefly.com/api/2.5",
-		AuthToken: token,
-	}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
-	svc := &api.ServicesService{Client: client}
+	svc := &ServicesService{Client: client}
 
-	resp, err := svc.List(context.Background(), api.ListOptions{Limit: 1})
+	req := CreateServiceRequest{Name: "New Service", UniqueName: "new-service"}
+	result, err := svc.Create(context.Background(), req)
+
 	if err != nil {
-		t.Fatalf("expected no error listing services, got %v", err)
+		t.Fatalf("Expected no error, got %v", err)
 	}
-	if len(resp.Services) == 0 {
-		t.Fatalf("expected at least one service in list, got 0")
+	if result.ID != "new-123" {
+		t.Errorf("Expected service ID new-123, got %s", result.ID)
 	}
 }
 
-func TestServicesService_GetByID(t *testing.T) {
-	loadEnv(t)
+// READ - Test Get method
+func TestServicesService_Get(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/2.5/services/test-123" {
+			t.Errorf("Expected path /api/2.5/services/test-123, got %s", r.URL.Path)
+		}
+		if r.Method != "GET" {
+			t.Errorf("Expected GET method, got %s", r.Method)
+		}
 
-	token := os.Getenv("CACHEFLY_API_TOKEN")
-	if token == "" {
-		t.Skip("CACHEFLY_API_TOKEN not set")
-	}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"_id":"test-123","name":"Test Service"}`))
+	}))
+	defer server.Close()
 
-	cfg := httpclient.Config{
-		BaseURL:   "https://api.cachefly.com/api/2.5",
-		AuthToken: token,
-	}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
-	svc := &api.ServicesService{Client: client}
+	svc := &ServicesService{Client: client}
 
-	// First, list to get a valid ID
-	listResp, err := svc.List(context.Background(), api.ListOptions{Limit: 1})
-	if err != nil {
-		t.Fatalf("cannot list services: %v", err)
-	}
-	if len(listResp.Services) == 0 {
-		t.Skip("no services available to test GetByID")
-	}
-	id := listResp.Services[0].ID
+	result, err := svc.Get(context.Background(), "test-123", "", true)
 
-	// fetch by that ID
-	single, err := svc.GetByID(context.Background(), id)
 	if err != nil {
-		t.Fatalf("expected no error fetching service %s, got %v", id, err)
+		t.Fatalf("Expected no error, got %v", err)
 	}
-	if single.ID != id {
-		t.Errorf("expected returned ID %q, got %q", id, single.ID)
+	if result.ID != "test-123" {
+		t.Errorf("Expected service ID test-123, got %s", result.ID)
+	}
+}
+
+// READ - Test List method
+func TestServicesService_List(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/2.5/services" {
+			t.Errorf("Expected path /api/2.5/services, got %s", r.URL.Path)
+		}
+		if r.Method != "GET" {
+			t.Errorf("Expected GET method, got %s", r.Method)
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"meta":{"limit":10,"offset":0,"count":1},"data":[{"_id":"list-123","name":"Listed Service"}]}`))
+	}))
+	defer server.Close()
+
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	client := httpclient.New(cfg)
+	svc := &ServicesService{Client: client}
+
+	opts := ListOptions{Limit: 10}
+	result, err := svc.List(context.Background(), opts)
+
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if len(result.Services) != 1 {
+		t.Errorf("Expected 1 service, got %d", len(result.Services))
+	}
+	if result.Services[0].ID != "list-123" {
+		t.Errorf("Expected service ID list-123, got %s", result.Services[0].ID)
+	}
+}
+
+// UPDATE - Test UpdateServiceByID method
+func TestServicesService_UpdateServiceByID(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/2.5/services/update-123" {
+			t.Errorf("Expected path /api/2.5/services/update-123, got %s", r.URL.Path)
+		}
+		if r.Method != "PUT" {
+			t.Errorf("Expected PUT method, got %s", r.Method)
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"_id":"update-123","name":"Updated Service"}`))
+	}))
+	defer server.Close()
+
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	client := httpclient.New(cfg)
+	svc := &ServicesService{Client: client}
+
+	req := UpdateServiceRequest{Description: "Updated description"}
+	result, err := svc.UpdateServiceByID(context.Background(), "update-123", req)
+
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if result.ID != "update-123" {
+		t.Errorf("Expected service ID update-123, got %s", result.ID)
+	}
+}
+
+// DELETE - Test DeactivateServiceByID method
+func TestServicesService_DeactivateServiceByID(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/2.5/services/deactivate-123/deactivate" {
+			t.Errorf("Expected path /api/2.5/services/deactivate-123/deactivate, got %s", r.URL.Path)
+		}
+		if r.Method != "PUT" {
+			t.Errorf("Expected PUT method, got %s", r.Method)
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"_id":"deactivate-123","name":"Deactivated Service","status":"inactive"}`))
+	}))
+	defer server.Close()
+
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	client := httpclient.New(cfg)
+	svc := &ServicesService{Client: client}
+
+	result, err := svc.DeactivateServiceByID(context.Background(), "deactivate-123")
+
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
+	if result.ID != "deactivate-123" {
+		t.Errorf("Expected service ID deactivate-123, got %s", result.ID)
+	}
+}
+
+// Error handling test
+func TestServicesService_ErrorHandling(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"error":"Invalid request"}`))
+	}))
+	defer server.Close()
+
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	client := httpclient.New(cfg)
+	svc := &ServicesService{Client: client}
+
+	_, err := svc.Get(context.Background(), "error-test", "", false)
+
+	if err == nil {
+		t.Error("Expected error for 400 response")
 	}
 }
