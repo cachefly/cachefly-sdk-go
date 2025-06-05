@@ -43,6 +43,10 @@ func main() {
 			Enabled: true,
 			Value:   120,
 		},
+		ConTimeout: api.Option{
+			Enabled: true,
+			Value:   5,
+		},
 		NoCache: true,
 
 		MimeTypesOverrides: []api.MimeTypeOverride{},
