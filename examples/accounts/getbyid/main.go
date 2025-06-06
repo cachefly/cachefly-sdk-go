@@ -1,3 +1,20 @@
+// Example demonstrates retrieving a specific CacheFly account by ID.
+//
+// This example shows:
+// - Client initialization with API token
+// - Fetching account details by ID with optional response type
+// - Error handling and JSON response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <account_id> [responseType]
+//
+// Example:
+//
+//	go run main.go acc_123456789
+//	go run main.go acc_123456789 full
+
 package main
 
 import (

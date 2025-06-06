@@ -1,3 +1,16 @@
+// Example demonstrates listing CacheFly parent accounts with filtering options.
+//
+// This example shows:
+// - Client initialization with API token
+// - Listing accounts with pagination and filters
+// - Filtering by parent account status
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
+
 package main
 
 import (

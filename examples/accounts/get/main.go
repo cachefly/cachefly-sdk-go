@@ -1,3 +1,14 @@
+// Example demonstrates retrieving the current CacheFly account information.
+//
+// This example shows:
+// - Client initialization with API token
+// - Fetching current account details
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
 package main
 
 import (

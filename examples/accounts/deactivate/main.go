@@ -1,3 +1,15 @@
+// Example usage to demonstrates how to deactivate a CacheFly child account using the SDK.
+//
+// This example shows:
+//   - Client initialization with environment variables
+//   - Error handling best practices
+//   - Using the Accounts service to deactivate an account
+//   - Pretty-printing JSON responses
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <account_id>
 package main
 
 import (

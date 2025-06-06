@@ -1,3 +1,20 @@
+// Example demonstrates updating a specific CacheFly account by ID.
+//
+// This example shows:
+// - Client initialization with API token
+// - Updating account details for a specific account ID
+// - Modifying company information and settings
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <account_id>
+//
+// Example:
+//
+//	go run main.go acc_123456789
+
 package main
 
 import (

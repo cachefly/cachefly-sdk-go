@@ -1,3 +1,16 @@
+// Example demonstrates updating the current CacheFly account information.
+//
+// This example shows:
+// - Client initialization with API token
+// - Updating account details including company info and settings
+// - Configuring SAML and 2FA grace period
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
+
 package main
 
 import (

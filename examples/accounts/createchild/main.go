@@ -1,3 +1,9 @@
+// Create a new CacheFly child account using the SDK.
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
 package main
 
 import (
@@ -15,7 +21,7 @@ import (
 func main() {
 	// Load environment variables from .env file
 	if err := godotenv.Load(); err != nil {
-		log.Printf("⚠️ Warning: unable to load .env file: %v", err)
+		log.Printf("⚠️  Warning: unable to load .env file: %v", err)
 	}
 
 	// Read API token from environment
@@ -29,6 +35,7 @@ func main() {
 		cachefly.WithToken(token),
 	)
 
+	// Define account details
 	payload := api.CreateChildAccountRequest{
 		CompanyName: "child-01-account-sdk",
 		Username:    "childchildsdk001",
@@ -45,18 +52,18 @@ func main() {
 		Zip:         "string",
 	}
 
-	// Call Create (POST /accounts)
+	// Create child account
 	account, err := client.Accounts.CreateChildAccount(context.Background(), payload)
 	if err != nil {
 		log.Fatalf("❌ Failed to create child account: %v", err)
 	}
 
-	// Marshal and print the created account as indented JSON
+	// Display result
 	out, err := json.MarshalIndent(account, "", "  ")
 	if err != nil {
 		log.Fatalf("❌ Error formatting account JSON: %v", err)
 	}
 
-	fmt.Println("\n✅ Child account created successfully:")
+	fmt.Println("✅ Child account created successfully:")
 	fmt.Println(string(out))
 }

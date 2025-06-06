@@ -1,3 +1,18 @@
+// Example demonstrates retrieving an authentication token for a CacheFly child account.
+//
+// This example shows:
+// - Client initialization with API token
+// - Fetching auth token for a child account
+// - Error handling and JSON response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <child_account_id> [responseType]
+//
+// Example:
+//
+//	go run main.go acc_child_123456789
 package main
 
 import (
