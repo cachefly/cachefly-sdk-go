@@ -1,3 +1,19 @@
+// Example demonstrates uploading a new TLS/SSL certificate to CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Uploading certificate with PEM-encoded cert and key
+// - Optional password for encrypted private keys
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	export CERT_PEM="-----BEGIN CERTIFICATE-----..."
+//	export CERT_KEY="-----BEGIN PRIVATE KEY-----..."
+//	export CERT_PASSWORD="optional-key-password"
+//	go run main.go
+
 package main
 
 import (
