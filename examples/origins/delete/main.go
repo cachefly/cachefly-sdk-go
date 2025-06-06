@@ -1,3 +1,19 @@
+// Example demonstrates deleting an origin server from CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Deleting an origin by ID
+// - Error handling for delete operations
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <origin_id>
+//
+// Example:
+//
+//	go run main.go org_123456789
+
 package main
 
 import (

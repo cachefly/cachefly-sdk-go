@@ -1,3 +1,16 @@
+// Example demonstrates creating a new origin server in CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Creating a web origin with HTTP scheme
+// - Setting TTL configuration
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
+
 package main
 
 import (

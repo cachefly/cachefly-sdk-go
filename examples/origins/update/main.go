@@ -1,3 +1,19 @@
+// Example demonstrates updating an origin server in CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Updating origin configuration including hostname and TTL
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <origin_id>
+//
+// Example:
+//
+//	go run main.go org_123456789
+
 package main
 
 import (
