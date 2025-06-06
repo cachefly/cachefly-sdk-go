@@ -1,3 +1,9 @@
+// Get basic service options for a CacheFly service.
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id>
 package main
 
 import (
@@ -14,7 +20,7 @@ import (
 func main() {
 	// Load environment variables from .env file
 	if err := godotenv.Load(); err != nil {
-		log.Printf("⚠️ Warning: unable to load .env file: %v", err)
+		log.Printf("⚠️  Warning: unable to load .env file: %v", err)
 	}
 
 	// Read API token
@@ -25,7 +31,7 @@ func main() {
 
 	// Read Service ID argument
 	if len(os.Args) < 2 {
-		log.Println("⚠️ Usage: go run main.go <service_id>")
+		log.Println("⚠️  Usage: go run main.go <service_id>")
 		return
 	}
 	serviceID := os.Args[1]
@@ -35,7 +41,7 @@ func main() {
 		cachefly.WithToken(token),
 	)
 
-	// Call GetBasic Service Options (GET /services/{id}/options)
+	// Get basic service options
 	options, err := client.ServiceOptions.GetBasicOptions(context.Background(), serviceID)
 	if err != nil {
 		log.Fatalf("❌ Failed to get basic service options for %s: %v", serviceID, err)
@@ -47,6 +53,6 @@ func main() {
 		log.Fatalf("❌ Error formatting options JSON: %v", err)
 	}
 
-	fmt.Println("\n✅ Basic service options retrieved successfully:")
+	fmt.Println("✅ Basic service options retrieved successfully:")
 	fmt.Println(string(out))
 }

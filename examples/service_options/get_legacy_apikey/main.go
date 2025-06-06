@@ -1,3 +1,19 @@
+// Example demonstrates retrieving the legacy API key for a CacheFly service.
+//
+// This example shows:
+// - Client initialization with API token
+// - Fetching legacy API key for a service
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id>
+//
+// Example:
+//
+//	go run main.go srv_123456789
+
 package main
 
 import (
