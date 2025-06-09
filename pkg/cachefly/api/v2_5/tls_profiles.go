@@ -1,3 +1,4 @@
+// Package v2_5 provides types and services for CacheFly API v2.5.
 package v2_5
 
 import (
@@ -9,7 +10,7 @@ import (
 	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
 )
 
-// TLSProfile represents a TLS profile in CacheFly.
+// TLSProfile represents a TLS configuration profile in CacheFly.
 type TLSProfile struct {
 	ID        string `json:"_id"`
 	UpdatedAt string `json:"updateAt"`
@@ -18,13 +19,13 @@ type TLSProfile struct {
 	// Add more fields here once the schema is known
 }
 
-// ListTLSProfilesResponse wraps a paged list of TLS profiles.
+// ListTLSProfilesResponse contains paginated TLS profile results.
 type ListTLSProfilesResponse struct {
 	Meta     MetaInfo     `json:"meta"`
 	Profiles []TLSProfile `json:"data"`
 }
 
-// ListTLSProfilesOptions controls filtering & pagination.
+// ListTLSProfilesOptions specifies filtering and pagination for listing TLS profiles.
 type ListTLSProfilesOptions struct {
 	SortBy []string
 	Group  string
@@ -32,15 +33,16 @@ type ListTLSProfilesOptions struct {
 	Limit  int
 }
 
-// TLSProfilesService handles /tlsprofiles endpoints.
+// TLSProfilesService handles TLS profile operations.
 type TLSProfilesService struct {
 	Client *httpclient.Client
 }
 
-// List retrieves all TLS profiles, with optional sort, group, paging.
+// List retrieves TLS profiles with optional sorting, grouping, and pagination.
 func (s *TLSProfilesService) List(ctx context.Context, opts ListTLSProfilesOptions) (*ListTLSProfilesResponse, error) {
 	endpoint := "/tlsprofiles"
 	params := url.Values{}
+
 	if len(opts.SortBy) > 0 {
 		for _, v := range opts.SortBy {
 			params.Add("sortBy", v)
@@ -65,11 +67,12 @@ func (s *TLSProfilesService) List(ctx context.Context, opts ListTLSProfilesOptio
 	return &resp, nil
 }
 
-// GetByID fetches a single TLS profile by its ID.
+// GetByID retrieves a TLS profile by its ID.
 func (s *TLSProfilesService) GetByID(ctx context.Context, id string) (*TLSProfile, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
+
 	endpoint := fmt.Sprintf("/tlsprofiles/%s", id)
 
 	var p TLSProfile

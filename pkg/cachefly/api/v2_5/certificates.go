@@ -1,3 +1,4 @@
+// Package v2_5 provides types and services for CacheFly API v2.5.
 package v2_5
 
 import (
@@ -9,11 +10,12 @@ import (
 	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
 )
 
+// CertificatesService handles TLS/SSL certificate operations.
 type CertificatesService struct {
 	Client *httpclient.Client
 }
 
-// TLS/SSL certificate in CacheFly.
+// Certificate represents a TLS/SSL certificate in CacheFly.
 type Certificate struct {
 	ID                string   `json:"_id"`
 	CreatedAt         string   `json:"createdAt"`
@@ -29,11 +31,13 @@ type Certificate struct {
 	NotAfter          string   `json:"notAfter"`
 }
 
+// ListCertificatesResponse contains paginated certificate results.
 type ListCertificatesResponse struct {
 	Meta         MetaInfo      `json:"meta"`
 	Certificates []Certificate `json:"data"`
 }
 
+// ListCertificatesOptions specifies filters and pagination for listing certificates.
 type ListCertificatesOptions struct {
 	ResponseType string
 	Search       string
@@ -41,16 +45,18 @@ type ListCertificatesOptions struct {
 	Limit        int
 }
 
+// CreateCertificateRequest contains the required fields for uploading a certificate.
 type CreateCertificateRequest struct {
 	Certificate    string `json:"certificate"`        // required, PEM-encoded certificate
 	CertificateKey string `json:"certificateKey"`     // required, PEM-encoded private key
 	Password       string `json:"password,omitempty"` // optional password for key
 }
 
-// List fetches all certificates with optional filters.
+// List retrieves certificates with optional filtering and pagination.
 func (s *CertificatesService) List(ctx context.Context, opts ListCertificatesOptions) (*ListCertificatesResponse, error) {
 	endpoint := "/certificates"
 	params := url.Values{}
+
 	if opts.ResponseType != "" {
 		params.Set("responseType", opts.ResponseType)
 	}
@@ -63,6 +69,7 @@ func (s *CertificatesService) List(ctx context.Context, opts ListCertificatesOpt
 	if opts.Limit > 0 {
 		params.Set("limit", strconv.Itoa(opts.Limit))
 	}
+
 	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
 
 	var resp ListCertificatesResponse
@@ -72,12 +79,12 @@ func (s *CertificatesService) List(ctx context.Context, opts ListCertificatesOpt
 	return &resp, nil
 }
 
-// Create uploads a new certificate.
+// Create uploads a new TLS/SSL certificate.
 func (s *CertificatesService) Create(ctx context.Context, req CreateCertificateRequest) (*Certificate, error) {
-	// validate required fields
 	if req.Certificate == "" || req.CertificateKey == "" {
 		return nil, fmt.Errorf("certificate and certificateKey are required")
 	}
+
 	endpoint := "/certificates"
 
 	var created Certificate
@@ -92,11 +99,13 @@ func (s *CertificatesService) GetByID(ctx context.Context, id, responseType stri
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
+
 	endpoint := fmt.Sprintf("/certificates/%s", id)
 	params := url.Values{}
 	if responseType != "" {
 		params.Set("responseType", responseType)
 	}
+
 	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
 
 	var cert Certificate
@@ -111,6 +120,7 @@ func (s *CertificatesService) Delete(ctx context.Context, id string) error {
 	if id == "" {
 		return fmt.Errorf("id is required")
 	}
+
 	endpoint := fmt.Sprintf("/certificates/%s", id)
 	return s.Client.Delete(ctx, endpoint, nil)
 }

@@ -1,3 +1,4 @@
+// Package v2_5 provides types and services for CacheFly API v2.5.
 package v2_5
 
 import (
@@ -58,6 +59,7 @@ type ServiceOptions struct {
 	APIKeyEnabled          bool               `json:"apiKeyEnabled"`
 }
 
+// Options holds service current option configration
 type Option struct {
 	Enabled bool        `json:"enabled"`
 	Value   interface{} `json:"value"`

@@ -1,3 +1,4 @@
+// Package v2_5 provides types and services for CacheFly API v2.5.
 package v2_5
 
 import (
@@ -8,6 +9,11 @@ import (
 
 	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
 )
+
+// ScriptConfigsService handles /scriptConfigs endpoints.
+type ScriptConfigsService struct {
+	Client *httpclient.Client
+}
 
 // ScriptConfig represents a script config resource.
 type ScriptConfig struct {
@@ -59,11 +65,6 @@ type UpdateScriptConfigRequest struct {
 	Services               []string    `json:"services,omitempty"`
 	ScriptConfigDefinition string      `json:"scriptConfigDefinition"`
 	Value                  interface{} `json:"value,omitempty"`
-}
-
-// ScriptConfigsService handles /scriptConfigs endpoints.
-type ScriptConfigsService struct {
-	Client *httpclient.Client
 }
 
 // List returns script configs with optional filters.
@@ -232,6 +233,7 @@ func (s *ScriptConfigsService) ListPromo(ctx context.Context, includeFeatures bo
 	return defs, nil
 }
 
+// GetDefinitionByID retrieves definition script config.
 func (s *ScriptConfigsService) GetDefinitionByID(ctx context.Context, id string) (*ScriptConfig, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")

@@ -1,3 +1,4 @@
+// Package v2_5 provides types and services for CacheFly API v2.5.
 package v2_5
 
 import (
@@ -8,14 +9,13 @@ import (
 	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
 )
 
+// ServiceImageOptimizationService handles account-related API operations.
 type ServiceImageOptimizationService struct {
 	Client *httpclient.Client
 }
 
-/*
-CreateImageOptimizationOptions specifies the payload for creating an image optimization configuration.
-refere for correct paylaod from updated documentation.
-*/
+// CreateImageOptimizationOptions specifies the payload for creating an image optimization configuration.
+// refere for correct paylaod from updated documentation.
 type CreateImageOptimizationOptions struct {
 	Enabled        bool     `json:"enabled"`                  // enable/disable optimization
 	Formats        []string `json:"formats,omitempty"`        // e.g. ["webp","avif"]

@@ -1,3 +1,4 @@
+// Package v2_5 provides types and services for CacheFly API v2.5.
 package v2_5
 
 import (
@@ -8,6 +9,11 @@ import (
 
 	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
 )
+
+// OriginsService handles origin configuration operations.
+type OriginsService struct {
+	Client *httpclient.Client
+}
 
 // Origin represents an origin configuration in CacheFly.
 type Origin struct {
@@ -78,10 +84,6 @@ type UpdateOriginRequest struct {
 	SecretKey              string `json:"secretKey,omitempty"`
 	Region                 string `json:"region,omitempty"`
 	SignatureVersion       string `json:"signatureVersion,omitempty"`
-}
-
-type OriginsService struct {
-	Client *httpclient.Client
 }
 
 // List retrieves all origins with optional filters.

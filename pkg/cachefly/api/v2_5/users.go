@@ -1,3 +1,4 @@
+// Package v2_5 provides types and services for CacheFly API v2.5.
 package v2_5
 
 import (
@@ -9,7 +10,7 @@ import (
 	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
 )
 
-// User is the representation of a CacheFly user.
+// User represents a CacheFly user account with permissions and service access.
 type User struct {
 	ID                     string   `json:"_id"`
 	UpdatedAt              string   `json:"updateAt"`
@@ -24,7 +25,7 @@ type User struct {
 	Status                 string   `json:"status"`
 }
 
-// ListUsersOptions allows filtering & pagination when listing users.
+// ListUsersOptions specifies filtering and pagination for listing users.
 type ListUsersOptions struct {
 	Search       string
 	Offset       int
@@ -32,13 +33,13 @@ type ListUsersOptions struct {
 	ResponseType string
 }
 
-// ListUsersResponse is the paged response for listing users.
+// ListUsersResponse contains paginated user results.
 type ListUsersResponse struct {
 	Meta  MetaInfo `json:"meta"`
 	Users []User   `json:"data"`
 }
 
-// CreateUserRequest is the payload to create a new user.
+// CreateUserRequest contains the required fields for creating a new user.
 type CreateUserRequest struct {
 	Username               string   `json:"username"`
 	Password               string   `json:"password"`
@@ -50,7 +51,7 @@ type CreateUserRequest struct {
 	Permissions            []string `json:"permissions"`
 }
 
-// UpdateUserRequest is the payload to update an existing user.
+// UpdateUserRequest contains fields for updating an existing user.
 type UpdateUserRequest struct {
 	Password                string   `json:"password,omitempty"`
 	Services                []string `json:"services,omitempty"`
@@ -64,12 +65,12 @@ type UpdateUserRequest struct {
 	Permissions             []string `json:"permissions,omitempty"`
 }
 
-// UsersService handles communication with the /users endpoints.
+// UsersService handles user account operations.
 type UsersService struct {
 	Client *httpclient.Client
 }
 
-// GetCurrentUser fetches the currently authenticated user.
+// GetCurrentUser retrieves the currently authenticated user.
 func (u *UsersService) GetCurrentUser(ctx context.Context) (*User, error) {
 	var usr User
 	if err := u.Client.Get(ctx, "/users/me", &usr); err != nil {
@@ -87,10 +88,11 @@ func (u *UsersService) UpdateCurrentUser(ctx context.Context, req UpdateUserRequ
 	return &updated, nil
 }
 
-// List retrieves a paginated list of users.
+// List retrieves users with optional search filtering and pagination.
 func (u *UsersService) List(ctx context.Context, opts ListUsersOptions) (*ListUsersResponse, error) {
 	endpoint := "/users"
 	params := url.Values{}
+
 	if opts.Search != "" {
 		params.Set("search", opts.Search)
 	}
@@ -105,6 +107,7 @@ func (u *UsersService) List(ctx context.Context, opts ListUsersOptions) (*ListUs
 	}
 
 	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
+
 	var resp ListUsersResponse
 	if err := u.Client.Get(ctx, fullURL, &resp); err != nil {
 		return nil, err
@@ -112,7 +115,7 @@ func (u *UsersService) List(ctx context.Context, opts ListUsersOptions) (*ListUs
 	return &resp, nil
 }
 
-// Create adds a new user.
+// Create adds a new user account.
 func (u *UsersService) Create(ctx context.Context, req CreateUserRequest) (*User, error) {
 	var created User
 	if err := u.Client.Post(ctx, "/users", req, &created); err != nil {
@@ -121,11 +124,12 @@ func (u *UsersService) Create(ctx context.Context, req CreateUserRequest) (*User
 	return &created, nil
 }
 
-// GetByID fetches a user by their ID.
+// GetByID retrieves a user by their ID.
 func (u *UsersService) GetByID(ctx context.Context, id, responseType string) (*User, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
+
 	endpoint := fmt.Sprintf("/users/%s", id)
 	params := url.Values{}
 	if responseType != "" {
@@ -133,6 +137,7 @@ func (u *UsersService) GetByID(ctx context.Context, id, responseType string) (*U
 	}
 
 	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
+
 	var usr User
 	if err := u.Client.Get(ctx, fullURL, &usr); err != nil {
 		return nil, err
@@ -145,6 +150,7 @@ func (u *UsersService) UpdateByID(ctx context.Context, id string, req UpdateUser
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
+
 	endpoint := fmt.Sprintf("/users/%s", id)
 
 	var updated User
@@ -159,6 +165,7 @@ func (u *UsersService) DeleteByID(ctx context.Context, id string) error {
 	if id == "" {
 		return fmt.Errorf("id is required")
 	}
+
 	endpoint := fmt.Sprintf("/users/%s", id)
 	return u.Client.Delete(ctx, endpoint, nil)
 }
@@ -168,6 +175,7 @@ func (u *UsersService) GetAllowedPermissions(ctx context.Context, id string) ([]
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
+
 	endpoint := fmt.Sprintf("/users/%s/allowedPermissions", id)
 
 	var out struct {
@@ -179,11 +187,12 @@ func (u *UsersService) GetAllowedPermissions(ctx context.Context, id string) ([]
 	return out.Permissions, nil
 }
 
-// ActivateByID activates a user by ID.
+// ActivateByID activates a user account.
 func (u *UsersService) ActivateByID(ctx context.Context, id string) (*User, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
+
 	endpoint := fmt.Sprintf("/users/%s/activate", id)
 
 	var updated User
@@ -193,11 +202,12 @@ func (u *UsersService) ActivateByID(ctx context.Context, id string) (*User, erro
 	return &updated, nil
 }
 
-// DeactivateByID deactivates a user by ID.
+// DeactivateByID deactivates a user account.
 func (u *UsersService) DeactivateByID(ctx context.Context, id string) (*User, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
+
 	endpoint := fmt.Sprintf("/users/%s/deactivate", id)
 
 	var updated User
@@ -207,21 +217,18 @@ func (u *UsersService) DeactivateByID(ctx context.Context, id string) (*User, er
 	return &updated, nil
 }
 
-// EnableTwoFactorAuth enables 2FA for the current user.
-// PUT /users/me/enable2FA
+// EnableTwoFactorAuth enables two-factor authentication for the current user.
 func (u *UsersService) EnableTwoFactorAuth(ctx context.Context) (*User, error) {
 	const endpoint = "/users/me/enable2FA"
 
 	var updated User
-	// Send an empty JSON body so Content-Type: application/json is set
 	if err := u.Client.Put(ctx, endpoint, struct{}{}, &updated); err != nil {
 		return nil, err
 	}
 	return &updated, nil
 }
 
-// DisableTwoFactorAuth disables 2FA for the current user.
-// PUT /users/me/disable2FA
+// DisableTwoFactorAuth disables two-factor authentication for the current user.
 func (u *UsersService) DisableTwoFactorAuth(ctx context.Context) (*User, error) {
 	const endpoint = "/users/me/disable2FA"
 
