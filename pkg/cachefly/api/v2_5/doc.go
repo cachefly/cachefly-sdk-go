@@ -10,9 +10,12 @@
 // - AccountsService: Handles account-level operations
 // - ServiceDomainsService: Manages domain configurations
 // - ServiceRulesService: Controls caching and delivery rules
+// - ServiceOptionsService: Manages service-specific options and settings
+// - ScriptConfigsService: Handles script configurations and definitions
 // - CertificatesService: Manages SSL/TLS certificates
 // - OriginsService: Configures origin server settings
-// - UsersService: Handles user management
+// - UsersService: Handles user management and permissions
+// - TLSProfilesService: Manages TLS profile configurations
 //
 // This package is typically not imported directly. Instead, use the
 // main cachefly package which provides a unified client interface.
