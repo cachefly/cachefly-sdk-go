@@ -1,14 +1,3 @@
-/*
-Core SDK responsibilities tested:
-
-constructs correct API endpoints
-Uses proper HTTP methods for all CRUD operations
-Validates required service ID parameter
-Handles string responses (configurations) and JSON responses (schemas)
-Parses JSON schema data as map[string]interface{}
-Handles error scenarios appropriately
-*/
-
 package v2_5
 
 import (
