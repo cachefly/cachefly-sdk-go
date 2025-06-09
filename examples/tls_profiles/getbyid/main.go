@@ -1,3 +1,19 @@
+// Example demonstrates retrieving a specific TLS profile from CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Fetching TLS profile details by ID
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <profile_id>
+//
+// Example:
+//
+//	go run main.go tls_123456789
+
 package main
 
 import (
