@@ -1,3 +1,19 @@
+// Example demonstrates retrieving allowed permissions for a CacheFly user.
+//
+// This example shows:
+// - Client initialization with API token
+// - Fetching user permission capabilities
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <user_id>
+//
+// Example:
+//
+//	go run main.go usr_123456789
+
 package main
 
 import (

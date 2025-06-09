@@ -1,3 +1,19 @@
+// Example demonstrates deleting a user account from CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Deleting a user by ID
+// - Error handling for delete operations
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <user_id>
+//
+// Example:
+//
+//	go run main.go usr_123456789
+
 package main
 
 import (

@@ -1,3 +1,15 @@
+// Example demonstrates retrieving the current authenticated user in CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Fetching current user profile
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
+
 package main
 
 import (

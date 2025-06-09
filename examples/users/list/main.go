@@ -1,3 +1,16 @@
+// Example demonstrates listing users in a CacheFly account.
+//
+// This example shows:
+// - Client initialization with API token
+// - Listing users with pagination
+// - Using shallow response type for efficiency
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
+
 package main
 
 import (

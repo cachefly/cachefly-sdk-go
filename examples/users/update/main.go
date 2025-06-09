@@ -1,3 +1,20 @@
+// Example demonstrates updating a user account in CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Updating user details including password and permissions
+// - Modifying service access and email
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <user_id>
+//
+// Example:
+//
+//	go run main.go usr_123456789
+
 package main
 
 import (

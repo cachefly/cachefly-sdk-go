@@ -1,3 +1,16 @@
+// Example demonstrates creating a new user in CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Creating a user with permissions and service access
+// - Setting admin and billing permissions
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
+
 package main
 
 import (

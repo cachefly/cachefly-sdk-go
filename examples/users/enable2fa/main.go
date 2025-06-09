@@ -1,3 +1,15 @@
+// Example demonstrates enabling two-factor authentication for the current user in CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Enabling 2FA for authenticated user
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
+
 package main
 
 import (
