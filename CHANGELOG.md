@@ -1,12 +1,25 @@
 # Changelog
 
-changes to this project will be documented here.
+All notable changes to this project will be documented here.
+
+## [v1.0.3] - 2025-06-09
+
+### Added
+- Added unit tests for core CRUD resource endpoints
+- Added code comments for pksite resource definitions
+
+## [v1.0.2] - 2025-06-02
+
+### Fixed
+- Added `omitempty` to UpdateServiceRequest so empty values no longer appear in JSON payload, fixes terraform service apply
 
 ## [v1.0.1] - 2025-05-27
+
 ### Changed
 - Removed unused directories
 - Cleaned up internal project structure
 
 ## [v1.0.0] - 2025-05-27
+
 ### Added
 - Initial release of SDK for CacheFly API v2.5
