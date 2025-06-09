@@ -1,3 +1,19 @@
+// Example demonstrates disabling origin logging for a CacheFly service.
+//
+// This example shows:
+// - Client initialization with API token
+// - Removing origin logging configuration
+// - Error handling for delete operations
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id>
+//
+// Example:
+//
+//	go run main.go srv_123456789
+
 package main
 
 import (

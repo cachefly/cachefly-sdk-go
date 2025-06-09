@@ -1,3 +1,20 @@
+// Example demonstrates updating a CacheFly service configuration.
+//
+// This example shows:
+// - Client initialization with API token
+// - Updating service settings including TLS and delivery region
+// - Configuring API rules mode
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id>
+//
+// Example:
+//
+//	go run main.go srv_123456789
+
 package main
 
 import (

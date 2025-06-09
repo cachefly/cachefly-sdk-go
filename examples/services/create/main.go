@@ -1,3 +1,16 @@
+// Example demonstrates creating a new CacheFly service.
+//
+// This example shows:
+// - Client initialization with API token
+// - Creating a service with unique name
+// - Setting service description
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
+
 package main
 
 import (

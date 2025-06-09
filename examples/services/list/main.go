@@ -1,3 +1,15 @@
+// Example demonstrates listing CacheFly services with filtering options.
+//
+// This example shows:
+// - Client initialization with API token
+// - Listing services with pagination and status filter
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
+
 package main
 
 import (
