@@ -1,3 +1,19 @@
+// Example demonstrates downloading script configuration content as a file from CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Retrieving script config content by ID
+// - Error handling and file content processing
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <config_id>
+//
+// Example:
+//
+//	go run main.go cfg_123456789
+
 package main
 
 import (

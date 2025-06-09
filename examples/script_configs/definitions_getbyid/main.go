@@ -1,3 +1,19 @@
+// Example demonstrates retrieving a script configuration definition from CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Fetching script definition details by ID
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <definition_id>
+//
+// Example:
+//
+//	go run main.go def_123456789
+
 package main
 
 import (

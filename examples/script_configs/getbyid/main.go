@@ -1,3 +1,19 @@
+// Example demonstrates retrieving a specific script configuration from CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Fetching script config details by ID
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <config_id>
+//
+// Example:
+//
+//	go run main.go cfg_123456789
+
 package main
 
 import (

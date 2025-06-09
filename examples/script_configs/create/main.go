@@ -1,3 +1,16 @@
+// Example demonstrates creating a new script configuration in CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Creating a script config with service associations
+// - Setting script definition and MIME type
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
+
 package main
 
 import (

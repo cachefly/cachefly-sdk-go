@@ -1,3 +1,20 @@
+// Example demonstrates updating a script configuration in CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Updating script config with URL redirects
+// - Configuring 301 redirect mappings
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <config_id>
+//
+// Example:
+//
+//	go run main.go cfg_123456789
+
 package main
 
 import (

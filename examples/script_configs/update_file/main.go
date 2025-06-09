@@ -1,3 +1,19 @@
+// Example demonstrates updating script configuration content from a file in CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Updating script config value using file content
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <config_id> <file_path>
+//
+// Example:
+//
+//	go run main.go cfg_123456789 config.yaml
+
 package main
 
 import (

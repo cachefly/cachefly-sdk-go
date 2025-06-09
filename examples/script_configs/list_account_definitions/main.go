@@ -1,3 +1,16 @@
+// Example demonstrates listing script configuration definitions for a CacheFly account.
+//
+// This example shows:
+// - Client initialization with API token
+// - Listing available script definitions with features
+// - Filtering options for hidden definitions
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go
+
 package main
 
 import (
