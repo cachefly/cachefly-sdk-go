@@ -42,7 +42,7 @@ func main() {
 	)
 
 	// Get basic service options
-	options, err := client.ServiceOptions.GetBasicOptions(context.Background(), serviceID)
+	options, err := client.ServiceOptions.GetOptions(context.Background(), serviceID)
 	if err != nil {
 		log.Fatalf("❌ Failed to get basic service options for %s: %v", serviceID, err)
 	}

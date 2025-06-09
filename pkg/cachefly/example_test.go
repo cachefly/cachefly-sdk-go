@@ -858,78 +858,231 @@ func ExampleScriptConfigsService_GetDefinitionByID() {
 // Service Options Examples
 // ============================================================================
 
-// ExampleServiceOptionsService_GetBasicOptions demonstrates retrieving service options.
-func ExampleServiceOptionsService_GetBasicOptions() {
+// ExampleServiceOptionsService_GetOptions demonstrates retrieving service options.
+func ExampleServiceOptionsService_GetOptions() {
 	client := cachefly.NewClient(
 		cachefly.WithToken("your-api-token"),
 	)
 
-	options, err := client.ServiceOptions.GetBasicOptions(context.Background(), "srv_123456789")
+	options, err := client.ServiceOptions.GetOptions(context.Background(), "srv_123456789")
 	if err != nil {
 		log.Fatalf("Failed to get service options: %v", err)
 	}
 
-	fmt.Printf("FTP enabled: %v\n", options.FTP)
-	fmt.Printf("CORS enabled: %v\n", options.CORS)
-	fmt.Printf("Brotli compression: %v\n", options.BrotliCompression)
-	fmt.Printf("Cache by geo country: %v\n", options.CacheByGeoCountry)
-	fmt.Printf("No cache: %v\n", options.NoCache)
-	fmt.Printf("API key enabled: %v\n", options.APIKeyEnabled)
+	// Access options using type assertions since ServiceOptions is map[string]interface{}
+	if ftp, ok := options["ftp"].(bool); ok {
+		fmt.Printf("FTP enabled: %v\n", ftp)
+	}
+
+	if cors, ok := options["cors"].(bool); ok {
+		fmt.Printf("CORS enabled: %v\n", cors)
+	}
+
+	if brotli, ok := options["brotli_compression"].(bool); ok {
+		fmt.Printf("Brotli compression: %v\n", brotli)
+	}
+
+	if geocountry, ok := options["cachebygeocountry"].(bool); ok {
+		fmt.Printf("Cache by geo country: %v\n", geocountry)
+	}
+
+	if nocache, ok := options["nocache"].(bool); ok {
+		fmt.Printf("No cache: %v\n", nocache)
+	}
+
+	if apikey, ok := options["apiKeyEnabled"].(bool); ok {
+		fmt.Printf("API key enabled: %v\n", apikey)
+	}
+
+	// Access complex nested options
+	if reverseProxy, ok := options["reverseProxy"].(map[string]interface{}); ok {
+		if enabled, ok := reverseProxy["enabled"].(bool); ok {
+			fmt.Printf("Reverse proxy enabled: %v\n", enabled)
+		}
+	}
 }
 
-// ExampleServiceOptionsService_SaveBasicOptions demonstrates updating service options.
-func ExampleServiceOptionsService_SaveBasicOptions() {
+// ExampleServiceOptionsService_GetOptionsMetadata demonstrates getting available options.
+func ExampleServiceOptionsService_GetOptionsMetadata() {
 	client := cachefly.NewClient(
 		cachefly.WithToken("your-api-token"),
 	)
 
+	metadata, err := client.ServiceOptions.GetOptionsMetadata(context.Background(), "srv_123456789")
+	if err != nil {
+		log.Fatalf("Failed to get options metadata: %v", err)
+	}
+
+	fmt.Printf("Available options count: %d\n", metadata.Meta.Count)
+
+	// Show available options grouped by category
+	for _, option := range metadata.Data {
+		if option.Type == "dynamic" && option.Property != nil && !option.ReadOnly {
+			fmt.Printf("- %s (%s): %s\n", option.Property.Name, option.Property.Type, option.Description)
+		}
+	}
+}
+
+// ExampleServiceOptionsService_UpdateOptions demonstrates updating service options with validation.
+func ExampleServiceOptionsService_UpdateOptions() {
+	client := cachefly.NewClient(
+		cachefly.WithToken("your-api-token"),
+	)
+
+	// Create options update request
 	updateReq := api.ServiceOptions{
-		FTP:               true,
-		CORS:              true,
-		AutoRedirect:      false,
-		BrotliCompression: true,
-		BrotliSupport:     true,
-		NoCache:           false,
-		CacheByGeoCountry: true,
-		FollowRedirect:    true,
-		SendXFF:           true,
-		APIKeyEnabled:     true,
-		ReverseProxy: api.ReverseProxyConfig{
-			Enabled:           true,
-			Hostname:          "origin.example.com",
-			TTL:               3600,
-			CacheByQueryParam: true,
-			OriginScheme:      "https",
+		"ftp":                true,
+		"cors":               true,
+		"autoRedirect":       false,
+		"brotli_compression": true,
+		"brotli_support":     true,
+		"nocache":            false,
+		"cachebygeocountry":  true,
+		"followredirect":     true,
+		"send-xff":           true,
+		"apiKeyEnabled":      true,
+		"reverseProxy": map[string]interface{}{
+			"enabled":           true,
+			"hostname":          "origin.example.com",
+			"ttl":               3600,
+			"cacheByQueryParam": true,
+			"originScheme":      "https",
 		},
-		MimeTypesOverrides: []api.MimeTypeOverride{
+		"mimeTypesOverrides": []map[string]interface{}{
 			{
-				Extension: "woff2",
-				MimeType:  "font/woff2",
+				"extension": "woff2",
+				"mimeType":  "font/woff2",
 			},
 		},
-		ExpiryHeaders: []api.ExpiryHeader{
+		"expiryHeaders": []map[string]interface{}{
 			{
-				Path:       "/static/",
-				ExpiryTime: 31536000, // 1 year
+				"path":       "/static/",
+				"expiryTime": 31536000, // 1 year
 			},
 		},
-		ErrorTTL: api.Option{
-			Enabled: true,
-			Value:   60,
+		"error_ttl": map[string]interface{}{
+			"enabled": true,
+			"value":   60,
 		},
-		TTFBTimeout: api.Option{
-			Enabled: true,
-			Value:   30,
+		"ttfb_timeout": map[string]interface{}{
+			"enabled": true,
+			"value":   30,
 		},
 	}
 
-	options, err := client.ServiceOptions.SaveBasicOptions(context.Background(), "srv_123456789", updateReq)
+	// Update options (automatically validates against metadata)
+	options, err := client.ServiceOptions.UpdateOptions(context.Background(), "srv_123456789", updateReq)
 	if err != nil {
+		// Handle validation errors gracefully
+		if validationErr, ok := err.(api.ServiceOptionsValidationError); ok {
+			fmt.Printf("Validation failed: %s\n", validationErr.Message)
+			for _, fieldErr := range validationErr.Errors {
+				fmt.Printf("- %s: %s\n", fieldErr.Field, fieldErr.Message)
+			}
+			return
+		}
 		log.Fatalf("Failed to update service options: %v", err)
 	}
 
-	fmt.Printf("Updated options - CORS: %v\n", options.CORS)
-	fmt.Printf("Reverse proxy enabled: %v\n", options.ReverseProxy.Enabled)
+	// Access updated values
+	if cors, ok := options["cors"].(bool); ok {
+		fmt.Printf("Updated CORS: %v\n", cors)
+	}
+
+	if reverseProxy, ok := options["reverseProxy"].(map[string]interface{}); ok {
+		if enabled, ok := reverseProxy["enabled"].(bool); ok {
+			fmt.Printf("Reverse proxy enabled: %v\n", enabled)
+		}
+	}
+}
+
+// ExampleServiceOptionsService_UpdateSpecificOption demonstrates updating a single option.
+func ExampleServiceOptionsService_UpdateSpecificOption() {
+	client := cachefly.NewClient(
+		cachefly.WithToken("your-api-token"),
+	)
+
+	// Update just the CORS setting
+	options, err := client.ServiceOptions.UpdateSpecificOption(
+		context.Background(),
+		"srv_123456789",
+		"cors",
+		true,
+	)
+	if err != nil {
+		if validationErr, ok := err.(api.ServiceOptionsValidationError); ok {
+			fmt.Printf("Validation failed: %s\n", validationErr.Message)
+			return
+		}
+		log.Fatalf("Failed to update CORS option: %v", err)
+	}
+
+	if cors, ok := options["cors"].(bool); ok {
+		fmt.Printf("CORS updated to: %v\n", cors)
+	}
+}
+
+// ExampleServiceOptionsService_IsOptionAvailable demonstrates checking option availability.
+func ExampleServiceOptionsService_IsOptionAvailable() {
+	client := cachefly.NewClient(
+		cachefly.WithToken("your-api-token"),
+	)
+
+	// Check if livestreaming option is available for this service
+	available, metadata, err := client.ServiceOptions.IsOptionAvailable(
+		context.Background(),
+		"srv_123456789",
+		"livestreaming",
+	)
+	if err != nil {
+		log.Fatalf("Failed to check option availability: %v", err)
+	}
+
+	if available {
+		fmt.Printf("Livestreaming option is available\n")
+		fmt.Printf("Description: %s\n", metadata.Description)
+		if metadata.Property != nil {
+			fmt.Printf("Type: %s\n", metadata.Property.Type)
+		}
+	} else {
+		fmt.Printf("Livestreaming option is not available for this service\n")
+	}
+}
+
+// ExampleServiceOptionsService_ValidationErrorHandling demonstrates handling validation errors.
+func ExampleServiceOptionsService_ValidationErrorHandling() {
+	client := cachefly.NewClient(
+		cachefly.WithToken("your-api-token"),
+	)
+
+	// Try to update with invalid options
+	invalidOptions := api.ServiceOptions{
+		"nonexistent_option": true,      // This option doesn't exist
+		"cors":               "invalid", // Wrong type (should be boolean)
+	}
+
+	_, err := client.ServiceOptions.UpdateOptions(context.Background(), "srv_123456789", invalidOptions)
+	if err != nil {
+		if validationErr, ok := err.(api.ServiceOptionsValidationError); ok {
+			fmt.Printf("Validation failed with %d errors:\n", len(validationErr.Errors))
+
+			for _, fieldErr := range validationErr.Errors {
+				fmt.Printf("Field: %s\n", fieldErr.Field)
+				fmt.Printf("Error: %s\n", fieldErr.Message)
+				fmt.Printf("Code: %s\n", fieldErr.Code)
+				fmt.Println("---")
+			}
+
+			// Get available options to help user
+			availableOptions, _ := client.ServiceOptions.GetAvailableOptionNames(
+				context.Background(),
+				"srv_123456789",
+			)
+			fmt.Printf("Available options: %v\n", availableOptions)
+		} else {
+			log.Fatalf("Unexpected error: %v", err)
+		}
+	}
 }
 
 // ExampleServiceOptionsService_GetLegacyAPIKey demonstrates retrieving the legacy API key.
