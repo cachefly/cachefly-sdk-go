@@ -1,3 +1,20 @@
+// Example demonstrates updating a referer rule for a CacheFly service.
+//
+// This example shows:
+// - Client initialization with API token
+// - Updating referer rule configuration
+// - Modifying allowed domains and file extensions
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id> <rule_id>
+//
+// Example:
+//
+//	go run main.go srv_123456789 rule_987654321
+
 package main
 
 import (

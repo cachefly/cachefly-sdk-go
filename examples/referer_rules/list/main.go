@@ -1,3 +1,20 @@
+// Example demonstrates listing access control rules for a CacheFly service.
+//
+// This example shows:
+// - Client initialization with API token
+// - Listing service rules with pagination
+// - Using shallow response type for efficiency
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id>
+//
+// Example:
+//
+//	go run main.go srv_123456789
+
 package main
 
 import (

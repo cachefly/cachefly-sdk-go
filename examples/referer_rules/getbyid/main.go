@@ -1,3 +1,19 @@
+// Example demonstrates retrieving a specific referer rule from a CacheFly service.
+//
+// This example shows:
+// - Client initialization with API token
+// - Fetching referer rule details by ID
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id> <rule_id>
+//
+// Example:
+//
+//	go run main.go srv_123456789 rule_987654321
+
 package main
 
 import (

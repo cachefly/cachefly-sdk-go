@@ -1,3 +1,19 @@
+// Example demonstrates deleting a referer rule from a CacheFly service.
+//
+// This example shows:
+// - Client initialization with API token
+// - Deleting a specific referer rule by ID
+// - Error handling for delete operations
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id> <rule_id>
+//
+// Example:
+//
+//	go run main.go srv_123456789 rule_987654321
+
 package main
 
 import (
