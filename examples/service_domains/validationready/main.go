@@ -1,3 +1,19 @@
+// Example demonstrates signaling that a domain is ready for validation in CacheFly.
+//
+// This example shows:
+// - Client initialization with API token
+// - Triggering domain validation process
+// - Error handling for validation operations
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id> <domain_id>
+//
+// Example:
+//
+//	go run main.go srv_123456789 dom_987654321
+
 package main
 
 import (

@@ -13,6 +13,7 @@
 // Example:
 //
 //	go run main.go cfg_123456789
+
 package main
 
 import (

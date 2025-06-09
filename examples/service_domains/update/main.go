@@ -1,3 +1,19 @@
+// Example demonstrates updating a custom domain for a CacheFly service.
+//
+// This example shows:
+// - Client initialization with API token
+// - Updating service domain description
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id> <domain_id>
+//
+// Example:
+//
+//	go run main.go srv_123456789 dom_987654321
+
 package main
 
 import (

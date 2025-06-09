@@ -1,3 +1,19 @@
+// Example demonstrates removing a custom domain from a CacheFly service.
+//
+// This example shows:
+// - Client initialization with API token
+// - Deleting a service domain by ID
+// - Error handling for delete operations
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id> <domain_id>
+//
+// Example:
+//
+//	go run main.go srv_123456789 dom_987654321
+
 package main
 
 import (

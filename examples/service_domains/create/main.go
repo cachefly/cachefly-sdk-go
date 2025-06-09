@@ -1,3 +1,19 @@
+// Example demonstrates adding a custom domain to a CacheFly service.
+//
+// This example shows:
+// - Client initialization with API token
+// - Creating a service domain with description
+// - Error handling and response formatting
+//
+// Usage:
+//
+//	export CACHEFLY_API_TOKEN="your-token"
+//	go run main.go <service_id>
+//
+// Example:
+//
+//	go run main.go srv_123456789
+
 package main
 
 import (
