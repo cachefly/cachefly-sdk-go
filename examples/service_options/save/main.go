@@ -48,11 +48,9 @@ func main() {
 	fmt.Printf("📄 Current service options format:\n%s\n\n", string(currentJSON))
 
 	enableAllOptions := api.ServiceOptions{
-		"nocache":              false,
-		"allowretry":           true,
-		"servestale":           true,
-		"normalizequerystring": true,
-		"forceorigqstring":     false,
+
+		"allowretry":       true,
+		"forceorigqstring": true,
 
 		// uncomment to test unsupported feature error handling
 		/*
@@ -71,12 +69,13 @@ func main() {
 			"ttl":               2678400,
 			"useRobotsTxt":      true,
 		},
-
-		"rawLogs": map[string]interface{}{
-			"enabled":     true,
-			"logFormat":   "combined",
-			"compression": "gzip",
-		},
+		/*
+			"rawLogs": map[string]interface{}{
+				"enabled":     true,
+				"logFormat":   "combined",
+				"compression": "gzip",
+			},
+		*/
 
 		// Standard enabled/value structure options
 		"error_ttl": map[string]interface{}{
@@ -99,11 +98,6 @@ func main() {
 			"value":   100,
 		},
 
-		"bwthrottle": map[string]interface{}{
-			"enabled": true,
-			"value":   1000000, // 1MB/s
-		},
-
 		"sharedshield": map[string]interface{}{
 			"enabled": true,
 			"value":   "ORD", // Chicago data center
@@ -114,42 +108,55 @@ func main() {
 			"value":   "2",
 		},
 
-		"redirect": map[string]interface{}{
-			"enabled": true,
-			"value":   "https://www.newdomain.com/",
-		},
-
-		"slice": map[string]interface{}{
-			"enabled": true,
-			"value":   true,
-		},
+		/*
+			"slice": map[string]interface{}{
+				"enabled": true,
+				"value":   true,
+			},
+		*/
 
 		"originhostheader": map[string]interface{}{
 			"enabled": true,
 			"value":   []string{"origin.example.com", "backup.example.com"},
 		},
 
-		"skip_pserve_ext": map[string]interface{}{
-			"enabled": true,
-			"value":   []string{".jpg", ".png", ".gif", ".css", ".js"},
-		},
-
-		"skip_encoding_ext": map[string]interface{}{
-			"enabled": true,
-			"value":   []string{".zip", ".gz", ".tar", ".rar"},
-		},
-
-		"bwthrottlequery": map[string]interface{}{
-			"enabled": true,
-			"value":   []string{"limit", "throttle"},
-		},
-
+		/*
+			"bwthrottlequery": map[string]interface{}{
+				"enabled": true,
+				"value":   []string{"limit", "throttle"},
+			},
+		*/
 		"dirpurgeskip": map[string]interface{}{
 			"enabled": true,
 			"value":   1,
 		},
 
-		// HTTP methods bitfield option
+		// Caching options
+		"nocache":              true,
+		"cachebygeocountry":    true,
+		"cachebyregion":        true,
+		"normalizequerystring": true,
+		"servestale":           true,
+		"cachebyreferer":       true,
+		"expiryHeaders":        []interface{}{},
+
+		// Delivery options
+		"cors":          true,
+		"autoRedirect":  true,
+		"livestreaming": true,
+		"linkpreheat":   true,
+		"redirect": map[string]interface{}{
+			"enabled": true,
+			"value":   "https://www.newdomain.com/",
+		},
+		"skip_encoding_ext": map[string]interface{}{
+			"enabled": true,
+			"value":   []string{".zip", ".gz", ".tar", ".rar"},
+		},
+		"bwthrottle": map[string]interface{}{
+			"enabled": true,
+			"value":   70656,
+		},
 		"httpmethods": map[string]interface{}{
 			"enabled": true,
 			"value": map[string]interface{}{
@@ -161,6 +168,14 @@ func main() {
 				"OPTIONS": true,
 				"PATCH":   false,
 			},
+		},
+
+		// Security options
+		"protectServeKeyEnabled": true,
+		"apiKeyEnabled":          true,
+		"skip_pserve_ext": map[string]interface{}{
+			"enabled": true,
+			"value":   []string{".jpg", ".png", ".gif", ".css", ".js"},
 		},
 	}
 

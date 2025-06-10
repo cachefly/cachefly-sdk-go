@@ -14,7 +14,7 @@ type OptionProperty struct {
 	Label      string      `json:"label"`
 	ID         string      `json:"_id"`
 	Name       string      `json:"name"`
-	Type       string      `json:"type"` // "boolean", "integer", "enum", "bitfield", "strings" this is as the per the api doc
+	Type       string      `json:"type"` // "boolean", "integer", "enum", "bitfield", "strings"
 	MaxValue   *int        `json:"maxValue,omitempty"`
 	MinValue   *int        `json:"minValue,omitempty"`
 	Default    interface{} `json:"default,omitempty"`
@@ -122,32 +122,102 @@ func (s *ServiceOptionsService) GetOptions(ctx context.Context, id string) (Serv
 	return opts, nil
 }
 
-// UpdateOptions updates service options with strict validation
+// UpdateOptions updates service options with strict validation and handles special cases
 func (s *ServiceOptionsService) UpdateOptions(ctx context.Context, id string, options ServiceOptions) (ServiceOptions, error) {
 	if id == "" {
 		return nil, fmt.Errorf("id is required")
 	}
 
-	// we are gettimg metadata for validation
-	metadata, err := s.GetOptionsMetadata(ctx, id)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get options metadata: %w", err)
+	// Handle special key management fields
+	var apiKeyEnabled *bool
+	var protectServeKeyEnabled *bool
+
+	// Extract apiKeyEnabled
+	if val, exists := options["apiKeyEnabled"]; exists {
+		if boolVal, ok := val.(bool); ok {
+			apiKeyEnabled = &boolVal
+			// Remove from options since it's handled separately
+			delete(options, "apiKeyEnabled")
+		}
 	}
 
-	// validate options against metadata
-	if err := s.validateOptions(options, metadata); err != nil {
-		return nil, err
+	// Extract protectServeKeyEnabled
+	if val, exists := options["protectServeKeyEnabled"]; exists {
+		if boolVal, ok := val.(bool); ok {
+			protectServeKeyEnabled = &boolVal
+			// Remove from options since it's handled separately
+			delete(options, "protectServeKeyEnabled")
+		}
 	}
 
-	// lets transform options to match api expectations
-	transformedOptions := s.transformOptionsForAPI(options)
-
-	// finally we Update options
-	endpoint := fmt.Sprintf("/services/%s/options", id)
+	// Get metadata for validation (only if there are options to validate)
 	var updated ServiceOptions
-	if err := s.Client.Put(ctx, endpoint, transformedOptions, &updated); err != nil {
-		return nil, err
+	if len(options) > 0 {
+		metadata, err := s.GetOptionsMetadata(ctx, id)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get options metadata: %w", err)
+		}
+
+		// Validate options against metadata
+		if err := s.validateOptions(options, metadata); err != nil {
+			return nil, err
+		}
+
+		// Transform options to match API expectations
+		transformedOptions := s.transformOptionsForAPI(options, metadata)
+
+		// Update options
+		endpoint := fmt.Sprintf("/services/%s/options", id)
+		if err := s.Client.Put(ctx, endpoint, transformedOptions, &updated); err != nil {
+			return nil, err
+		}
+	} else {
+		// If no options to update, get current options for return value
+		var err error
+		updated, err = s.GetOptions(ctx, id)
+		if err != nil {
+			return nil, err
+		}
 	}
+
+	// Handle apiKeyEnabled after options update
+	if apiKeyEnabled != nil {
+		if *apiKeyEnabled {
+			// Generate new legacy API key
+			_, err := s.RegenerateLegacyAPIKey(ctx, id)
+			if err != nil {
+				return nil, fmt.Errorf("failed to regenerate legacy API key: %w", err)
+			}
+			updated["apiKeyEnabled"] = true
+		} else {
+			// Delete legacy API key
+			err := s.DeleteLegacyAPIKey(ctx, id)
+			if err != nil {
+				return nil, fmt.Errorf("failed to delete legacy API key: %w", err)
+			}
+			updated["apiKeyEnabled"] = false
+		}
+	}
+
+	// Handle protectServeKeyEnabled after options update
+	if protectServeKeyEnabled != nil {
+		if *protectServeKeyEnabled {
+			// Generate new ProtectServe key
+			_, err := s.RecreateProtectServeKey(ctx, id, "REGENERATE")
+			if err != nil {
+				return nil, fmt.Errorf("failed to regenerate ProtectServe key: %w", err)
+			}
+			updated["protectServeKeyEnabled"] = true
+		} else {
+			// Delete ProtectServe key
+			err := s.DeleteProtectServeKey(ctx, id)
+			if err != nil {
+				return nil, fmt.Errorf("failed to delete ProtectServe key: %w", err)
+			}
+			updated["protectServeKeyEnabled"] = false
+		}
+	}
+
 	return updated, nil
 }
 
@@ -155,31 +225,48 @@ func (s *ServiceOptionsService) UpdateOptions(ctx context.Context, id string, op
 func (s *ServiceOptionsService) validateOptions(options ServiceOptions, metadata *ServiceOptionsMetadata) error {
 	var validationErrors []ValidationError
 
-	// Create a map of available options for quick lookup
-	availableOptions := make(map[string]OptionMetadata)
+	// Create maps for both dynamic and standard options
+	dynamicOptions := make(map[string]OptionMetadata)
+	standardOptions := make(map[string]OptionMetadata)
+
 	for _, opt := range metadata.Data {
-		// For dynamic options, use the property name
 		if opt.Type == "dynamic" && opt.Property != nil {
-			availableOptions[opt.Property.Name] = opt
+			dynamicOptions[opt.Property.Name] = opt
+		} else if opt.Type == "standard" {
+			// Map standard option names to their expected field names
+			var optName string
+			switch opt.Name {
+			case "Reverse Proxy":
+				optName = "reverseProxy"
+			case "ProtectServe":
+				optName = "protectServeKeyEnabled"
+			case "CORS Override":
+				optName = "cors"
+			case "Expiry Overrides":
+				optName = "expiryHeaders"
+			case "Referrer Blocking":
+				optName = "referrerBlocking"
+			case "Auto HTTPS Redirect":
+				optName = "autoRedirect"
+			default:
+				optName = opt.Name
+			}
+			standardOptions[optName] = opt
 		}
 	}
 
 	// Validate each option in the request
 	for optionName, value := range options {
-		if s.isFeatureEnablementOption(optionName) {
+		var optMeta OptionMetadata
+		var exists bool
+		var isDynamic bool
 
-			if err := s.validateEnabledValueStructure(optionName, value, availableOptions); err != nil {
-				validationErrors = append(validationErrors, ValidationError{
-					Field:   optionName,
-					Message: err.Error(),
-					Code:    "INVALID_STRUCTURE",
-				})
-			}
-			continue
-		}
-
-		optMeta, exists := availableOptions[optionName]
-		if !exists {
+		// Check dynamic options first
+		if optMeta, exists = dynamicOptions[optionName]; exists {
+			isDynamic = true
+		} else if optMeta, exists = standardOptions[optionName]; exists {
+			isDynamic = false
+		} else {
 			validationErrors = append(validationErrors, ValidationError{
 				Field:   optionName,
 				Message: fmt.Sprintf("Option '%s' is not available for this service", optionName),
@@ -198,13 +285,25 @@ func (s *ServiceOptionsService) validateOptions(options ServiceOptions, metadata
 			continue
 		}
 
-		// Validate value based on metadata
-		if err := s.validateOptionValue(optMeta, value); err != nil {
-			validationErrors = append(validationErrors, ValidationError{
-				Field:   optionName,
-				Message: err.Error(),
-				Code:    "INVALID_VALUE",
-			})
+		// Validate value based on option type
+		if isDynamic {
+			// Dynamic options can be direct values or enabled/value structure
+			if err := s.validateDynamicOptionValue(optionName, optMeta, value); err != nil {
+				validationErrors = append(validationErrors, ValidationError{
+					Field:   optionName,
+					Message: err.Error(),
+					Code:    "INVALID_VALUE",
+				})
+			}
+		} else {
+			// Standard options have various structures
+			if err := s.validateStandardOptionValue(optionName, optMeta, value); err != nil {
+				validationErrors = append(validationErrors, ValidationError{
+					Field:   optionName,
+					Message: err.Error(),
+					Code:    "INVALID_VALUE",
+				})
+			}
 		}
 	}
 
@@ -219,36 +318,28 @@ func (s *ServiceOptionsService) validateOptions(options ServiceOptions, metadata
 	return nil
 }
 
-// validateEnabledValueStructure validates the enabled/value structure for complex options
-func (s *ServiceOptionsService) validateEnabledValueStructure(optionName string, value interface{}, availableOptions map[string]OptionMetadata) error {
-	// Must be an object
-	objVal, ok := value.(map[string]interface{})
-	if !ok {
-		return fmt.Errorf("option '%s' must be an object", optionName)
+// validateDynamicOptionValue validates dynamic option values (can be direct or enabled/value structure)
+func (s *ServiceOptionsService) validateDynamicOptionValue(optionName string, opt OptionMetadata, value interface{}) error {
+	if opt.Property == nil {
+		return nil // No validation possible without property metadata
 	}
 
-	// Special handling for complex objects that don't use enabled/value structure
-	if optionName == "reverseProxy" || optionName == "rawLogs" {
-		enabled, hasEnabled := objVal["enabled"]
-		if !hasEnabled {
-			return fmt.Errorf("option '%s' is missing required 'enabled' field", optionName)
-		}
+	prop := opt.Property
 
-		// Validate enabled field is boolean
-		if _, ok := enabled.(bool); !ok {
-			return fmt.Errorf("'enabled' field must be a boolean for option '%s'", optionName)
+	// Check if this is an enabled/value structure
+	if objVal, ok := value.(map[string]interface{}); ok {
+		if _, hasEnabled := objVal["enabled"]; hasEnabled {
+			// This is an enabled/value structure
+			return s.validateEnabledValueStructure(optionName, objVal, prop)
 		}
-
-		// Special validation for reverseProxy
-		if optionName == "reverseProxy" {
-			if enabledBool, ok := enabled.(bool); ok && enabledBool {
-				return s.validateReverseProxyStructure(objVal)
-			}
-		}
-		return nil
 	}
 
-	// Standard enabled/value structure for other options
+	// This is a direct value - validate it directly
+	return s.validatePropertyValue(prop, value)
+}
+
+// validateEnabledValueStructure validates the enabled/value structure for dynamic options
+func (s *ServiceOptionsService) validateEnabledValueStructure(optionName string, objVal map[string]interface{}, prop *OptionProperty) error {
 	enabled, hasEnabled := objVal["enabled"]
 	val, hasValue := objVal["value"]
 
@@ -268,11 +359,115 @@ func (s *ServiceOptionsService) validateEnabledValueStructure(optionName string,
 		return fmt.Errorf("option '%s' requires 'value' field when enabled is true", optionName)
 	}
 
-	// Validate the value field against metadata if available and present
+	// Validate the value field if present
 	if hasValue {
-		if optMeta, exists := availableOptions[optionName]; exists {
-			if err := s.validateOptionValue(optMeta, val); err != nil {
-				return fmt.Errorf("invalid value in enabled/value structure for '%s': %w", optionName, err)
+		return s.validatePropertyValue(prop, val)
+	}
+
+	return nil
+}
+
+// validateStandardOptionValue validates standard option values with their various structures
+func (s *ServiceOptionsService) validateStandardOptionValue(optionName string, opt OptionMetadata, value interface{}) error {
+	switch optionName {
+	case "protectServeKeyEnabled", "cors", "referrerBlocking", "autoRedirect":
+		// Simple boolean options
+		if _, ok := value.(bool); !ok {
+			return fmt.Errorf("option '%s' expects a boolean value, got %T", optionName, value)
+		}
+
+	case "reverseProxy":
+		// Complex object with enabled flag and configuration
+		return s.validateReverseProxyOption(value)
+
+	case "rawLogs":
+		// Complex object with enabled flag and configuration
+		return s.validateRawLogsOption(value)
+
+	case "expiryHeaders":
+		// Array of expiry header configurations or enabled/value structure
+		return s.validateExpiryHeadersOption(value)
+
+	default:
+		// For unknown standard options, try to infer validation
+		return s.validateGenericStandardOption(optionName, value)
+	}
+
+	return nil
+}
+
+// validateReverseProxyOption validates reverse proxy configuration
+func (s *ServiceOptionsService) validateReverseProxyOption(value interface{}) error {
+	// Must be an object
+	objVal, ok := value.(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("reverseProxy must be an object, got %T", value)
+	}
+
+	// Check for enabled field
+	enabled, hasEnabled := objVal["enabled"]
+	if !hasEnabled {
+		return fmt.Errorf("reverseProxy is missing required 'enabled' field")
+	}
+
+	// Validate enabled field is boolean
+	enabledBool, ok := enabled.(bool)
+	if !ok {
+		return fmt.Errorf("reverseProxy 'enabled' field must be a boolean")
+	}
+
+	// If enabled, validate required configuration fields
+	if enabledBool {
+		requiredFields := []string{"mode", "hostname"}
+		optionalFields := []string{"cacheByQueryParam", "originScheme", "ttl", "useRobotsTxt"}
+
+		// Check required fields
+		for _, field := range requiredFields {
+			if _, exists := objVal[field]; !exists {
+				return fmt.Errorf("reverseProxy configuration missing required field: %s", field)
+			}
+		}
+
+		// Validate field types
+		if mode, ok := objVal["mode"]; ok {
+			if modeStr, ok := mode.(string); ok {
+				validModes := []string{"WEB", "API", "STORAGE"}
+				if !s.isValidEnumValue(modeStr, validModes) {
+					return fmt.Errorf("reverseProxy mode must be one of: %v, got '%s'", validModes, modeStr)
+				}
+			} else {
+				return fmt.Errorf("reverseProxy mode must be a string")
+			}
+		}
+
+		if hostname, ok := objVal["hostname"]; ok {
+			if _, ok := hostname.(string); !ok {
+				return fmt.Errorf("reverseProxy hostname must be a string")
+			}
+		}
+
+		// Validate optional fields if present
+		for _, field := range optionalFields {
+			if val, exists := objVal[field]; exists {
+				switch field {
+				case "cacheByQueryParam", "useRobotsTxt":
+					if _, ok := val.(bool); !ok {
+						return fmt.Errorf("reverseProxy %s must be a boolean", field)
+					}
+				case "ttl":
+					if !s.isNumeric(val) {
+						return fmt.Errorf("reverseProxy ttl must be a number")
+					}
+				case "originScheme":
+					if schemeStr, ok := val.(string); ok {
+						validSchemes := []string{"FOLLOW", "HTTP", "HTTPS"}
+						if !s.isValidEnumValue(schemeStr, validSchemes) {
+							return fmt.Errorf("reverseProxy originScheme must be one of: %v", validSchemes)
+						}
+					} else {
+						return fmt.Errorf("reverseProxy originScheme must be a string")
+					}
+				}
 			}
 		}
 	}
@@ -280,69 +475,168 @@ func (s *ServiceOptionsService) validateEnabledValueStructure(optionName string,
 	return nil
 }
 
-// validateReverseProxyStructure validates reverse proxy configuration
-func (s *ServiceOptionsService) validateReverseProxyStructure(config map[string]interface{}) error {
-	requiredFields := []string{"mode", "hostname"}
+// validateRawLogsOption validates raw logs configuration
+func (s *ServiceOptionsService) validateRawLogsOption(value interface{}) error {
+	// Must be an object
+	objVal, ok := value.(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("rawLogs must be an object, got %T", value)
+	}
 
-	for _, field := range requiredFields {
-		if _, exists := config[field]; !exists {
-			return fmt.Errorf("reverse proxy configuration missing required field: %s", field)
+	// Check for enabled field
+	enabled, hasEnabled := objVal["enabled"]
+	if !hasEnabled {
+		return fmt.Errorf("rawLogs is missing required 'enabled' field")
+	}
+
+	// Validate enabled field is boolean
+	enabledBool, ok := enabled.(bool)
+	if !ok {
+		return fmt.Errorf("rawLogs 'enabled' field must be a boolean")
+	}
+
+	// If enabled, validate configuration fields
+	if enabledBool {
+		// Validate logFormat if present
+		if logFormat, exists := objVal["logFormat"]; exists {
+			if logFormatStr, ok := logFormat.(string); ok {
+				validFormats := []string{"combined", "common", "custom"}
+				if !s.isValidEnumValue(logFormatStr, validFormats) {
+					return fmt.Errorf("rawLogs logFormat must be one of: %v", validFormats)
+				}
+			} else {
+				return fmt.Errorf("rawLogs logFormat must be a string")
+			}
+		}
+
+		// Validate compression if present
+		if compression, exists := objVal["compression"]; exists {
+			if compressionStr, ok := compression.(string); ok {
+				validCompressions := []string{"gzip", "bzip2", "none"}
+				if !s.isValidEnumValue(compressionStr, validCompressions) {
+					return fmt.Errorf("rawLogs compression must be one of: %v", validCompressions)
+				}
+			} else {
+				return fmt.Errorf("rawLogs compression must be a string")
+			}
 		}
 	}
+
 	return nil
 }
 
-// isFeatureEnablementOption checks if an option is a feature enablement option
-func (s *ServiceOptionsService) isFeatureEnablementOption(optionName string) bool {
-	// Define options that require enabled/value structure
-	featureOptions := []string{
-		"reverseProxy",
-		"rawLogs",
-		"error_ttl",
-		"ttfb_timeout",
-		"contimeout",
-		"maxcons",
-		"bwthrottle",
-		"sharedshield",
-		"originhostheader",
-		"purgemode",
-		"dirpurgeskip",
-		"httpmethods",
-		"skip_pserve_ext",
-		"skip_encoding_ext",
-		"redirect",
-		"slice",
-		"bwthrottlequery",
-	}
+// validateExpiryHeadersOption validates expiry headers array configuration
+func (s *ServiceOptionsService) validateExpiryHeadersOption(value interface{}) error {
+	// Could be an array directly or an enabled/value structure
+	if objVal, ok := value.(map[string]interface{}); ok {
+		if enabled, hasEnabled := objVal["enabled"]; hasEnabled {
+			// This is an enabled/value structure
+			enabledBool, ok := enabled.(bool)
+			if !ok {
+				return fmt.Errorf("expiryHeaders 'enabled' field must be a boolean")
+			}
 
-	// Check if this is a feature option
-	for _, feature := range featureOptions {
-		if optionName == feature {
-			return true
+			if enabledBool {
+				if val, hasValue := objVal["value"]; hasValue {
+					return s.validateExpiryHeadersArray(val)
+				} else {
+					return fmt.Errorf("expiryHeaders requires 'value' field when enabled is true")
+				}
+			}
+			return nil
 		}
 	}
 
-	return false
+	// Direct array
+	return s.validateExpiryHeadersArray(value)
 }
 
-func (s *ServiceOptionsService) transformOptionsForAPI(options ServiceOptions) ServiceOptions {
-	transformed := make(ServiceOptions)
+// validateExpiryHeadersArray validates the actual expiry headers array
+func (s *ServiceOptionsService) validateExpiryHeadersArray(value interface{}) error {
+	var arrayVal []interface{}
 
-	// Since we only accept enabled/value format, pass through as-is
-	for optionName, value := range options {
-		transformed[optionName] = value
+	// Handle both []interface{} and []map[string]interface{} types
+	switch v := value.(type) {
+	case []interface{}:
+		arrayVal = v
+	case []map[string]interface{}:
+		// Convert []map[string]interface{} to []interface{}
+		arrayVal = make([]interface{}, len(v))
+		for i, item := range v {
+			arrayVal[i] = item
+		}
+	default:
+		return fmt.Errorf("expiryHeaders must be an array, got %T", value)
 	}
 
-	return transformed
+	// Validate each expiry header entry
+	for i, entry := range arrayVal {
+		entryObj, ok := entry.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("expiryHeaders[%d] must be an object", i)
+		}
+
+		// Check for required fields (at least one of path or extension)
+		path, hasPath := entryObj["path"]
+		extension, hasExtension := entryObj["extension"]
+		expiryTime, hasExpiryTime := entryObj["expiryTime"]
+
+		if !hasPath && !hasExtension {
+			return fmt.Errorf("expiryHeaders[%d] must have either 'path' or 'extension' field", i)
+		}
+
+		if !hasExpiryTime {
+			return fmt.Errorf("expiryHeaders[%d] is missing required 'expiryTime' field", i)
+		}
+
+		// Validate field types
+		if hasPath {
+			if _, ok := path.(string); !ok {
+				return fmt.Errorf("expiryHeaders[%d] path must be a string", i)
+			}
+		}
+
+		if hasExtension {
+			if _, ok := extension.(string); !ok {
+				return fmt.Errorf("expiryHeaders[%d] extension must be a string", i)
+			}
+		}
+
+		if !s.isNumeric(expiryTime) {
+			return fmt.Errorf("expiryHeaders[%d] expiry_time must be a number", i)
+		}
+	}
+
+	return nil
 }
 
-// validateOptionValue validates a value against option metadata
-func (s *ServiceOptionsService) validateOptionValue(opt OptionMetadata, value interface{}) error {
-	if opt.Property == nil {
-		return nil // No validation for standard options
+// validateGenericStandardOption provides generic validation for unknown standard options
+func (s *ServiceOptionsService) validateGenericStandardOption(optionName string, value interface{}) error {
+	// Try to determine the expected type based on the value structure
+	switch v := value.(type) {
+	case bool:
+		// Simple boolean toggle - no additional validation needed
+		return nil
+	case map[string]interface{}:
+		// Complex object - check for common patterns
+		if enabled, hasEnabled := v["enabled"]; hasEnabled {
+			// Has enabled/value or enabled/config pattern
+			if _, ok := enabled.(bool); !ok {
+				return fmt.Errorf("option '%s' enabled field must be a boolean", optionName)
+			}
+		}
+		return nil
+	case []interface{}:
+		// Array configuration - basic validation
+		return nil
+	default:
+		// Allow other types but no specific validation
+		return nil
 	}
+}
 
-	prop := opt.Property
+// validatePropertyValue validates a simple value against property constraints
+func (s *ServiceOptionsService) validatePropertyValue(prop *OptionProperty, value interface{}) error {
 	switch prop.Type {
 	case "boolean":
 		if _, ok := value.(bool); !ok {
@@ -364,6 +658,10 @@ func (s *ServiceOptionsService) validateOptionValue(opt OptionMetadata, value in
 		}
 		if prop.MaxValue != nil && intVal > *prop.MaxValue {
 			return fmt.Errorf("value %d is above maximum %d", intVal, *prop.MaxValue)
+		}
+	case "string":
+		if _, ok := value.(string); !ok {
+			return fmt.Errorf("expected string value, got %T", value)
 		}
 	case "enum":
 		strVal, ok := value.(string)
@@ -415,6 +713,18 @@ func (s *ServiceOptionsService) validateOptionValue(opt OptionMetadata, value in
 	return nil
 }
 
+// transformOptionsForAPI transforms validated options to match API expectations
+func (s *ServiceOptionsService) transformOptionsForAPI(options ServiceOptions, metadata *ServiceOptionsMetadata) ServiceOptions {
+	transformed := make(ServiceOptions)
+
+	// Simply pass through all options as-is since the input is already in the correct format
+	for optionName, value := range options {
+		transformed[optionName] = value
+	}
+
+	return transformed
+}
+
 // UpdateSpecificOption updates a single option by name with validation
 func (s *ServiceOptionsService) UpdateSpecificOption(ctx context.Context, id string, optionName string, value interface{}) (ServiceOptions, error) {
 	options := ServiceOptions{
@@ -430,9 +740,31 @@ func (s *ServiceOptionsService) IsOptionAvailable(ctx context.Context, id string
 		return false, nil, err
 	}
 
+	// Check both dynamic and standard options
 	for _, opt := range metadata.Data {
 		if opt.Type == "dynamic" && opt.Property != nil && opt.Property.Name == optionName {
 			return true, &opt, nil
+		} else if opt.Type == "standard" {
+			var mappedName string
+			switch opt.Name {
+			case "Reverse Proxy":
+				mappedName = "reverseProxy"
+			case "ProtectServe":
+				mappedName = "protectServeKeyEnabled"
+			case "CORS Override":
+				mappedName = "cors"
+			case "Expiry Overrides":
+				mappedName = "expiryHeaders"
+			case "Referrer Blocking":
+				mappedName = "referrerBlocking"
+			case "Auto HTTPS Redirect":
+				mappedName = "autoRedirect"
+			default:
+				mappedName = opt.Name
+			}
+			if mappedName == optionName {
+				return true, &opt, nil
+			}
 		}
 	}
 	return false, nil, nil
@@ -449,6 +781,25 @@ func (s *ServiceOptionsService) GetAvailableOptionNames(ctx context.Context, id 
 	for _, opt := range metadata.Data {
 		if opt.Type == "dynamic" && opt.Property != nil {
 			names = append(names, opt.Property.Name)
+		} else if opt.Type == "standard" {
+			var mappedName string
+			switch opt.Name {
+			case "Reverse Proxy":
+				mappedName = "reverseProxy"
+			case "ProtectServe":
+				mappedName = "protectServeKeyEnabled"
+			case "CORS Override":
+				mappedName = "cors"
+			case "Expiry Overrides":
+				mappedName = "expiryHeaders"
+			case "Referrer Blocking":
+				mappedName = "referrerBlocking"
+			case "Auto HTTPS Redirect":
+				mappedName = "autoRedirect"
+			default:
+				mappedName = opt.Name
+			}
+			names = append(names, mappedName)
 		}
 	}
 	return names, nil
@@ -466,6 +817,25 @@ func (s *ServiceOptionsService) GetOptionsByGroup(ctx context.Context, id string
 		groups[opt.Group] = append(groups[opt.Group], opt)
 	}
 	return groups, nil
+}
+
+// Helper functions
+func (s *ServiceOptionsService) isValidEnumValue(value string, validValues []string) bool {
+	for _, valid := range validValues {
+		if value == valid {
+			return true
+		}
+	}
+	return false
+}
+
+func (s *ServiceOptionsService) isNumeric(value interface{}) bool {
+	switch value.(type) {
+	case int, int32, int64, float32, float64:
+		return true
+	default:
+		return false
+	}
 }
 
 // LegacyAPIKeyResponse represents API key payload.
