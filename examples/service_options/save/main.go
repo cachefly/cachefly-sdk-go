@@ -51,7 +51,11 @@ func main() {
 
 		"allowretry":       true,
 		"forceorigqstring": true,
+		"send-xff":         true,
+		"brotli_support":   true,
 
+		// Purge options
+		"purgenoquery": true,
 		// uncomment to test unsupported feature error handling
 		/*
 			"unsupported_feature": map[string]interface{}{
