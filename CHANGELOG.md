@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented here.
 
+## [v1.0.4] - 2025-06-10
+
+### Added
+- Dynamic service option handling, use /options/metadata endpoint to discover available options per service
+- Validate service option against metadata before sending
+
 ## [v1.0.3] - 2025-06-09
 
 ### Added
