@@ -1049,42 +1049,6 @@ func ExampleServiceOptionsService_IsOptionAvailable() {
 	}
 }
 
-// ExampleServiceOptionsService_ValidationErrorHandling demonstrates handling validation errors.
-func ExampleServiceOptionsService_ValidationErrorHandling() {
-	client := cachefly.NewClient(
-		cachefly.WithToken("your-api-token"),
-	)
-
-	// Try to update with invalid options
-	invalidOptions := api.ServiceOptions{
-		"nonexistent_option": true,      // This option doesn't exist
-		"cors":               "invalid", // Wrong type (should be boolean)
-	}
-
-	_, err := client.ServiceOptions.UpdateOptions(context.Background(), "srv_123456789", invalidOptions)
-	if err != nil {
-		if validationErr, ok := err.(api.ServiceOptionsValidationError); ok {
-			fmt.Printf("Validation failed with %d errors:\n", len(validationErr.Errors))
-
-			for _, fieldErr := range validationErr.Errors {
-				fmt.Printf("Field: %s\n", fieldErr.Field)
-				fmt.Printf("Error: %s\n", fieldErr.Message)
-				fmt.Printf("Code: %s\n", fieldErr.Code)
-				fmt.Println("---")
-			}
-
-			// Get available options to help user
-			availableOptions, _ := client.ServiceOptions.GetAvailableOptionNames(
-				context.Background(),
-				"srv_123456789",
-			)
-			fmt.Printf("Available options: %v\n", availableOptions)
-		} else {
-			log.Fatalf("Unexpected error: %v", err)
-		}
-	}
-}
-
 // ExampleServiceOptionsService_GetLegacyAPIKey demonstrates retrieving the legacy API key.
 func ExampleServiceOptionsService_GetLegacyAPIKey() {
 	client := cachefly.NewClient(
