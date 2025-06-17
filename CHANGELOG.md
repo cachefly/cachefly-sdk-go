@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented here.
 
+## [v1.0.5] - 2025-06-17
+
+### Refactor
+- Refactor Dynamic service option handling
+- update docs
+
 ## [v1.0.4] - 2025-06-10
 
 ### Added
