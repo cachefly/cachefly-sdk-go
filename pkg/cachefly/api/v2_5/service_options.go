@@ -164,7 +164,7 @@ func (s *ServiceOptionsService) UpdateOptions(ctx context.Context, id string, op
 		}
 
 		// Transform options to match API expectations
-		transformedOptions := s.transformOptionsForAPI(options, metadata)
+		transformedOptions := s.transformOptionsForAPI(options)
 
 		// Update options
 		endpoint := fmt.Sprintf("/services/%s/options", id)
@@ -297,7 +297,7 @@ func (s *ServiceOptionsService) validateOptions(options ServiceOptions, metadata
 			}
 		} else {
 			// Standard options have various structures
-			if err := s.validateStandardOptionValue(optionName, optMeta, value); err != nil {
+			if err := s.validateStandardOptionValue(optionName, value); err != nil {
 				validationErrors = append(validationErrors, ValidationError{
 					Field:   optionName,
 					Message: err.Error(),
@@ -368,7 +368,7 @@ func (s *ServiceOptionsService) validateEnabledValueStructure(optionName string,
 }
 
 // validateStandardOptionValue validates standard option values with their various structures
-func (s *ServiceOptionsService) validateStandardOptionValue(optionName string, opt OptionMetadata, value interface{}) error {
+func (s *ServiceOptionsService) validateStandardOptionValue(optionName string, value interface{}) error {
 	switch optionName {
 	case "protectServeKeyEnabled", "cors", "referrerBlocking", "autoRedirect":
 		// Simple boolean options
@@ -714,7 +714,7 @@ func (s *ServiceOptionsService) validatePropertyValue(prop *OptionProperty, valu
 }
 
 // transformOptionsForAPI transforms validated options to match API expectations
-func (s *ServiceOptionsService) transformOptionsForAPI(options ServiceOptions, metadata *ServiceOptionsMetadata) ServiceOptions {
+func (s *ServiceOptionsService) transformOptionsForAPI(options ServiceOptions) ServiceOptions {
 	transformed := make(ServiceOptions)
 
 	// Simply pass through all options as-is since the input is already in the correct format
