@@ -219,45 +219,13 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 * [Get TLS Profile By ID](examples/tls_profiles/getbyid/main.go)  
 
 
-## Running the Examples with Make
+##  Tests
 
-simplify running example scripts.
-
-1. **Ensure** you have a `.env` in your project root with your API token:
-   ```dotenv
-   CACHEFLY_API_TOKEN=your_real_api_token_here
-   ```
-
-  Run example, to list services:
-
-  ```
-    make service-list
-  ```
-
-  Run example, to list service by ID, You’ll be asked to enter the service ID interactively.
-
-  ```
-    make service-getbyid
-  ```
-
-## Acceptance Tests
-
-The SDK includes one or two end-to-end (acceptance) tests per resources that hit real CacheFly API endpoints. 
-
-- Require a live API token in a `.env` file at the project root  
-- Automatically skip if `.env` or `CACHEFLY_API_TOKEN` is not found  
-- Discover valid resource IDs at runtime (no other setup needed)  
-- Run against your account/staging environment to verify full CRUD behavior  
-
-Create a `.env` in your repo root with:
-
-```dotenv
-CACHEFLY_API_TOKEN=your_real_api_token_here
-```
+The SDK includes unit tests at `pkg/cachefly/api/v2_5. 
 
 
-```run acceptance tests 
-  go test ./pkg/cachefly/api -timeout 30s
+```run  tests 
+  go test -v -count=1 ./pkg/cachefly/api/v2_5 
 ```
 
 ## License
