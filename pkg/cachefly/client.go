@@ -74,6 +74,9 @@ type Client struct {
 
 	// TLSProfiles manages TLS security profiles
 	TLSProfiles *api.TLSProfilesService
+
+	// DeliveryRegions manages delivery regions
+	DeliveryRegions *api.DeliveryRegionsService
 }
 
 // Option is a functional option for configuring the Client.
@@ -170,5 +173,6 @@ func NewClient(opts ...Option) *Client {
 		Users:                      &api.UsersService{Client: hc},
 		ScriptConfigs:              &api.ScriptConfigsService{Client: hc},
 		TLSProfiles:                &api.TLSProfilesService{Client: hc},
+		DeliveryRegions:            &api.DeliveryRegionsService{Client: hc},
 	}
 }

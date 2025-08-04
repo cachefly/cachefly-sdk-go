@@ -136,9 +136,6 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 
 * [Get Basic Service Options](examples/service_options/get_basic/main.go)  
 * [Save Basic Service Options](examples/service_options/save/main.go)  
-* [Get Legacy API Key](examples/service_options/get_legacy_apikey/main.go)  
-* [Regenerate Legacy API Key](examples/service_options/regenerate_legacy_apikey/main.go)  
-* [Delete Legacy API Key](examples/service_options/delete_legacy_apikey/main.go)  
 * [Get ProtectServe Key](examples/service_options/get_protectserve_key/main.go)  
 * [Regenerate ProtectServe Key](examples/service_options/recreate_protectserve_key/main.go)  
 * [Update ProtectServe Key Options](examples/service_options/update_protectserve_key_options/main.go)  

@@ -17,7 +17,8 @@ type ServicesService struct {
 // Service represents a CacheFly service configuration.
 type Service struct {
 	ID                string `json:"_id"`
-	UpdatedAt         string `json:"updateAt"`
+	Description       string `json:"description"`
+	UpdatedAt         string `json:"updatedAt"`
 	CreatedAt         string `json:"createdAt"`
 	Name              string `json:"name"`
 	UniqueName        string `json:"uniqueName"`
@@ -65,11 +66,10 @@ type ListOptions struct {
 
 // UpdateServiceRequest contains fields for updating an existing service.
 type UpdateServiceRequest struct {
-	Description       string `json:"description"`
-	TLSProfile        string `json:"tlsProfile,omitempty"`
-	AutoSSL           bool   `json:"autoSsl"`
-	DeliveryRegion    string `json:"deliveryRegion,omitempty"`
-	ConfigurationMode string `json:"configurationMode"`
+	Description    string `json:"description"`
+	TLSProfile     string `json:"tlsProfile,omitempty"`
+	AutoSSL        bool   `json:"autoSsl"`
+	DeliveryRegion string `json:"deliveryRegion,omitempty"`
 }
 
 // EnableAccessLogsRequest specifies the log target for access logging.

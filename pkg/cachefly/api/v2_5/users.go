@@ -12,13 +12,13 @@ import (
 // User represents a CacheFly user account with permissions and service access.
 type User struct {
 	ID                     string   `json:"_id"`
-	UpdatedAt              string   `json:"updateAt"`
+	UpdatedAt              string   `json:"updatedAt"`
 	CreatedAt              string   `json:"createdAt"`
 	Username               string   `json:"username"`
 	PasswordChangeRequired bool     `json:"passwordChangeRequired"`
 	Email                  string   `json:"email"`
 	FullName               string   `json:"fullName"`
-	Phone                  string   `json:"phone"`
+	Phone                  *string  `json:"phone,omitempty"`
 	Permissions            []string `json:"permissions"`
 	Services               []string `json:"services"`
 	Status                 string   `json:"status"`
@@ -42,12 +42,12 @@ type ListUsersResponse struct {
 type CreateUserRequest struct {
 	Username               string   `json:"username"`
 	Password               string   `json:"password"`
-	Services               []string `json:"services"`
-	PasswordChangeRequired bool     `json:"passwordChangeRequired"`
-	Email                  string   `json:"email"`
-	FullName               string   `json:"fullName"`
-	Phone                  string   `json:"phone"`
-	Permissions            []string `json:"permissions"`
+	Services               []string `json:"services,omitempty"`
+	PasswordChangeRequired *bool    `json:"passwordChangeRequired,omitempty"`
+	Email                  string   `json:"email,omitempty"`
+	FullName               string   `json:"fullName,omitempty"`
+	Phone                  string   `json:"phone,omitempty"`
+	Permissions            []string `json:"permissions,omitempty"`
 }
 
 // UpdateUserRequest contains fields for updating an existing user.

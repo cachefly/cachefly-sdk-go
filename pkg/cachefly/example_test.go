@@ -890,10 +890,6 @@ func ExampleServiceOptionsService_GetOptions() {
 		fmt.Printf("No cache: %v\n", nocache)
 	}
 
-	if apikey, ok := options["apiKeyEnabled"].(bool); ok {
-		fmt.Printf("API key enabled: %v\n", apikey)
-	}
-
 	// Access complex nested options
 	if reverseProxy, ok := options["reverseProxy"].(map[string]interface{}); ok {
 		if enabled, ok := reverseProxy["enabled"].(bool); ok {
@@ -940,7 +936,6 @@ func ExampleServiceOptionsService_UpdateOptions() {
 		"cachebygeocountry":  true,
 		"followredirect":     true,
 		"send-xff":           true,
-		"apiKeyEnabled":      true,
 		"reverseProxy": map[string]interface{}{
 			"enabled":           true,
 			"hostname":          "origin.example.com",
@@ -1047,48 +1042,6 @@ func ExampleServiceOptionsService_IsOptionAvailable() {
 	} else {
 		fmt.Printf("Livestreaming option is not available for this service\n")
 	}
-}
-
-// ExampleServiceOptionsService_GetLegacyAPIKey demonstrates retrieving the legacy API key.
-func ExampleServiceOptionsService_GetLegacyAPIKey() {
-	client := cachefly.NewClient(
-		cachefly.WithToken("your-api-token"),
-	)
-
-	apiKeyResp, err := client.ServiceOptions.GetLegacyAPIKey(context.Background(), "srv_123456789")
-	if err != nil {
-		log.Fatalf("Failed to get legacy API key: %v", err)
-	}
-
-	fmt.Printf("Legacy API key: %s\n", apiKeyResp.APIKey)
-}
-
-// ExampleServiceOptionsService_RegenerateLegacyAPIKey demonstrates regenerating the API key.
-func ExampleServiceOptionsService_RegenerateLegacyAPIKey() {
-	client := cachefly.NewClient(
-		cachefly.WithToken("your-api-token"),
-	)
-
-	apiKeyResp, err := client.ServiceOptions.RegenerateLegacyAPIKey(context.Background(), "srv_123456789")
-	if err != nil {
-		log.Fatalf("Failed to regenerate legacy API key: %v", err)
-	}
-
-	fmt.Printf("New legacy API key: %s\n", apiKeyResp.APIKey)
-}
-
-// ExampleServiceOptionsService_DeleteLegacyAPIKey demonstrates deleting the API key.
-func ExampleServiceOptionsService_DeleteLegacyAPIKey() {
-	client := cachefly.NewClient(
-		cachefly.WithToken("your-api-token"),
-	)
-
-	err := client.ServiceOptions.DeleteLegacyAPIKey(context.Background(), "srv_123456789")
-	if err != nil {
-		log.Fatalf("Failed to delete legacy API key: %v", err)
-	}
-
-	fmt.Println("Legacy API key deleted successfully")
 }
 
 // ExampleServiceOptionsService_GetProtectServeKey demonstrates retrieving ProtectServe key.

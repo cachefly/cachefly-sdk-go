@@ -73,13 +73,6 @@ func main() {
 			"ttl":               2678400,
 			"useRobotsTxt":      true,
 		},
-		/*
-			"rawLogs": map[string]interface{}{
-				"enabled":     true,
-				"logFormat":   "combined",
-				"compression": "gzip",
-			},
-		*/
 
 		// Standard enabled/value structure options
 		"error_ttl": map[string]interface{}{
@@ -176,7 +169,6 @@ func main() {
 
 		// Security options
 		"protectServeKeyEnabled": true,
-		"apiKeyEnabled":          true,
 		"skip_pserve_ext": map[string]interface{}{
 			"enabled": true,
 			"value":   []string{".jpg", ".png", ".gif", ".css", ".js"},
