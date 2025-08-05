@@ -17,7 +17,7 @@ type OriginsService struct {
 // Origin represents an origin configuration in CacheFly.
 type Origin struct {
 	ID                     string `json:"_id"`
-	UpdatedAt              string `json:"updateAt"`
+	UpdatedAt              string `json:"updatedAt"`
 	CreatedAt              string `json:"createdAt"`
 	Type                   string `json:"type,omitempty"`
 	Name                   string `json:"name,omitempty"`

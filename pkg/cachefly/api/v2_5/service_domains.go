@@ -12,7 +12,7 @@ import (
 // ServiceDomain represents a domain attached to a service.
 type ServiceDomain struct {
 	ID               string   `json:"_id"`
-	UpdatedAt        string   `json:"updateAt"`
+	UpdatedAt        string   `json:"updatedAt"`
 	CreatedAt        string   `json:"createdAt"`
 	Name             string   `json:"name"`
 	Description      string   `json:"description"`
@@ -96,6 +96,7 @@ func (s *ServiceDomainsService) Create(ctx context.Context, sid string, req Crea
 	if err := s.Client.Post(ctx, endpoint, req, &created); err != nil {
 		return nil, err
 	}
+
 	return &created, nil
 }
 

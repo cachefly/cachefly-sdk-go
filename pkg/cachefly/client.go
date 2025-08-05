@@ -77,6 +77,9 @@ type Client struct {
 
 	// DeliveryRegions manages delivery regions
 	DeliveryRegions *api.DeliveryRegionsService
+
+	// LogTargets manages log target configurations
+	LogTargets *api.LogTargetsService
 }
 
 // Option is a functional option for configuring the Client.
@@ -174,5 +177,6 @@ func NewClient(opts ...Option) *Client {
 		ScriptConfigs:              &api.ScriptConfigsService{Client: hc},
 		TLSProfiles:                &api.TLSProfilesService{Client: hc},
 		DeliveryRegions:            &api.DeliveryRegionsService{Client: hc},
+		LogTargets:                 &api.LogTargetsService{Client: hc},
 	}
 }
