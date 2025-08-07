@@ -30,6 +30,8 @@ type LogTarget struct {
 	User                       string   `json:"user,omitempty"`
 	Password                   string   `json:"password,omitempty"`
 	ApiKey                     string   `json:"apiKey,omitempty"`
+	AccessLogsServices         []string `json:"accessLogsServices"`
+	OriginLogsServices         []string `json:"originLogsServices"`
 }
 
 // ListLogTargetsResponse contains paginated log target results.
@@ -64,6 +66,8 @@ type CreateLogTargetRequest struct {
 	User                       string   `json:"user,omitempty"`
 	Password                   string   `json:"password,omitempty"`
 	ApiKey                     string   `json:"apiKey,omitempty"`
+	AccessLogsServices         []string `json:"accessLogsServices"`
+	OriginLogsServices         []string `json:"originLogsServices"`
 }
 
 // UpdateLogTargetRequest contains the fields for updating an existing log target.
@@ -84,10 +88,12 @@ type UpdateLogTargetRequest struct {
 	User                       string   `json:"user,omitempty"`
 	Password                   string   `json:"password,omitempty"`
 	ApiKey                     string   `json:"apiKey,omitempty"`
+	AccessLogsServices         []string `json:"accessLogsServices,omitempty"`
+	OriginLogsServices         []string `json:"originLogsServices,omitempty"`
 }
 
-// EnableLoggingRequest contains the services to enable logging for.
-type EnableLoggingRequest struct {
+// SetLoggingRequest contains the services to set logging for.
+type SetLoggingRequest struct {
 	AccessLogsServices []string `json:"accessLogsServices"`
 	OriginLogsServices []string `json:"originLogsServices"`
 }
@@ -176,12 +182,12 @@ func (s *LogTargetsService) DeleteByID(ctx context.Context, id string) error {
 	return s.Client.Delete(ctx, endpoint, nil)
 }
 
-// EnableLogging enables services logging for a log target.
-func (s *LogTargetsService) EnableLogging(ctx context.Context, id string, req EnableLoggingRequest) (*LogTarget, error) {
+// SetLogging sets services logging for a log target.
+func (s *LogTargetsService) SetLogging(ctx context.Context, id string, req SetLoggingRequest) (*LogTarget, error) {
 	if id == "" {
 		return nil, fmt.Errorf("log target ID is required")
 	}
-	endpoint := fmt.Sprintf("/logtargets/%s/enableLogging", id)
+	endpoint := fmt.Sprintf("/logtargets/%s/logging", id)
 
 	var result LogTarget
 	if err := s.Client.Put(ctx, endpoint, req, &result); err != nil {
