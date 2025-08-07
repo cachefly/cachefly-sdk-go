@@ -88,8 +88,8 @@ type UpdateLogTargetRequest struct {
 
 // EnableLoggingRequest contains the services to enable logging for.
 type EnableLoggingRequest struct {
-	AccessLogsServices []string `json:"accessLogsServices,omitempty"`
-	OriginLogsServices []string `json:"originLogsServices,omitempty"`
+	AccessLogsServices []string `json:"accessLogsServices"`
+	OriginLogsServices []string `json:"originLogsServices"`
 }
 
 // LogTargetsService handles log target-related API operations.
