@@ -11,27 +11,27 @@ import (
 
 // LogTarget represents a CacheFly log target configuration.
 type LogTarget struct {
-	ID                         string   `json:"_id"`
-	UpdatedAt                  string   `json:"updatedAt"`
-	CreatedAt                  string   `json:"createdAt"`
-	Name                       string   `json:"name"`
-	Type                       string   `json:"type"`
-	Endpoint                   string   `json:"endpoint,omitempty"`
-	Region                     string   `json:"region,omitempty"`
-	Bucket                     string   `json:"bucket,omitempty"`
-	AccessKey                  string   `json:"accessKey,omitempty"`
-	SecretKey                  string   `json:"secretKey,omitempty"`
-	SignatureVersion           string   `json:"signatureVersion,omitempty"`
-	JsonKey                    string   `json:"jsonKey,omitempty"`
-	Hosts                      []string `json:"hosts,omitempty"`
-	SSL                        bool     `json:"ssl,omitempty"`
-	SSLCertificateVerification bool     `json:"sslCertificateVerification,omitempty"`
-	Index                      string   `json:"index,omitempty"`
-	User                       string   `json:"user,omitempty"`
-	Password                   string   `json:"password,omitempty"`
-	ApiKey                     string   `json:"apiKey,omitempty"`
-	AccessLogsServices         []string `json:"accessLogsServices"`
-	OriginLogsServices         []string `json:"originLogsServices"`
+	ID                         string    `json:"_id"`
+	UpdatedAt                  string    `json:"updatedAt"`
+	CreatedAt                  string    `json:"createdAt"`
+	Type                       string    `json:"type"`
+	Name                       *string   `json:"name,omitempty"`
+	Endpoint                   *string   `json:"endpoint,omitempty"`
+	Region                     *string   `json:"region,omitempty"`
+	Bucket                     *string   `json:"bucket,omitempty"`
+	AccessKey                  *string   `json:"accessKey,omitempty"`
+	SecretKey                  *string   `json:"secretKey,omitempty"`
+	SignatureVersion           *string   `json:"signatureVersion,omitempty"`
+	JsonKey                    *string   `json:"jsonKey,omitempty"`
+	Hosts                      *[]string `json:"hosts,omitempty"`
+	SSL                        *bool     `json:"ssl,omitempty"`
+	SSLCertificateVerification *bool     `json:"sslCertificateVerification,omitempty"`
+	Index                      *string   `json:"index,omitempty"`
+	User                       *string   `json:"user,omitempty"`
+	Password                   *string   `json:"password,omitempty"`
+	ApiKey                     *string   `json:"apiKey,omitempty"`
+	AccessLogsServices         *[]string `json:"accessLogsServices,omitempty"`
+	OriginLogsServices         *[]string `json:"originLogsServices,omitempty"`
 }
 
 // ListLogTargetsResponse contains paginated log target results.
@@ -50,46 +50,44 @@ type ListLogTargetsOptions struct {
 
 // CreateLogTargetRequest contains the required fields for creating a new log target.
 type CreateLogTargetRequest struct {
-	Name                       string   `json:"name"`
-	Type                       string   `json:"type"`
-	Endpoint                   string   `json:"endpoint,omitempty"`
-	Region                     string   `json:"region,omitempty"`
-	Bucket                     string   `json:"bucket,omitempty"`
-	AccessKey                  string   `json:"accessKey,omitempty"`
-	SecretKey                  string   `json:"secretKey,omitempty"`
-	SignatureVersion           string   `json:"signatureVersion,omitempty"`
-	JsonKey                    string   `json:"jsonKey,omitempty"`
-	Hosts                      []string `json:"hosts,omitempty"`
-	SSL                        bool     `json:"ssl,omitempty"`
-	SSLCertificateVerification bool     `json:"sslCertificateVerification,omitempty"`
-	Index                      string   `json:"index,omitempty"`
-	User                       string   `json:"user,omitempty"`
-	Password                   string   `json:"password,omitempty"`
-	ApiKey                     string   `json:"apiKey,omitempty"`
-	AccessLogsServices         []string `json:"accessLogsServices"`
-	OriginLogsServices         []string `json:"originLogsServices"`
+	Type                       string    `json:"type"`
+	Name                       *string   `json:"name,omitempty"`
+	Endpoint                   *string   `json:"endpoint,omitempty"`
+	Region                     *string   `json:"region,omitempty"`
+	Bucket                     *string   `json:"bucket,omitempty"`
+	AccessKey                  *string   `json:"accessKey,omitempty"`
+	SecretKey                  *string   `json:"secretKey,omitempty"`
+	SignatureVersion           *string   `json:"signatureVersion,omitempty"`
+	JsonKey                    *string   `json:"jsonKey,omitempty"`
+	Hosts                      *[]string `json:"hosts,omitempty"`
+	SSL                        *bool     `json:"ssl,omitempty"`
+	SSLCertificateVerification *bool     `json:"sslCertificateVerification,omitempty"`
+	Index                      *string   `json:"index,omitempty"`
+	User                       *string   `json:"user,omitempty"`
+	Password                   *string   `json:"password,omitempty"`
+	ApiKey                     *string   `json:"apiKey,omitempty"`
 }
 
 // UpdateLogTargetRequest contains the fields for updating an existing log target.
 type UpdateLogTargetRequest struct {
-	Name                       string   `json:"name,omitempty"`
-	Type                       string   `json:"type,omitempty"`
-	Endpoint                   string   `json:"endpoint,omitempty"`
-	Region                     string   `json:"region,omitempty"`
-	Bucket                     string   `json:"bucket,omitempty"`
-	AccessKey                  string   `json:"accessKey,omitempty"`
-	SecretKey                  string   `json:"secretKey,omitempty"`
-	SignatureVersion           string   `json:"signatureVersion,omitempty"`
-	JsonKey                    string   `json:"jsonKey,omitempty"`
-	Hosts                      []string `json:"hosts,omitempty"`
-	SSL                        bool     `json:"ssl,omitempty"`
-	SSLCertificateVerification bool     `json:"sslCertificateVerification,omitempty"`
-	Index                      string   `json:"index,omitempty"`
-	User                       string   `json:"user,omitempty"`
-	Password                   string   `json:"password,omitempty"`
-	ApiKey                     string   `json:"apiKey,omitempty"`
-	AccessLogsServices         []string `json:"accessLogsServices,omitempty"`
-	OriginLogsServices         []string `json:"originLogsServices,omitempty"`
+	Name                       *string   `json:"name,omitempty"`
+	Type                       *string   `json:"type,omitempty"`
+	Endpoint                   *string   `json:"endpoint,omitempty"`
+	Region                     *string   `json:"region,omitempty"`
+	Bucket                     *string   `json:"bucket,omitempty"`
+	AccessKey                  *string   `json:"accessKey,omitempty"`
+	SecretKey                  *string   `json:"secretKey,omitempty"`
+	SignatureVersion           *string   `json:"signatureVersion,omitempty"`
+	JsonKey                    *string   `json:"jsonKey,omitempty"`
+	Hosts                      *[]string `json:"hosts,omitempty"`
+	SSL                        *bool     `json:"ssl,omitempty"`
+	SSLCertificateVerification *bool     `json:"sslCertificateVerification,omitempty"`
+	Index                      *string   `json:"index,omitempty"`
+	User                       *string   `json:"user,omitempty"`
+	Password                   *string   `json:"password,omitempty"`
+	ApiKey                     *string   `json:"apiKey,omitempty"`
+	AccessLogsServices         *[]string `json:"accessLogsServices,omitempty"`
+	OriginLogsServices         *[]string `json:"originLogsServices,omitempty"`
 }
 
 // SetLoggingRequest contains the services to set logging for.
