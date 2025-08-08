@@ -16,23 +16,24 @@ type OriginsService struct {
 
 // Origin represents an origin configuration in CacheFly.
 type Origin struct {
-	ID                     string `json:"_id"`
-	UpdatedAt              string `json:"updatedAt"`
-	CreatedAt              string `json:"createdAt"`
-	Type                   string `json:"type,omitempty"`
-	Name                   string `json:"name,omitempty"`
-	Hostname               string `json:"hostname"`
-	CacheByQueryParam      bool   `json:"cacheByQueryParam"`
-	Gzip                   bool   `json:"gzip"`
-	Scheme                 string `json:"scheme"`
-	TTL                    int    `json:"ttl"`
-	MissedTTL              int    `json:"missedTtl"`
-	ConnectionTimeout      int    `json:"connectionTimeout,omitempty"`
-	TimeToFirstByteTimeout int    `json:"timeToFirstByteTimeout,omitempty"`
-	AccessKey              string `json:"accessKey,omitempty"`
-	SecretKey              string `json:"secretKey,omitempty"`
-	Region                 string `json:"region,omitempty"`
-	SignatureVersion       string `json:"signatureVersion,omitempty"`
+	ID                     string  `json:"_id"`
+	UpdatedAt              string  `json:"updatedAt"`
+	CreatedAt              string  `json:"createdAt"`
+	Type                   string  `json:"type"`
+	Name                   *string `json:"name,omitempty"`
+	Hostname               *string `json:"hostname,omitempty"`
+	Host                   *string `json:"host,omitempty"`
+	CacheByQueryParam      *bool   `json:"cacheByQueryParam,omitempty"`
+	Gzip                   *bool   `json:"gzip,omitempty"`
+	Scheme                 *string `json:"scheme,omitempty"`
+	TTL                    *int    `json:"ttl,omitempty"`
+	MissedTTL              *int    `json:"missedTtl,omitempty"`
+	ConnectionTimeout      *int    `json:"connectionTimeout,omitempty"`
+	TimeToFirstByteTimeout *int    `json:"timeToFirstByteTimeout,omitempty"`
+	AccessKey              *string `json:"accessKey,omitempty"`
+	SecretKey              *string `json:"secretKey,omitempty"`
+	Region                 *string `json:"region,omitempty"`
+	SignatureVersion       *string `json:"signatureVersion,omitempty"`
 }
 
 // ListOriginsResponse wraps paginated origin list.
@@ -51,38 +52,40 @@ type ListOriginsOptions struct {
 
 // CreateOriginRequest is the payload for creating a new origin.
 type CreateOriginRequest struct {
-	Type                   string `json:"type"`
-	Name                   string `json:"name,omitempty"`
-	Hostname               string `json:"hostname"`
-	Gzip                   bool   `json:"gzip,omitempty"`
-	CacheByQueryParam      bool   `json:"cacheByQueryParam,omitempty"`
-	Scheme                 string `json:"scheme,omitempty"`
-	TTL                    int    `json:"ttl,omitempty"`
-	MissedTTL              int    `json:"missedTtl,omitempty"`
-	ConnectionTimeout      int    `json:"connectionTimeout,omitempty"`
-	TimeToFirstByteTimeout int    `json:"timeToFirstByteTimeout,omitempty"`
-	AccessKey              string `json:"accessKey,omitempty"`
-	SecretKey              string `json:"secretKey,omitempty"`
-	Region                 string `json:"region,omitempty"`
-	SignatureVersion       string `json:"signatureVersion,omitempty"`
+	Type                   string  `json:"type"`
+	Name                   *string `json:"name,omitempty"`
+	Hostname               *string `json:"hostname,omitempty"`
+	Host                   *string `json:"host,omitempty"`
+	Gzip                   *bool   `json:"gzip,omitempty"`
+	CacheByQueryParam      *bool   `json:"cacheByQueryParam,omitempty"`
+	Scheme                 *string `json:"scheme,omitempty"`
+	TTL                    *int    `json:"ttl,omitempty"`
+	MissedTTL              *int    `json:"missedTtl,omitempty"`
+	ConnectionTimeout      *int    `json:"connectionTimeout,omitempty"`
+	TimeToFirstByteTimeout *int    `json:"timeToFirstByteTimeout,omitempty"`
+	AccessKey              *string `json:"accessKey,omitempty"`
+	SecretKey              *string `json:"secretKey,omitempty"`
+	Region                 *string `json:"region,omitempty"`
+	SignatureVersion       *string `json:"signatureVersion,omitempty"`
 }
 
 // UpdateOriginRequest is the payload for updating an existing origin.
 type UpdateOriginRequest struct {
-	Type                   string `json:"type,omitempty"`
-	Name                   string `json:"name,omitempty"`
-	Hostname               string `json:"hostname,omitempty"`
-	Gzip                   bool   `json:"gzip,omitempty"`
-	CacheByQueryParam      bool   `json:"cacheByQueryParam,omitempty"`
-	Scheme                 string `json:"scheme,omitempty"`
-	TTL                    int    `json:"ttl,omitempty"`
-	MissedTTL              int    `json:"missedTtl,omitempty"`
-	ConnectionTimeout      int    `json:"connectionTimeout,omitempty"`
-	TimeToFirstByteTimeout int    `json:"timeToFirstByteTimeout,omitempty"`
-	AccessKey              string `json:"accessKey,omitempty"`
-	SecretKey              string `json:"secretKey,omitempty"`
-	Region                 string `json:"region,omitempty"`
-	SignatureVersion       string `json:"signatureVersion,omitempty"`
+	Type                   *string `json:"type,omitempty"`
+	Name                   *string `json:"name,omitempty"`
+	Hostname               *string `json:"hostname,omitempty"`
+	Host                   *string `json:"host,omitempty"`
+	Gzip                   *bool   `json:"gzip,omitempty"`
+	CacheByQueryParam      *bool   `json:"cacheByQueryParam,omitempty"`
+	Scheme                 *string `json:"scheme,omitempty"`
+	TTL                    *int    `json:"ttl,omitempty"`
+	MissedTTL              *int    `json:"missedTtl,omitempty"`
+	ConnectionTimeout      *int    `json:"connectionTimeout,omitempty"`
+	TimeToFirstByteTimeout *int    `json:"timeToFirstByteTimeout,omitempty"`
+	AccessKey              *string `json:"accessKey,omitempty"`
+	SecretKey              *string `json:"secretKey,omitempty"`
+	Region                 *string `json:"region,omitempty"`
+	SignatureVersion       *string `json:"signatureVersion,omitempty"`
 }
 
 // List retrieves all origins with optional filters.
