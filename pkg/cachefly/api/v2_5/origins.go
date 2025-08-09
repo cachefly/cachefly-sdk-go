@@ -21,15 +21,15 @@ type Origin struct {
 	CreatedAt              string  `json:"createdAt"`
 	Type                   string  `json:"type"`
 	Name                   *string `json:"name,omitempty"`
-	Hostname               *string `json:"hostname,omitempty"`
 	Host                   *string `json:"host,omitempty"`
+	Hostname               *string `json:"hostname,omitempty"`
 	CacheByQueryParam      *bool   `json:"cacheByQueryParam,omitempty"`
 	Gzip                   *bool   `json:"gzip,omitempty"`
 	Scheme                 *string `json:"scheme,omitempty"`
-	TTL                    *int    `json:"ttl,omitempty"`
-	MissedTTL              *int    `json:"missedTtl,omitempty"`
-	ConnectionTimeout      *int    `json:"connectionTimeout,omitempty"`
-	TimeToFirstByteTimeout *int    `json:"timeToFirstByteTimeout,omitempty"`
+	TTL                    *int32  `json:"ttl,omitempty"`
+	MissedTTL              *int32  `json:"missedTtl,omitempty"`
+	ConnectionTimeout      *int32  `json:"connectionTimeout,omitempty"`
+	TimeToFirstByteTimeout *int32  `json:"timeToFirstByteTimeout,omitempty"`
 	AccessKey              *string `json:"accessKey,omitempty"`
 	SecretKey              *string `json:"secretKey,omitempty"`
 	Region                 *string `json:"region,omitempty"`
@@ -54,15 +54,15 @@ type ListOriginsOptions struct {
 type CreateOriginRequest struct {
 	Type                   string  `json:"type"`
 	Name                   *string `json:"name,omitempty"`
-	Hostname               *string `json:"hostname,omitempty"`
 	Host                   *string `json:"host,omitempty"`
+	Hostname               *string `json:"hostname,omitempty"`
 	Gzip                   *bool   `json:"gzip,omitempty"`
 	CacheByQueryParam      *bool   `json:"cacheByQueryParam,omitempty"`
 	Scheme                 *string `json:"scheme,omitempty"`
-	TTL                    *int    `json:"ttl,omitempty"`
-	MissedTTL              *int    `json:"missedTtl,omitempty"`
-	ConnectionTimeout      *int    `json:"connectionTimeout,omitempty"`
-	TimeToFirstByteTimeout *int    `json:"timeToFirstByteTimeout,omitempty"`
+	TTL                    *int32  `json:"ttl,omitempty"`
+	MissedTTL              *int32  `json:"missedTtl,omitempty"`
+	ConnectionTimeout      *int32  `json:"connectionTimeout,omitempty"`
+	TimeToFirstByteTimeout *int32  `json:"timeToFirstByteTimeout,omitempty"`
 	AccessKey              *string `json:"accessKey,omitempty"`
 	SecretKey              *string `json:"secretKey,omitempty"`
 	Region                 *string `json:"region,omitempty"`
@@ -73,15 +73,15 @@ type CreateOriginRequest struct {
 type UpdateOriginRequest struct {
 	Type                   *string `json:"type,omitempty"`
 	Name                   *string `json:"name,omitempty"`
-	Hostname               *string `json:"hostname,omitempty"`
 	Host                   *string `json:"host,omitempty"`
+	Hostname               *string `json:"hostname,omitempty"`
 	Gzip                   *bool   `json:"gzip,omitempty"`
 	CacheByQueryParam      *bool   `json:"cacheByQueryParam,omitempty"`
 	Scheme                 *string `json:"scheme,omitempty"`
-	TTL                    *int    `json:"ttl,omitempty"`
-	MissedTTL              *int    `json:"missedTtl,omitempty"`
-	ConnectionTimeout      *int    `json:"connectionTimeout,omitempty"`
-	TimeToFirstByteTimeout *int    `json:"timeToFirstByteTimeout,omitempty"`
+	TTL                    *int32  `json:"ttl,omitempty"`
+	MissedTTL              *int32  `json:"missedTtl,omitempty"`
+	ConnectionTimeout      *int32  `json:"connectionTimeout,omitempty"`
+	TimeToFirstByteTimeout *int32  `json:"timeToFirstByteTimeout,omitempty"`
 	AccessKey              *string `json:"accessKey,omitempty"`
 	SecretKey              *string `json:"secretKey,omitempty"`
 	Region                 *string `json:"region,omitempty"`
@@ -117,6 +117,7 @@ func (s *OriginsService) List(ctx context.Context, opts ListOriginsOptions) (*Li
 func (s *OriginsService) Create(ctx context.Context, req CreateOriginRequest) (*Origin, error) {
 	endpoint := "/origins"
 	var created Origin
+
 	if err := s.Client.Post(ctx, endpoint, req, &created); err != nil {
 		return nil, err
 	}
