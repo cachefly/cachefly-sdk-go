@@ -60,7 +60,7 @@ func TestScriptConfigsService_List(t *testing.T) {
 	client := httpclient.New(cfg)
 	svc := &ScriptConfigsService{Client: client}
 
-	opts := ListScriptConfigsOptions{Limit: 10}
+	opts := ListScriptConfigsOptions{Limit: 10, SortBy: []string{"name", "status"}}
 	result, err := svc.List(context.Background(), opts)
 
 	if err != nil {

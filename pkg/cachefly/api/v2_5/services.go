@@ -66,7 +66,7 @@ type ListOptions struct {
 
 // UpdateServiceRequest contains fields for updating an existing service.
 type UpdateServiceRequest struct {
-	Description    string `json:"description"`
+	Description    string `json:"description,omitempty"`
 	TLSProfile     string `json:"tlsProfile,omitempty"`
 	AutoSSL        bool   `json:"autoSsl"`
 	DeliveryRegion string `json:"deliveryRegion,omitempty"`

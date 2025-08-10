@@ -26,6 +26,8 @@ type ScriptConfig struct {
 	MimeType               string                 `json:"mimeType"`
 	DataMode               string                 `json:"dataMode"`
 	Value                  interface{}            `json:"value"`
+	Status                 string                 `json:"status"`
+	DataModel              string                 `json:"dataModel"`
 	CreatedAt              string                 `json:"createdAt"`
 	UpdatedAt              string                 `json:"updateAt"`
 }
@@ -51,10 +53,10 @@ type ListScriptConfigsResponse struct {
 // CreateScriptConfigRequest is the payload for creating a config.
 type CreateScriptConfigRequest struct {
 	Name                   string      `json:"name"`
-	Services               []string    `json:"services"`
+	Services               []string    `json:"services,omitempty"`
 	ScriptConfigDefinition string      `json:"scriptConfigDefinition"`
-	MimeType               string      `json:"mimeType"`
-	Value                  interface{} `json:"value"`
+	MimeType               string      `json:"mimeType,omitempty"`
+	Value                  interface{} `json:"value,omitempty"`
 }
 
 // UpdateScriptConfigRequest is the payload for updating a config.
@@ -88,7 +90,9 @@ func (s *ScriptConfigsService) List(ctx context.Context, opts ListScriptConfigsO
 		params.Set("search", opts.Search)
 	}
 	if len(opts.SortBy) > 0 {
-		params.Set("sortBy", fmt.Sprintf("%v", opts.SortBy))
+		for _, sort := range opts.SortBy {
+			params.Add("sortBy", sort)
+		}
 	}
 
 	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
@@ -105,6 +109,7 @@ func (s *ScriptConfigsService) Create(ctx context.Context, req CreateScriptConfi
 	if err := s.Client.Post(ctx, "/scriptConfigs", req, &created); err != nil {
 		return nil, err
 	}
+
 	return &created, nil
 }
 

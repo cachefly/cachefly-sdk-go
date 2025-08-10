@@ -25,6 +25,8 @@
 package cachefly
 
 import (
+	"os"
+
 	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
 	api "github.com/cachefly/cachefly-go-sdk/pkg/cachefly/api/v2_5"
 )
@@ -71,6 +73,9 @@ type Client struct {
 
 	// ScriptConfigs manages edge script configurations
 	ScriptConfigs *api.ScriptConfigsService
+
+	// ScriptDefinitions manages script configuration definitions
+	ScriptDefinitions *api.ScriptDefinitionsService
 
 	// TLSProfiles manages TLS security profiles
 	TLSProfiles *api.TLSProfilesService
@@ -149,8 +154,12 @@ func WithBaseURL(url string) Option {
 //		log.Fatal(err)
 //	}
 func NewClient(opts ...Option) *Client {
-	cfg := &ClientConfig{
-		BaseURL: "https://api.cachefly.com/api/2.5",
+	cfg := &ClientConfig{}
+
+	if os.Getenv("CACHEFLY_API_BASE_URL") != "" {
+		cfg.BaseURL = os.Getenv("CACHEFLY_API_BASE_URL")
+	} else {
+		cfg.BaseURL = "https://api.cachefly.com/api/2.5"
 	}
 
 	for _, opt := range opts {
@@ -175,6 +184,7 @@ func NewClient(opts ...Option) *Client {
 		Origins:                    &api.OriginsService{Client: hc},
 		Users:                      &api.UsersService{Client: hc},
 		ScriptConfigs:              &api.ScriptConfigsService{Client: hc},
+		ScriptDefinitions:          &api.ScriptDefinitionsService{Client: hc},
 		TLSProfiles:                &api.TLSProfilesService{Client: hc},
 		DeliveryRegions:            &api.DeliveryRegionsService{Client: hc},
 		LogTargets:                 &api.LogTargetsService{Client: hc},

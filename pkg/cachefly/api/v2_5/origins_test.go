@@ -29,7 +29,8 @@ func TestOriginsService_Create(t *testing.T) {
 	client := httpclient.New(cfg)
 	svc := &OriginsService{Client: client}
 
-	req := CreateOriginRequest{Type: "http", Hostname: "example.com"}
+	hostname := "example.com"
+	req := CreateOriginRequest{Type: "http", Hostname: &hostname}
 	result, err := svc.Create(context.Background(), req)
 
 	if err != nil {
@@ -124,7 +125,8 @@ func TestOriginsService_UpdateByID(t *testing.T) {
 	client := httpclient.New(cfg)
 	svc := &OriginsService{Client: client}
 
-	req := UpdateOriginRequest{Hostname: "updated.com"}
+	updatedHostname := "updated.com"
+	req := UpdateOriginRequest{Hostname: &updatedHostname}
 	result, err := svc.UpdateByID(context.Background(), "origin-123", req)
 
 	if err != nil {
