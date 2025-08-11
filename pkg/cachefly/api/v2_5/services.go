@@ -68,7 +68,7 @@ type ListOptions struct {
 type UpdateServiceRequest struct {
 	Description    string `json:"description,omitempty"`
 	TLSProfile     string `json:"tlsProfile,omitempty"`
-	AutoSSL        bool   `json:"autoSsl"`
+	AutoSSL        bool   `json:"autoSsl,omitempty"`
 	DeliveryRegion string `json:"deliveryRegion,omitempty"`
 }
 
