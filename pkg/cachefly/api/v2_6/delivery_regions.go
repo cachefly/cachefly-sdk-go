@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 type MetaInfoDeliveryRegions struct {
@@ -65,8 +65,10 @@ func (s *DeliveryRegionsService) List(ctx context.Context, opts ListDeliveryRegi
 		params.Set("limit", strconv.Itoa(opts.Limit))
 	}
 
+	fullURL := fmt.Sprintf("%s?%s", endpoint, params.Encode())
+
 	var resp ListDeliveryRegionsResponse
-	if err := s.Client.Get(ctx, endpoint, &resp); err != nil {
+	if err := s.Client.Get(ctx, fullURL, &resp); err != nil {
 		return nil, err
 	}
 	return &resp, nil

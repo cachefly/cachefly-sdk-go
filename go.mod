@@ -1,4 +1,4 @@
-module github.com/cachefly/cachefly-go-sdk
+module github.com/cachefly/cachefly-sdk-go
 
 go 1.23.2
 

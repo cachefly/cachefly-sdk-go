@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // READ - Test List method
 func TestDeliveryRegionsService_List(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/deliveryregions" {
-			t.Errorf("Expected path /api/2.5/deliveryregions, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/deliveryregions" {
+			t.Errorf("Expected path /api/2.6/deliveryregions, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -25,7 +25,7 @@ func TestDeliveryRegionsService_List(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &DeliveryRegionsService{Client: client}
 
@@ -52,8 +52,8 @@ func TestDeliveryRegionsService_List(t *testing.T) {
 // Test List method with search parameter
 func TestDeliveryRegionsService_ListWithSearch(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/deliveryregions" {
-			t.Errorf("Expected path /api/2.5/deliveryregions, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/deliveryregions" {
+			t.Errorf("Expected path /api/2.6/deliveryregions, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -71,7 +71,7 @@ func TestDeliveryRegionsService_ListWithSearch(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &DeliveryRegionsService{Client: client}
 
@@ -92,8 +92,8 @@ func TestDeliveryRegionsService_ListWithSearch(t *testing.T) {
 // Test List method with sort parameters
 func TestDeliveryRegionsService_ListWithSort(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/deliveryregions" {
-			t.Errorf("Expected path /api/2.5/deliveryregions, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/deliveryregions" {
+			t.Errorf("Expected path /api/2.6/deliveryregions, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -114,7 +114,7 @@ func TestDeliveryRegionsService_ListWithSort(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &DeliveryRegionsService{Client: client}
 
@@ -156,8 +156,8 @@ func TestDeliveryRegionsService_ErrorHandling_SearchTooShort(t *testing.T) {
 // Error handling test - empty search
 func TestDeliveryRegionsService_ErrorHandling_EmptySearch(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/deliveryregions" {
-			t.Errorf("Expected path /api/2.5/deliveryregions, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/deliveryregions" {
+			t.Errorf("Expected path /api/2.6/deliveryregions, got %s", r.URL.Path)
 		}
 
 		// Should not have search parameter when empty
@@ -172,7 +172,7 @@ func TestDeliveryRegionsService_ErrorHandling_EmptySearch(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &DeliveryRegionsService{Client: client}
 
@@ -214,7 +214,7 @@ func TestDeliveryRegionsService_ListWithAllParams(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &DeliveryRegionsService{Client: client}
 

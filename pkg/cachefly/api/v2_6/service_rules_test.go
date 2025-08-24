@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // READ - Test List method
 func TestServiceRulesService_List(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/rules" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/rules, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/rules" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/rules, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -25,7 +25,7 @@ func TestServiceRulesService_List(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceRulesService{Client: client}
 
@@ -46,8 +46,8 @@ func TestServiceRulesService_List(t *testing.T) {
 // UPDATE - Test Update method (bulk update)
 func TestServiceRulesService_Update(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/rules" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/rules, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/rules" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/rules, got %s", r.URL.Path)
 		}
 		if r.Method != "PUT" {
 			t.Errorf("Expected PUT method, got %s", r.Method)
@@ -59,7 +59,7 @@ func TestServiceRulesService_Update(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceRulesService{Client: client}
 
@@ -85,8 +85,8 @@ func TestServiceRulesService_Update(t *testing.T) {
 // READ - Test GetSchema method
 func TestServiceRulesService_GetSchema(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/rules/schema" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/rules/schema, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/rules/schema" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/rules/schema, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -98,7 +98,7 @@ func TestServiceRulesService_GetSchema(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceRulesService{Client: client}
 

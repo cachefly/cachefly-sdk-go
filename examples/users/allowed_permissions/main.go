@@ -23,7 +23,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/cachefly/cachefly-go-sdk/pkg/cachefly"
+	"github.com/cachefly/cachefly-sdk-go/pkg/cachefly"
 	"github.com/joho/godotenv"
 )
 

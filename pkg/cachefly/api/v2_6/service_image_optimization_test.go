@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // CREATE - Test CreateConfiguration method
 func TestServiceImageOptimizationService_CreateConfiguration(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/imageopt4" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/imageopt4, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/imageopt4" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/imageopt4, got %s", r.URL.Path)
 		}
 		if r.Method != "POST" {
 			t.Errorf("Expected POST method, got %s", r.Method)
@@ -25,7 +25,7 @@ func TestServiceImageOptimizationService_CreateConfiguration(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceImageOptimizationService{Client: client}
 
@@ -47,8 +47,8 @@ func TestServiceImageOptimizationService_CreateConfiguration(t *testing.T) {
 // READ - Test GetConfiguration method
 func TestServiceImageOptimizationService_GetConfiguration(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/imageopt4" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/imageopt4, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/imageopt4" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/imageopt4, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -60,7 +60,7 @@ func TestServiceImageOptimizationService_GetConfiguration(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceImageOptimizationService{Client: client}
 
@@ -77,8 +77,8 @@ func TestServiceImageOptimizationService_GetConfiguration(t *testing.T) {
 // UPDATE - Test UpdateConfiguration method
 func TestServiceImageOptimizationService_UpdateConfiguration(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/imageopt4" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/imageopt4, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/imageopt4" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/imageopt4, got %s", r.URL.Path)
 		}
 		if r.Method != "PUT" {
 			t.Errorf("Expected PUT method, got %s", r.Method)
@@ -90,7 +90,7 @@ func TestServiceImageOptimizationService_UpdateConfiguration(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceImageOptimizationService{Client: client}
 
@@ -108,8 +108,8 @@ func TestServiceImageOptimizationService_UpdateConfiguration(t *testing.T) {
 // DELETE - Test DeleteConfiguration method
 func TestServiceImageOptimizationService_DeleteConfiguration(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/imageopt4" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/imageopt4, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/imageopt4" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/imageopt4, got %s", r.URL.Path)
 		}
 		if r.Method != "DELETE" {
 			t.Errorf("Expected DELETE method, got %s", r.Method)
@@ -119,7 +119,7 @@ func TestServiceImageOptimizationService_DeleteConfiguration(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceImageOptimizationService{Client: client}
 
@@ -133,8 +133,8 @@ func TestServiceImageOptimizationService_DeleteConfiguration(t *testing.T) {
 // READ - Test GetSchema method
 func TestServiceImageOptimizationService_GetSchema(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/imageopt4/schema" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/imageopt4/schema, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/imageopt4/schema" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/imageopt4/schema, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -146,7 +146,7 @@ func TestServiceImageOptimizationService_GetSchema(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceImageOptimizationService{Client: client}
 

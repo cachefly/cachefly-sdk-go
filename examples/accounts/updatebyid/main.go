@@ -24,8 +24,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/cachefly/cachefly-go-sdk/pkg/cachefly"
-	api "github.com/cachefly/cachefly-go-sdk/pkg/cachefly/api/v2_5"
+	"github.com/cachefly/cachefly-sdk-go/pkg/cachefly"
+	api "github.com/cachefly/cachefly-sdk-go/pkg/cachefly/api/v2_6"
 	"github.com/joho/godotenv"
 )
 

@@ -20,15 +20,15 @@
 //
 //	client := cachefly.NewClient(
 //		cachefly.WithToken("your-bearer-token"),
-//		cachefly.WithBaseURL("https://custom-api.cachefly.com/api/2.5"),
+//		cachefly.WithBaseURL("https://custom-api.cachefly.com/api/2.6"),
 //	)
 package cachefly
 
 import (
 	"os"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
-	api "github.com/cachefly/cachefly-go-sdk/pkg/cachefly/api/v2_5"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
+	api "github.com/cachefly/cachefly-sdk-go/pkg/cachefly/api/v2_6"
 )
 
 // Client is the main struct to interact with CacheFly APIs.
@@ -122,7 +122,7 @@ func WithToken(token string) Option {
 //
 //	client := cachefly.NewClient(
 //		cachefly.WithToken("token"),
-//		cachefly.WithBaseURL("https://staging-api.cachefly.com/api/2.5"),
+//		cachefly.WithBaseURL("https://staging-api.cachefly.com/api/2.6"),
 //	)
 func WithBaseURL(url string) Option {
 	return func(c *ClientConfig) {
@@ -145,7 +145,7 @@ func WithBaseURL(url string) Option {
 //	// Client with custom configuration
 //	client := cachefly.NewClient(
 //		cachefly.WithToken("your-token"),
-//		cachefly.WithBaseURL("https://api.cachefly.com/api/2.5"),
+//		cachefly.WithBaseURL("https://api.cachefly.com/api/2.6"),
 //	)
 //
 //	// Use the client
@@ -159,7 +159,7 @@ func NewClient(opts ...Option) *Client {
 	if os.Getenv("CACHEFLY_API_BASE_URL") != "" {
 		cfg.BaseURL = os.Getenv("CACHEFLY_API_BASE_URL")
 	} else {
-		cfg.BaseURL = "https://api.cachefly.com/api/2.5"
+		cfg.BaseURL = "https://api.cachefly.com/api/2.6"
 	}
 
 	for _, opt := range opts {

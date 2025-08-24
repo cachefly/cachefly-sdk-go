@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // CREATE - Test Create method
 func TestServiceDomainsService_Create(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/domains" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/domains, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/domains" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/domains, got %s", r.URL.Path)
 		}
 		if r.Method != "POST" {
 			t.Errorf("Expected POST method, got %s", r.Method)
@@ -25,7 +25,7 @@ func TestServiceDomainsService_Create(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceDomainsService{Client: client}
 
@@ -43,8 +43,8 @@ func TestServiceDomainsService_Create(t *testing.T) {
 // READ - Test List method
 func TestServiceDomainsService_List(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/domains" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/domains, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/domains" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/domains, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -56,7 +56,7 @@ func TestServiceDomainsService_List(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceDomainsService{Client: client}
 
@@ -77,8 +77,8 @@ func TestServiceDomainsService_List(t *testing.T) {
 // READ - Test GetByID method
 func TestServiceDomainsService_GetByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/domains/dom-123" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/domains/dom-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/domains/dom-123" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/domains/dom-123, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -90,7 +90,7 @@ func TestServiceDomainsService_GetByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceDomainsService{Client: client}
 
@@ -107,8 +107,8 @@ func TestServiceDomainsService_GetByID(t *testing.T) {
 // UPDATE - Test UpdateByID method
 func TestServiceDomainsService_UpdateByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/domains/dom-123" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/domains/dom-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/domains/dom-123" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/domains/dom-123, got %s", r.URL.Path)
 		}
 		if r.Method != "PUT" {
 			t.Errorf("Expected PUT method, got %s", r.Method)
@@ -120,7 +120,7 @@ func TestServiceDomainsService_UpdateByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceDomainsService{Client: client}
 
@@ -138,8 +138,8 @@ func TestServiceDomainsService_UpdateByID(t *testing.T) {
 // DELETE - Test DeleteByID method
 func TestServiceDomainsService_DeleteByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/domains/dom-123" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/domains/dom-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/domains/dom-123" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/domains/dom-123, got %s", r.URL.Path)
 		}
 		if r.Method != "DELETE" {
 			t.Errorf("Expected DELETE method, got %s", r.Method)
@@ -149,7 +149,7 @@ func TestServiceDomainsService_DeleteByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceDomainsService{Client: client}
 

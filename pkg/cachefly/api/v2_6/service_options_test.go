@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // READ - Test GetOptions method
 func TestServiceOptionsService_GetOptions(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/options" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/options, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/options" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/options, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -25,7 +25,7 @@ func TestServiceOptionsService_GetOptions(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceOptionsService{Client: client}
 
@@ -42,8 +42,8 @@ func TestServiceOptionsService_GetOptions(t *testing.T) {
 // READ - Test GetOptionsMetadata method
 func TestServiceOptionsService_GetOptionsMetadata(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/svc-123/options/metadata" {
-			t.Errorf("Expected path /api/2.5/services/svc-123/options/metadata, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/svc-123/options/metadata" {
+			t.Errorf("Expected path /api/2.6/services/svc-123/options/metadata, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -81,7 +81,7 @@ func TestServiceOptionsService_GetOptionsMetadata(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceOptionsService{Client: client}
 
@@ -107,8 +107,8 @@ func TestServiceOptionsService_UpdateOptions(t *testing.T) {
 
 		// First request: GET metadata
 		if requestCount == 1 {
-			if r.URL.Path != "/api/2.5/services/svc-123/options/metadata" {
-				t.Errorf("Expected metadata path /api/2.5/services/svc-123/options/metadata, got %s", r.URL.Path)
+			if r.URL.Path != "/api/2.6/services/svc-123/options/metadata" {
+				t.Errorf("Expected metadata path /api/2.6/services/svc-123/options/metadata, got %s", r.URL.Path)
 			}
 			if r.Method != "GET" {
 				t.Errorf("Expected GET method for metadata, got %s", r.Method)
@@ -154,8 +154,8 @@ func TestServiceOptionsService_UpdateOptions(t *testing.T) {
 
 		// Second request: PUT options
 		if requestCount == 2 {
-			if r.URL.Path != "/api/2.5/services/svc-123/options" {
-				t.Errorf("Expected options path /api/2.5/services/svc-123/options, got %s", r.URL.Path)
+			if r.URL.Path != "/api/2.6/services/svc-123/options" {
+				t.Errorf("Expected options path /api/2.6/services/svc-123/options, got %s", r.URL.Path)
 			}
 			if r.Method != "PUT" {
 				t.Errorf("Expected PUT method for update, got %s", r.Method)
@@ -169,7 +169,7 @@ func TestServiceOptionsService_UpdateOptions(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceOptionsService{Client: client}
 
@@ -203,7 +203,7 @@ func TestServiceOptionsService_UpdateOptions(t *testing.T) {
 // Test validation error handling
 func TestServiceOptionsService_UpdateOptions_ValidationError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/api/2.5/services/svc-123/options/metadata" {
+		if r.URL.Path == "/api/2.6/services/svc-123/options/metadata" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{
@@ -227,7 +227,7 @@ func TestServiceOptionsService_UpdateOptions_ValidationError(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServiceOptionsService{Client: client}
 

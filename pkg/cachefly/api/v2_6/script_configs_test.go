@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // CREATE - Test Create method
 func TestScriptConfigsService_Create(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/scriptConfigs" {
-			t.Errorf("Expected path /api/2.5/scriptConfigs, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/scriptConfigs" {
+			t.Errorf("Expected path /api/2.6/scriptConfigs, got %s", r.URL.Path)
 		}
 		if r.Method != "POST" {
 			t.Errorf("Expected POST method, got %s", r.Method)
@@ -25,7 +25,7 @@ func TestScriptConfigsService_Create(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ScriptConfigsService{Client: client}
 
@@ -43,8 +43,8 @@ func TestScriptConfigsService_Create(t *testing.T) {
 // READ - Test List method
 func TestScriptConfigsService_List(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/scriptConfigs" {
-			t.Errorf("Expected path /api/2.5/scriptConfigs, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/scriptConfigs" {
+			t.Errorf("Expected path /api/2.6/scriptConfigs, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -56,7 +56,7 @@ func TestScriptConfigsService_List(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ScriptConfigsService{Client: client}
 
@@ -77,8 +77,8 @@ func TestScriptConfigsService_List(t *testing.T) {
 // READ - Test GetByID method
 func TestScriptConfigsService_GetByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/scriptConfigs/config-123" {
-			t.Errorf("Expected path /api/2.5/scriptConfigs/config-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/scriptConfigs/config-123" {
+			t.Errorf("Expected path /api/2.6/scriptConfigs/config-123, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -90,7 +90,7 @@ func TestScriptConfigsService_GetByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ScriptConfigsService{Client: client}
 
@@ -107,8 +107,8 @@ func TestScriptConfigsService_GetByID(t *testing.T) {
 // UPDATE - Test UpdateByID method
 func TestScriptConfigsService_UpdateByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/scriptConfigs/config-123" {
-			t.Errorf("Expected path /api/2.5/scriptConfigs/config-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/scriptConfigs/config-123" {
+			t.Errorf("Expected path /api/2.6/scriptConfigs/config-123, got %s", r.URL.Path)
 		}
 		if r.Method != "PUT" {
 			t.Errorf("Expected PUT method, got %s", r.Method)
@@ -120,7 +120,7 @@ func TestScriptConfigsService_UpdateByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ScriptConfigsService{Client: client}
 
@@ -138,8 +138,8 @@ func TestScriptConfigsService_UpdateByID(t *testing.T) {
 // DELETE - Test DeactivateByID method (we don't have actual delete)
 func TestScriptConfigsService_DeactivateByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/scriptConfigs/config-123/deactivate" {
-			t.Errorf("Expected path /api/2.5/scriptConfigs/config-123/deactivate, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/scriptConfigs/config-123/deactivate" {
+			t.Errorf("Expected path /api/2.6/scriptConfigs/config-123/deactivate, got %s", r.URL.Path)
 		}
 		if r.Method != "PUT" {
 			t.Errorf("Expected PUT method, got %s", r.Method)
@@ -151,7 +151,7 @@ func TestScriptConfigsService_DeactivateByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ScriptConfigsService{Client: client}
 

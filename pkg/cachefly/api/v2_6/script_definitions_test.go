@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // READ - Test List method
 func TestScriptDefinitionsService_List(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/scriptConfigDefinitions" {
-			t.Errorf("Expected path /api/2.5/scriptConfigDefinitions, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/scriptConfigDefinitions" {
+			t.Errorf("Expected path /api/2.6/scriptConfigDefinitions, got %s", r.URL.Path)
 		}
 		if r.Method != http.MethodGet {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -50,7 +50,7 @@ func TestScriptDefinitionsService_List(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ScriptDefinitionsService{Client: client}
 
@@ -71,8 +71,8 @@ func TestScriptDefinitionsService_List(t *testing.T) {
 // READ - Test GetByID method
 func TestScriptDefinitionsService_GetByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/scriptConfigDefinitions/def-123" {
-			t.Errorf("Expected path /api/2.5/scriptConfigDefinitions/def-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/scriptConfigDefinitions/def-123" {
+			t.Errorf("Expected path /api/2.6/scriptConfigDefinitions/def-123, got %s", r.URL.Path)
 		}
 		if r.Method != http.MethodGet {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -103,7 +103,7 @@ func TestScriptDefinitionsService_GetByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ScriptDefinitionsService{Client: client}
 

@@ -1,11 +1,11 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
 	"fmt"
 	"net/url"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // ServiceImageOptimizationService handles account-related API operations.

@@ -23,8 +23,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/cachefly/cachefly-go-sdk/pkg/cachefly"
-	api "github.com/cachefly/cachefly-go-sdk/pkg/cachefly/api/v2_5"
+	"github.com/cachefly/cachefly-sdk-go/pkg/cachefly"
+	api "github.com/cachefly/cachefly-sdk-go/pkg/cachefly/api/v2_6"
 	"github.com/joho/godotenv"
 )
 
@@ -52,12 +52,18 @@ func main() {
 	)
 
 	// Prepare payload for updating the origin
+	name := "updated-origin"
+	hostname := "updated-new-origin.example.com"
+	originType := "WEB"
+	scheme := "HTTP"
+	ttl := int32(2678400)
+
 	opts := api.UpdateOriginRequest{
-		Name:     "updated-origin",
-		Hostname: "updated-new-origin.example.com",
-		Type:     "WEB",
-		Scheme:   "HTTP",
-		TTL:      2678400,
+		Name:     &name,
+		Hostname: &hostname,
+		Type:     &originType,
+		Scheme:   &scheme,
+		TTL:      &ttl,
 	}
 
 	// Call Update (PUT /origins/{id})

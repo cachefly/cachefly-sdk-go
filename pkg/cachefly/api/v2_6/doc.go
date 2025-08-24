@@ -1,7 +1,7 @@
-// Package v2_5 implements CacheFly API v2.5 service interfaces.
+// package v2_6 implements CacheFly API v2.6 service interfaces.
 //
 // This package contains all the service implementations for interacting
-// with CacheFly's API version 2.5. Each service group handles specific
+// with CacheFly's API version 2.6. Each service group handles specific
 // functionality within the CacheFly platform.
 //
 // Service Groups:
@@ -22,8 +22,8 @@
 //
 // Example usage through main client:
 //
-//	import "github.com/cachefly/cachefly-go-sdk"
+//	import "github.com/cachefly/cachefly-sdk-go"
 //
 //	client := cachefly.NewClient(cachefly.WithToken("your-token"))
 //	services, err := client.Services.List()
-package v2_5
+package v2_6

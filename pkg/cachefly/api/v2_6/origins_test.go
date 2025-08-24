@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // CREATE - Test Create method
 func TestOriginsService_Create(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/origins" {
-			t.Errorf("Expected path /api/2.5/origins, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/origins" {
+			t.Errorf("Expected path /api/2.6/origins, got %s", r.URL.Path)
 		}
 		if r.Method != "POST" {
 			t.Errorf("Expected POST method, got %s", r.Method)
@@ -25,7 +25,7 @@ func TestOriginsService_Create(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &OriginsService{Client: client}
 
@@ -44,8 +44,8 @@ func TestOriginsService_Create(t *testing.T) {
 // READ - Test List method
 func TestOriginsService_List(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/origins" {
-			t.Errorf("Expected path /api/2.5/origins, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/origins" {
+			t.Errorf("Expected path /api/2.6/origins, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -57,7 +57,7 @@ func TestOriginsService_List(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &OriginsService{Client: client}
 
@@ -78,8 +78,8 @@ func TestOriginsService_List(t *testing.T) {
 // READ - Test GetByID method
 func TestOriginsService_GetByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/origins/origin-123" {
-			t.Errorf("Expected path /api/2.5/origins/origin-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/origins/origin-123" {
+			t.Errorf("Expected path /api/2.6/origins/origin-123, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -91,7 +91,7 @@ func TestOriginsService_GetByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &OriginsService{Client: client}
 
@@ -108,8 +108,8 @@ func TestOriginsService_GetByID(t *testing.T) {
 // UPDATE - Test UpdateByID method
 func TestOriginsService_UpdateByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/origins/origin-123" {
-			t.Errorf("Expected path /api/2.5/origins/origin-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/origins/origin-123" {
+			t.Errorf("Expected path /api/2.6/origins/origin-123, got %s", r.URL.Path)
 		}
 		if r.Method != "PUT" {
 			t.Errorf("Expected PUT method, got %s", r.Method)
@@ -121,7 +121,7 @@ func TestOriginsService_UpdateByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &OriginsService{Client: client}
 
@@ -140,8 +140,8 @@ func TestOriginsService_UpdateByID(t *testing.T) {
 // DELETE - Test Delete method
 func TestOriginsService_Delete(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/origins/origin-123" {
-			t.Errorf("Expected path /api/2.5/origins/origin-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/origins/origin-123" {
+			t.Errorf("Expected path /api/2.6/origins/origin-123, got %s", r.URL.Path)
 		}
 		if r.Method != "DELETE" {
 			t.Errorf("Expected DELETE method, got %s", r.Method)
@@ -151,7 +151,7 @@ func TestOriginsService_Delete(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &OriginsService{Client: client}
 

@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // CREATE - Test Create method
 func TestServicesService_Create(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services" {
-			t.Errorf("Expected path /api/2.5/services, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services" {
+			t.Errorf("Expected path /api/2.6/services, got %s", r.URL.Path)
 		}
 		if r.Method != "POST" {
 			t.Errorf("Expected POST method, got %s", r.Method)
@@ -25,7 +25,7 @@ func TestServicesService_Create(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServicesService{Client: client}
 
@@ -43,8 +43,8 @@ func TestServicesService_Create(t *testing.T) {
 // READ - Test Get method
 func TestServicesService_Get(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/test-123" {
-			t.Errorf("Expected path /api/2.5/services/test-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/test-123" {
+			t.Errorf("Expected path /api/2.6/services/test-123, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -56,7 +56,7 @@ func TestServicesService_Get(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServicesService{Client: client}
 
@@ -73,8 +73,8 @@ func TestServicesService_Get(t *testing.T) {
 // READ - Test List method
 func TestServicesService_List(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services" {
-			t.Errorf("Expected path /api/2.5/services, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services" {
+			t.Errorf("Expected path /api/2.6/services, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -86,7 +86,7 @@ func TestServicesService_List(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServicesService{Client: client}
 
@@ -107,8 +107,8 @@ func TestServicesService_List(t *testing.T) {
 // UPDATE - Test UpdateServiceByID method
 func TestServicesService_UpdateServiceByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/update-123" {
-			t.Errorf("Expected path /api/2.5/services/update-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/update-123" {
+			t.Errorf("Expected path /api/2.6/services/update-123, got %s", r.URL.Path)
 		}
 		if r.Method != "PUT" {
 			t.Errorf("Expected PUT method, got %s", r.Method)
@@ -120,7 +120,7 @@ func TestServicesService_UpdateServiceByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServicesService{Client: client}
 
@@ -138,8 +138,8 @@ func TestServicesService_UpdateServiceByID(t *testing.T) {
 // DELETE - Test DeactivateServiceByID method
 func TestServicesService_DeactivateServiceByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/services/deactivate-123/deactivate" {
-			t.Errorf("Expected path /api/2.5/services/deactivate-123/deactivate, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/services/deactivate-123/deactivate" {
+			t.Errorf("Expected path /api/2.6/services/deactivate-123/deactivate, got %s", r.URL.Path)
 		}
 		if r.Method != "PUT" {
 			t.Errorf("Expected PUT method, got %s", r.Method)
@@ -151,7 +151,7 @@ func TestServicesService_DeactivateServiceByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServicesService{Client: client}
 
@@ -173,7 +173,7 @@ func TestServicesService_ErrorHandling(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &ServicesService{Client: client}
 

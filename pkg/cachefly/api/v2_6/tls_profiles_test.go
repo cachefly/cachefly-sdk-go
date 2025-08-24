@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // READ - Test List method
 func TestTLSProfilesService_List(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/tlsprofiles" {
-			t.Errorf("Expected path /api/2.5/tlsprofiles, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/tlsprofiles" {
+			t.Errorf("Expected path /api/2.6/tlsprofiles, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -25,7 +25,7 @@ func TestTLSProfilesService_List(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &TLSProfilesService{Client: client}
 
@@ -46,8 +46,8 @@ func TestTLSProfilesService_List(t *testing.T) {
 // READ - Test GetByID method
 func TestTLSProfilesService_GetByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/tlsprofiles/tls-123" {
-			t.Errorf("Expected path /api/2.5/tlsprofiles/tls-123, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/tlsprofiles/tls-123" {
+			t.Errorf("Expected path /api/2.6/tlsprofiles/tls-123, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -59,7 +59,7 @@ func TestTLSProfilesService_GetByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &TLSProfilesService{Client: client}
 

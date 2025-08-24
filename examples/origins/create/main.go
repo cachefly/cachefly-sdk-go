@@ -20,8 +20,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/cachefly/cachefly-go-sdk/pkg/cachefly"
-	api "github.com/cachefly/cachefly-go-sdk/pkg/cachefly/api/v2_5"
+	"github.com/cachefly/cachefly-sdk-go/pkg/cachefly"
+	api "github.com/cachefly/cachefly-sdk-go/pkg/cachefly/api/v2_6"
 	"github.com/joho/godotenv"
 )
 
@@ -43,12 +43,17 @@ func main() {
 	)
 
 	// Prepare payload for creating a new origin
+	name := "example-origin"
+	hostname := "origin.example.com"
+	scheme := "HTTP"
+	ttl := int32(2678400)
+
 	opts := api.CreateOriginRequest{
-		Name:     "example-origin",
-		Hostname: "origin.example.com",
+		Name:     &name,
+		Hostname: &hostname,
 		Type:     "WEB",
-		Scheme:   "HTTP",
-		TTL:      2678400,
+		Scheme:   &scheme,
+		TTL:      &ttl,
 	}
 
 	// Call Create (POST /origins)

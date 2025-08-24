@@ -2,20 +2,20 @@
   <img src="https://www.cachefly.com/wp-content/uploads/2023/10/Thumbnail-About-Us-Video.png" alt="CacheFly Logo" width="200"/>
 </p>
 
-<h4 align="center">Go implementation of CacheFly API (2.5.0)</h4>
+<h4 align="center">Go implementation of CacheFly API (2.6.0)</h4>
 
 <hr style="width: 50%; border: 1px solid #000; margin: 20px auto;">
 
 ## CacheFly SDK for Go
 
-A Golang SDK for interacting with the [CacheFly CDN API v2.5](https://portal.cachefly.com/api/2.5/docs/).
+A Golang SDK for interacting with the [CacheFly CDN API v2.6](https://portal.cachefly.com/api/2.6/docs/).
 
-> v2.6 support coming soon.
+> v2.6 is the current target.
 
 This SDK is designed to abstract the HTTP API layer and simplify working with CacheFly resources 
 and can be used independently as golang package in your project or as the backend foundation for managing CacheFly resources. 
 
-> 🏷️ v1.0.4 latest
+> 🏷️ v1.0.5 latest
 
 ## CacheFly
 
@@ -56,11 +56,17 @@ CacheFly CDN is the only CDN built for throughput, delivering rich-media content
 - **TLS Profiles**  
   Create and manage TLS profiles for your services.
 
+- **Delivery Regions**  
+  Discover available CDN delivery regions for service provisioning.
+
+- **Log Targets**  
+  Manage log target configurations and assign them to services for access/origin logging.
+
 
 ## Installation
 
 ```bash
-go get github.com/cachefly/cachefly-go-sdk@v1.0.4
+go get github.com/cachefly/cachefly-sdk-go@v1.0.5
 
 ```
 
@@ -114,6 +120,10 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 * [Update Service By ID](examples/services/updatebyid/main.go)
 * [Activate Service](examples/services/activate/main.go)
 * [Deactivate Service](examples/services/deactivate/main.go)
+* [Enable Access Logging](examples/services/enableaccesslogging/main.go)
+* [Disable Access Logging](examples/services/disableaccesslogging/main.go)
+* [Enable Origin Logging](examples/services/enableoriginlogging/main.go)
+* [Disable Origin Logging](examples/services/disableoriginlogging/main.go)
 
 ### Service Domains
 
@@ -134,8 +144,8 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 
 ### Service Options
 
-* [Get Basic Service Options](examples/service_options/get_basic/main.go)  
-* [Save Basic Service Options](examples/service_options/save/main.go)  
+* [Get Service Options](examples/service_options/get_option/main.go)  
+* [Save Service Options](examples/service_options/save/main.go)  
 * [Get ProtectServe Key](examples/service_options/get_protectserve_key/main.go)  
 * [Regenerate ProtectServe Key](examples/service_options/recreate_protectserve_key/main.go)  
 * [Update ProtectServe Key Options](examples/service_options/update_protectserve_key_options/main.go)  
@@ -218,11 +228,10 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 
 ##  Tests
 
-The SDK includes unit tests at `pkg/cachefly/api/v2_5. 
+The SDK includes unit tests at `pkg/cachefly/api/v2_6`.
 
-
-```run  tests 
-  go test -v -count=1 ./pkg/cachefly/api/v2_5 
+```bash
+go test -v -count=1 ./pkg/cachefly/api/v2_6
 ```
 
 ## License

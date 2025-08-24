@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"slices"
 	"strconv"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // OptionProperty represents detailed metadata about an option property
@@ -141,12 +141,12 @@ func (s *ServiceOptionsService) UpdateOptions(ctx context.Context, id string, op
 
 	var updated ServiceOptions
 	if len(options) > 0 {
-		// metadata, err := s.GetOptionsMetadata(ctx, id)
-		// if err != nil {
-		// 	return nil, fmt.Errorf("failed to get options metadata: %w", err)
-		// }
+		metadata, err := s.GetOptionsMetadata(ctx, id)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get options metadata: %w", err)
+		}
 
-		if err := s.validateOptions(options); err != nil {
+		if err := s.validateOptions(options, metadata); err != nil {
 			return nil, err
 		}
 
@@ -183,7 +183,7 @@ func (s *ServiceOptionsService) UpdateOptions(ctx context.Context, id string, op
 }
 
 // validateOptions performs strict validation against metadata
-func (s *ServiceOptionsService) validateOptions_old(options ServiceOptions, metadata *ServiceOptionsMetadata) error {
+func (s *ServiceOptionsService) validateOptions(options ServiceOptions, metadata *ServiceOptionsMetadata) error {
 	var validationErrors []ValidationError
 
 	dynamicOptions := make(map[string]OptionMetadata)
@@ -270,7 +270,7 @@ func (s *ServiceOptionsService) validateOptions_old(options ServiceOptions, meta
 	return nil
 }
 
-func (s *ServiceOptionsService) validateOptions(options ServiceOptions) error {
+func (s *ServiceOptionsService) validateOptions_without_metadata(options ServiceOptions) error {
 	var validationErrors []ValidationError
 
 	for optionName, value := range options {

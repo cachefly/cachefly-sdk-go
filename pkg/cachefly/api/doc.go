@@ -9,7 +9,7 @@
 //
 // Currently supported API versions:
 //
-//   - v2_5: The latest stable API version with full feature support
+//   - v2_6: The latest stable API version with full feature support
 //
 // # Internal Architecture
 //
@@ -22,8 +22,8 @@
 // # Usage
 //
 //		import (
-//		    	"github.com/cachefly/cachefly-go-sdk/pkg/cachefly"
-//	 	api "github.com/cachefly/cachefly-go-sdk/pkg/cachefly/api/v2_5"
+//		    	"github.com/cachefly/cachefly-sdk-go/pkg/cachefly"
+//	 	api "github.com/cachefly/cachefly-sdk-go/pkg/cachefly/api/v2_6"
 //		)
 //
 //

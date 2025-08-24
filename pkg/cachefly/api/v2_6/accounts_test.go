@@ -1,4 +1,4 @@
-package v2_5
+package v2_6
 
 import (
 	"context"
@@ -6,14 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cachefly/cachefly-go-sdk/internal/httpclient"
+	"github.com/cachefly/cachefly-sdk-go/internal/httpclient"
 )
 
 // CREATE - Test CreateChildAccount method
 func TestAccountsService_CreateChildAccount(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/accounts" {
-			t.Errorf("Expected path /api/2.5/accounts, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/accounts" {
+			t.Errorf("Expected path /api/2.6/accounts, got %s", r.URL.Path)
 		}
 		if r.Method != "POST" {
 			t.Errorf("Expected POST method, got %s", r.Method)
@@ -25,7 +25,7 @@ func TestAccountsService_CreateChildAccount(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &AccountsService{Client: client}
 
@@ -49,8 +49,8 @@ func TestAccountsService_CreateChildAccount(t *testing.T) {
 // READ - Test Get method (current account)
 func TestAccountsService_Get(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/accounts/me" {
-			t.Errorf("Expected path /api/2.5/accounts/me, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/accounts/me" {
+			t.Errorf("Expected path /api/2.6/accounts/me, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -62,7 +62,7 @@ func TestAccountsService_Get(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &AccountsService{Client: client}
 
@@ -79,8 +79,8 @@ func TestAccountsService_Get(t *testing.T) {
 // READ - Test List method
 func TestAccountsService_List(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/accounts" {
-			t.Errorf("Expected path /api/2.5/accounts, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/accounts" {
+			t.Errorf("Expected path /api/2.6/accounts, got %s", r.URL.Path)
 		}
 		if r.Method != "GET" {
 			t.Errorf("Expected GET method, got %s", r.Method)
@@ -92,7 +92,7 @@ func TestAccountsService_List(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &AccountsService{Client: client}
 
@@ -113,8 +113,8 @@ func TestAccountsService_List(t *testing.T) {
 // UPDATE - Test UpdateCurrentAccount method
 func TestAccountsService_UpdateCurrentAccount(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/accounts/me" {
-			t.Errorf("Expected path /api/2.5/accounts/me, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/accounts/me" {
+			t.Errorf("Expected path /api/2.6/accounts/me, got %s", r.URL.Path)
 		}
 		if r.Method != "PUT" {
 			t.Errorf("Expected PUT method, got %s", r.Method)
@@ -126,7 +126,7 @@ func TestAccountsService_UpdateCurrentAccount(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &AccountsService{Client: client}
 
@@ -144,8 +144,8 @@ func TestAccountsService_UpdateCurrentAccount(t *testing.T) {
 // DELETE - Test DeactivateAccountByID method
 func TestAccountsService_DeactivateAccountByID(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/2.5/accounts/account-123/deactivate" {
-			t.Errorf("Expected path /api/2.5/accounts/account-123/deactivate, got %s", r.URL.Path)
+		if r.URL.Path != "/api/2.6/accounts/account-123/deactivate" {
+			t.Errorf("Expected path /api/2.6/accounts/account-123/deactivate, got %s", r.URL.Path)
 		}
 		if r.Method != "PUT" {
 			t.Errorf("Expected PUT method, got %s", r.Method)
@@ -157,7 +157,7 @@ func TestAccountsService_DeactivateAccountByID(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.5", AuthToken: "test-token"}
+	cfg := httpclient.Config{BaseURL: server.URL + "/api/2.6", AuthToken: "test-token"}
 	client := httpclient.New(cfg)
 	svc := &AccountsService{Client: client}
 
