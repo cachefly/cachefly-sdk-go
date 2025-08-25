@@ -52,20 +52,20 @@ type ListScriptConfigsResponse struct {
 
 // CreateScriptConfigRequest is the payload for creating a config.
 type CreateScriptConfigRequest struct {
-	Name                   string      `json:"name"`
-	Services               []string    `json:"services,omitempty"`
-	ScriptConfigDefinition string      `json:"scriptConfigDefinition"`
-	MimeType               string      `json:"mimeType,omitempty"`
-	Value                  interface{} `json:"value,omitempty"`
+	Name                   string   `json:"name"`
+	Services               []string `json:"services,omitempty"`
+	ScriptConfigDefinition string   `json:"scriptConfigDefinition"`
+	MimeType               string   `json:"mimeType,omitempty"`
+	Value                  string   `json:"value,omitempty"`
 }
 
 // UpdateScriptConfigRequest is the payload for updating a config.
 type UpdateScriptConfigRequest struct {
-	Name                   string      `json:"name,omitempty"`
-	MimeType               string      `json:"mimeType,omitempty"`
-	Services               []string    `json:"services,omitempty"`
-	ScriptConfigDefinition string      `json:"scriptConfigDefinition"`
-	Value                  interface{} `json:"value,omitempty"`
+	Name                   string   `json:"name,omitempty"`
+	MimeType               string   `json:"mimeType,omitempty"`
+	Services               []string `json:"services,omitempty"`
+	ScriptConfigDefinition string   `json:"scriptConfigDefinition"`
+	Value                  string   `json:"value,omitempty"`
 }
 
 // List returns script configs with optional filters.
@@ -109,7 +109,6 @@ func (s *ScriptConfigsService) Create(ctx context.Context, req CreateScriptConfi
 	if err := s.Client.Post(ctx, "/scriptConfigs", req, &created); err != nil {
 		return nil, err
 	}
-
 	return &created, nil
 }
 
