@@ -85,6 +85,21 @@ type Client struct {
 
 	// LogTargets manages log target configurations
 	LogTargets *api.LogTargetsService
+
+	// CacheWarming manages cache warming tasks
+	CacheWarming *api.CacheWarmingService
+
+	// AccountStats provides account-level statistics endpoints
+	AccountStats *api.AccountStatsService
+
+	// ServiceStats provides service-level statistics endpoints
+	ServiceStats *api.ServiceStatsService
+
+	// Availability provides availability endpoints
+	Availability *api.AvailabilityService
+
+	// SAML manages SAML configuration operations
+	SAML *api.SAMLService
 }
 
 // Option is a functional option for configuring the Client.
@@ -188,5 +203,10 @@ func NewClient(opts ...Option) *Client {
 		TLSProfiles:                &api.TLSProfilesService{Client: hc},
 		DeliveryRegions:            &api.DeliveryRegionsService{Client: hc},
 		LogTargets:                 &api.LogTargetsService{Client: hc},
+		CacheWarming:               &api.CacheWarmingService{Client: hc},
+		AccountStats:               &api.AccountStatsService{Client: hc},
+		ServiceStats:               &api.ServiceStatsService{Client: hc},
+		Availability:               &api.AvailabilityService{Client: hc},
+		SAML:                       &api.SAMLService{Client: hc},
 	}
 }

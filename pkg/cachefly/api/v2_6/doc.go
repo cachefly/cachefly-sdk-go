@@ -16,6 +16,11 @@
 // - OriginsService: Configures origin server settings
 // - UsersService: Handles user management and permissions
 // - TLSProfilesService: Manages TLS profile configurations
+// - CacheWarmingService: Manages cache warming tasks (list/create/get/delete)
+// - AccountStatsService: Provides account-level statistics endpoints
+// - ServiceStatsService: Provides service-level statistics endpoints
+// - AvailabilityService: Checks availability of domains, usernames, services, SAML
+// - SAMLService: Manages SAML configuration operations
 //
 // This package is typically not imported directly. Instead, use the
 // main cachefly package which provides a unified client interface.
