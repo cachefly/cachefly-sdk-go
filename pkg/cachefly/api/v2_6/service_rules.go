@@ -13,7 +13,7 @@ import (
 type ServiceRule struct {
 	ID        string `json:"_id"`
 	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updateAt"`
+	UpdatedAt string `json:"updatedAt"`
 }
 
 // ListServiceRulesResponse contains paginated service rule results.

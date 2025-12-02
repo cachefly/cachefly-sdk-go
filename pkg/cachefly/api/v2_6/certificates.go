@@ -20,6 +20,7 @@ type Certificate struct {
 	CreatedAt         string   `json:"createdAt"`
 	SubjectCommonName string   `json:"subjectCommonName"`
 	SubjectNames      []string `json:"subjectNames"`
+	SerialNumber      string   `json:"serialNumber"`
 	Expired           bool     `json:"expired"`
 	Expiring          bool     `json:"expiring"`
 	InUse             bool     `json:"inUse"`

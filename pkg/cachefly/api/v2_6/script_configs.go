@@ -29,7 +29,7 @@ type ScriptConfig struct {
 	Status                 string                 `json:"status"`
 	DataModel              string                 `json:"dataModel"`
 	CreatedAt              string                 `json:"createdAt"`
-	UpdatedAt              string                 `json:"updateAt"`
+	UpdatedAt              string                 `json:"updatedAt"`
 }
 
 // ListScriptConfigsOptions holds filters & pagination.

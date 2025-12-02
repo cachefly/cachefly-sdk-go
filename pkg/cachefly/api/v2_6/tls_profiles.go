@@ -12,7 +12,7 @@ import (
 // TLSProfile represents a TLS configuration profile in CacheFly.
 type TLSProfile struct {
 	ID        string `json:"_id"`
-	UpdatedAt string `json:"updateAt"`
+	UpdatedAt string `json:"updatedAt"`
 	CreatedAt string `json:"createdAt"`
 	Name      string `json:"name"`
 	// Add more fields here once the schema is known
