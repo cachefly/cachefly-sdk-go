@@ -22,7 +22,7 @@ type Service struct {
 	CreatedAt         string `json:"createdAt"`
 	Name              string `json:"name"`
 	UniqueName        string `json:"uniqueName"`
-	Uid               string `json:"uid"`
+	Uid               int    `json:"uid"`
 	AutoSSL           bool   `json:"autoSsl"`
 	ConfigurationMode string `json:"configurationMode"`
 	Status            string `json:"status"`
