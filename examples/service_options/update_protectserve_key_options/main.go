@@ -52,7 +52,7 @@ func main() {
 	// Prepare payload for updating ProtectServe key options
 	opts := api.UpdateProtectServeRequest{
 		ForceProtectServe: "OPTIONAL",
-		ProtectServeKey:   "1921f7aae1200a5e9a3de74d4b85ed4b",
+		ProtectServeKey:   "<your-protectserve-key>",
 	}
 
 	// Call UpdateProtectServeKeyOptions (PUT /services/{id}/options/protectserveKeyOptions)
