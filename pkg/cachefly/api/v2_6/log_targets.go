@@ -3,6 +3,7 @@ package v2_6
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/url"
 	"strconv"
 
@@ -10,28 +11,53 @@ import (
 )
 
 // LogTarget represents a CacheFly log target configuration.
+//
+// The fields are a union across all log target types (S3_BUCKET,
+// GOOGLE_BUCKET, AZURE_BLOB, HTTP); only the fields relevant to Type are
+// populated by the API.
 type LogTarget struct {
-	ID                         string    `json:"_id"`
-	UpdatedAt                  string    `json:"updatedAt"`
-	CreatedAt                  string    `json:"createdAt"`
-	Type                       string    `json:"type"`
-	Name                       *string   `json:"name,omitempty"`
-	Endpoint                   *string   `json:"endpoint,omitempty"`
-	Region                     *string   `json:"region,omitempty"`
-	Bucket                     *string   `json:"bucket,omitempty"`
-	AccessKey                  *string   `json:"accessKey,omitempty"`
-	SecretKey                  *string   `json:"secretKey,omitempty"`
-	SignatureVersion           *string   `json:"signatureVersion,omitempty"`
-	JsonKey                    *string   `json:"jsonKey,omitempty"`
-	Hosts                      *[]string `json:"hosts,omitempty"`
-	SSL                        *bool     `json:"ssl,omitempty"`
-	SSLCertificateVerification *bool     `json:"sslCertificateVerification,omitempty"`
-	Index                      *string   `json:"index,omitempty"`
-	User                       *string   `json:"user,omitempty"`
-	Password                   *string   `json:"password,omitempty"`
-	ApiKey                     *string   `json:"apiKey,omitempty"`
-	AccessLogsServices         *[]string `json:"accessLogsServices,omitempty"`
-	OriginLogsServices         *[]string `json:"originLogsServices,omitempty"`
+	ID        string  `json:"_id"`
+	UpdatedAt string  `json:"updatedAt"`
+	CreatedAt string  `json:"createdAt"`
+	Type      string  `json:"type"`
+	Name      *string `json:"name,omitempty"`
+
+	// Common log delivery options.
+	Format      *string `json:"format,omitempty"`      // "JSON" | "NDJSON"
+	Compression *string `json:"compression,omitempty"` // "NONE" | "GZIP" | "ZSTD"
+	Sampling    *int    `json:"sampling,omitempty"`    // 0..100
+
+	// S3_BUCKET fields.
+	Endpoint         *string `json:"endpoint,omitempty"`
+	Region           *string `json:"region,omitempty"`
+	Bucket           *string `json:"bucket,omitempty"` // also used by GOOGLE_BUCKET
+	AccessKey        *string `json:"accessKey,omitempty"`
+	SecretKey        *string `json:"secretKey,omitempty"`
+	SignatureVersion *string `json:"signatureVersion,omitempty"` // always "v4"
+
+	// GOOGLE_BUCKET fields.
+	JsonKey *string `json:"jsonKey,omitempty"`
+
+	// AZURE_BLOB fields.
+	EndpointProtocol *string `json:"endpointProtocol,omitempty"` // "HTTP" | "HTTPS"
+	EndpointSuffix   *string `json:"endpointSuffix,omitempty"`
+	AccountName      *string `json:"accountName,omitempty"`
+	AccountKey       *string `json:"accountKey,omitempty"`
+	ContainerName    *string `json:"containerName,omitempty"`
+	Prefix           *string `json:"prefix,omitempty"`
+
+	// HTTP fields.
+	Uri      *string `json:"uri,omitempty"`
+	Method   *string `json:"method,omitempty"` // "POST" | "PUT"
+	Auth     *string `json:"auth,omitempty"`   // "NONE" | "BASIC" | "BEARER"
+	Username *string `json:"username,omitempty"`
+	Password *string `json:"password,omitempty"`
+	Token    *string `json:"token,omitempty"`
+
+	// Services with logging enabled. These are not documented in the current
+	// API responses; they are populated only when the API returns them.
+	AccessLogsServices *[]string `json:"accessLogsServices,omitempty"`
+	OriginLogsServices *[]string `json:"originLogsServices,omitempty"`
 }
 
 // ListLogTargetsResponse contains paginated log target results.
@@ -48,46 +74,95 @@ type ListLogTargetsOptions struct {
 	ResponseType string
 }
 
-// CreateLogTargetRequest contains the required fields for creating a new log target.
+// CreateLogTargetRequest contains the fields for creating a new log target.
+//
+// Type is required. The remaining fields depend on the chosen type:
+//   - S3_BUCKET: region, bucket, accessKey, secretKey required; endpoint,
+//     signatureVersion optional.
+//   - GOOGLE_BUCKET: bucket, jsonKey required.
+//   - AZURE_BLOB: accountName, accountKey, containerName required;
+//     endpointProtocol, endpointSuffix, prefix optional.
+//   - HTTP: uri required; method, auth, username, password, token optional.
+//
+// name, format, compression and sampling are optional for every type. The
+// API rejects fields that do not belong to the chosen type.
 type CreateLogTargetRequest struct {
-	Type                       string    `json:"type"`
-	Name                       *string   `json:"name,omitempty"`
-	Endpoint                   *string   `json:"endpoint,omitempty"`
-	Region                     *string   `json:"region,omitempty"`
-	Bucket                     *string   `json:"bucket,omitempty"`
-	AccessKey                  *string   `json:"accessKey,omitempty"`
-	SecretKey                  *string   `json:"secretKey,omitempty"`
-	SignatureVersion           *string   `json:"signatureVersion,omitempty"`
-	JsonKey                    *string   `json:"jsonKey,omitempty"`
-	Hosts                      *[]string `json:"hosts,omitempty"`
-	SSL                        *bool     `json:"ssl,omitempty"`
-	SSLCertificateVerification *bool     `json:"sslCertificateVerification,omitempty"`
-	Index                      *string   `json:"index,omitempty"`
-	User                       *string   `json:"user,omitempty"`
-	Password                   *string   `json:"password,omitempty"`
-	ApiKey                     *string   `json:"apiKey,omitempty"`
+	Type string  `json:"type"`
+	Name *string `json:"name,omitempty"`
+
+	// Common log delivery options.
+	Format      *string `json:"format,omitempty"`
+	Compression *string `json:"compression,omitempty"`
+	Sampling    *int    `json:"sampling,omitempty"`
+
+	// S3_BUCKET fields.
+	Endpoint         *string `json:"endpoint,omitempty"`
+	Region           *string `json:"region,omitempty"`
+	Bucket           *string `json:"bucket,omitempty"` // also used by GOOGLE_BUCKET
+	AccessKey        *string `json:"accessKey,omitempty"`
+	SecretKey        *string `json:"secretKey,omitempty"`
+	SignatureVersion *string `json:"signatureVersion,omitempty"`
+
+	// GOOGLE_BUCKET fields.
+	JsonKey *string `json:"jsonKey,omitempty"`
+
+	// AZURE_BLOB fields.
+	EndpointProtocol *string `json:"endpointProtocol,omitempty"`
+	EndpointSuffix   *string `json:"endpointSuffix,omitempty"`
+	AccountName      *string `json:"accountName,omitempty"`
+	AccountKey       *string `json:"accountKey,omitempty"`
+	ContainerName    *string `json:"containerName,omitempty"`
+	Prefix           *string `json:"prefix,omitempty"`
+
+	// HTTP fields.
+	Uri      *string `json:"uri,omitempty"`
+	Method   *string `json:"method,omitempty"`
+	Auth     *string `json:"auth,omitempty"`
+	Username *string `json:"username,omitempty"`
+	Password *string `json:"password,omitempty"`
+	Token    *string `json:"token,omitempty"`
 }
 
-// UpdateLogTargetRequest contains the fields for updating an existing log target.
+// UpdateLogTargetRequest contains the fields for updating an existing log
+// target. All fields are optional; only the provided fields are changed.
+//
+// Services logging is managed separately via SetLogging: the update endpoint
+// rejects accessLogsServices/originLogsServices.
 type UpdateLogTargetRequest struct {
-	Name                       *string   `json:"name,omitempty"`
-	Type                       *string   `json:"type,omitempty"`
-	Endpoint                   *string   `json:"endpoint,omitempty"`
-	Region                     *string   `json:"region,omitempty"`
-	Bucket                     *string   `json:"bucket,omitempty"`
-	AccessKey                  *string   `json:"accessKey,omitempty"`
-	SecretKey                  *string   `json:"secretKey,omitempty"`
-	SignatureVersion           *string   `json:"signatureVersion,omitempty"`
-	JsonKey                    *string   `json:"jsonKey,omitempty"`
-	Hosts                      *[]string `json:"hosts,omitempty"`
-	SSL                        *bool     `json:"ssl,omitempty"`
-	SSLCertificateVerification *bool     `json:"sslCertificateVerification,omitempty"`
-	Index                      *string   `json:"index,omitempty"`
-	User                       *string   `json:"user,omitempty"`
-	Password                   *string   `json:"password,omitempty"`
-	ApiKey                     *string   `json:"apiKey,omitempty"`
-	AccessLogsServices         *[]string `json:"accessLogsServices,omitempty"`
-	OriginLogsServices         *[]string `json:"originLogsServices,omitempty"`
+	Type *string `json:"type,omitempty"`
+	Name *string `json:"name,omitempty"`
+
+	// Common log delivery options.
+	Format      *string `json:"format,omitempty"`
+	Compression *string `json:"compression,omitempty"`
+	Sampling    *int    `json:"sampling,omitempty"`
+
+	// S3_BUCKET fields.
+	Endpoint         *string `json:"endpoint,omitempty"`
+	Region           *string `json:"region,omitempty"`
+	Bucket           *string `json:"bucket,omitempty"` // also used by GOOGLE_BUCKET
+	AccessKey        *string `json:"accessKey,omitempty"`
+	SecretKey        *string `json:"secretKey,omitempty"`
+	SignatureVersion *string `json:"signatureVersion,omitempty"`
+
+	// GOOGLE_BUCKET fields.
+	JsonKey *string `json:"jsonKey,omitempty"`
+
+	// AZURE_BLOB fields.
+	EndpointProtocol *string `json:"endpointProtocol,omitempty"`
+	EndpointSuffix   *string `json:"endpointSuffix,omitempty"`
+	AccountName      *string `json:"accountName,omitempty"`
+	AccountKey       *string `json:"accountKey,omitempty"`
+	ContainerName    *string `json:"containerName,omitempty"`
+	Prefix           *string `json:"prefix,omitempty"`
+
+	// HTTP fields.
+	Uri      *string `json:"uri,omitempty"`
+	Method   *string `json:"method,omitempty"`
+	Auth     *string `json:"auth,omitempty"`
+	Username *string `json:"username,omitempty"`
+	Password *string `json:"password,omitempty"`
+	Token    *string `json:"token,omitempty"`
 }
 
 // SetLoggingRequest contains the services to set logging for.
@@ -192,4 +267,22 @@ func (s *LogTargetsService) SetLogging(ctx context.Context, id string, req SetLo
 		return nil, err
 	}
 	return &result, nil
+}
+
+// TestConnection tests the connection to the log target with the given id
+// (POST /logtargets/{id}/test). A nil error means the connection test
+// succeeded.
+func (s *LogTargetsService) TestConnection(ctx context.Context, id string) error {
+	if id == "" {
+		return fmt.Errorf("log target ID is required")
+	}
+	endpoint := fmt.Sprintf("/logtargets/%s/test", id)
+
+	// The success response body is unspecified and may be empty; tolerate an
+	// empty body but surface API errors.
+	var out map[string]interface{}
+	if err := s.Client.Post(ctx, endpoint, struct{}{}, &out); err != nil && err != io.EOF {
+		return err
+	}
+	return nil
 }
