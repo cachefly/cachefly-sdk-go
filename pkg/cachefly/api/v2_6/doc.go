@@ -21,6 +21,9 @@
 // - ServiceStatsService: Provides service-level statistics endpoints
 // - AvailabilityService: Checks availability of domains, usernames, services, SAML
 // - SAMLService: Manages SAML configuration operations
+// - EdgeControlScriptsService: Manages edge control script drafts, versions and activation
+// - EdgeControlKVService: Manages the account and service edge control key/value stores
+// - EdgeControlLibraryService: Manages the edge control script library
 //
 // This package is typically not imported directly. Instead, use the
 // main cachefly package which provides a unified client interface.

@@ -15,7 +15,7 @@ A Golang SDK for interacting with the [CacheFly CDN API v2.6](https://portal.cac
 This SDK is designed to abstract the HTTP API layer and simplify working with CacheFly resources 
 and can be used independently as golang package in your project or as the backend foundation for managing CacheFly resources. 
 
-> 🏷️ v1.1.0 latest
+> 🏷️ v1.4.0 latest
 
 ## CacheFly
 
@@ -62,11 +62,14 @@ CacheFly CDN is the only CDN built for throughput, delivering rich-media content
 - **Log Targets**  
   Manage log target configurations and assign them to services for access/origin logging.
 
+- **Edge Control**  
+  Publish, activate and deactivate edge scripts, manage the account and service KV stores, and maintain the script library.
+
 
 ## Installation
 
 ```bash
-go get github.com/cachefly/cachefly-sdk-go@v1.1.0
+go get github.com/cachefly/cachefly-sdk-go@v1.4.0
 
 ```
 
@@ -224,6 +227,12 @@ Below is an example of how to use the CacheFly SDK in your Go project:
 
 * [List TLS Profiles](examples/tls_profiles/list/main.go)  
 * [Get TLS Profile By ID](examples/tls_profiles/getbyid/main.go)  
+
+### Edge Control
+
+* [Publish And Activate An Edge Script](examples/edge_control/publish_script/main.go)  
+* [Replace And Read Service KV](examples/edge_control/kv/main.go)  
+* [Create And List Library Scripts](examples/edge_control/library/main.go)  
 
 
 ##  Tests

@@ -100,6 +100,15 @@ type Client struct {
 
 	// SAML manages SAML configuration operations
 	SAML *api.SAMLService
+
+	// EdgeControlScripts manages edge control scripts (drafts, versions, activation)
+	EdgeControlScripts *api.EdgeControlScriptsService
+
+	// EdgeControlKV manages the edge control key/value stores
+	EdgeControlKV *api.EdgeControlKVService
+
+	// EdgeControlLibrary manages the edge control script library
+	EdgeControlLibrary *api.EdgeControlLibraryService
 }
 
 // Option is a functional option for configuring the Client.
@@ -208,5 +217,8 @@ func NewClient(opts ...Option) *Client {
 		ServiceStats:               &api.ServiceStatsService{Client: hc},
 		Availability:               &api.AvailabilityService{Client: hc},
 		SAML:                       &api.SAMLService{Client: hc},
+		EdgeControlScripts:         &api.EdgeControlScriptsService{Client: hc},
+		EdgeControlKV:              &api.EdgeControlKVService{Client: hc},
+		EdgeControlLibrary:         &api.EdgeControlLibraryService{Client: hc},
 	}
 }
