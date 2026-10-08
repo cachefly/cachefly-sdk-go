@@ -50,10 +50,11 @@ func main() {
 		cachefly.WithToken(token),
 	)
 
+	autoSSL := false
 	payload := api.UpdateServiceRequest{
 		Description:    "updated service from SDK",
 		TLSProfile:     "66320d4208158b00411703e4",
-		AutoSSL:        false,
+		AutoSSL:        &autoSSL,
 		DeliveryRegion: "673f01735a5ddf015fc46997",
 	}
 
